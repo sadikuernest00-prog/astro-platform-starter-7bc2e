@@ -1,11 +1,11 @@
 ---
-/* AmicBridge – Bank-style landing + request form */
+const year = new Date().getFullYear();
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>AmicBridge | Private Lending & Investment Network</title>
+    <title>AmicBridge | Lending & Investment Network</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       :root {
@@ -21,7 +21,7 @@
         color: #0f172a;
       }
 
-      /* Header / layout */
+      /* Header */
       header.site-header {
         background: #0b1726;
         color: #e5e7eb;
@@ -30,7 +30,7 @@
       }
 
       .header-inner {
-        max-width: 1040px;
+        max-width: 960px;
         margin: 0 auto;
         padding: 0 18px;
         display: flex;
@@ -50,7 +50,6 @@
 
       .nav-links {
         display: flex;
-        flex-wrap: wrap;
         gap: 18px;
         font-size: 0.9rem;
       }
@@ -64,157 +63,92 @@
         text-decoration: underline;
       }
 
+      /* Layout */
       main.page {
-        max-width: 1040px;
+        max-width: 960px;
         margin: 0 auto;
         padding: 0 18px 40px;
       }
 
-      /* Hero */
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
         gap: 24px;
-        align-items: flex-start;
+        align-items: center;
         margin-bottom: 24px;
       }
 
-      .hero-main h1 {
-        font-size: 2.1rem;
+      .hero h1 {
+        font-size: 2rem;
         margin: 0 0 10px;
         font-weight: 600;
       }
 
-      .hero-main p {
-        margin: 0 0 8px;
+      .hero p {
+        margin: 0;
         font-size: 0.95rem;
         color: #4b5563;
       }
 
-      .tagline {
-        font-size: 0.9rem;
-        margin-top: 4px;
-        color: #374151;
-      }
-
       .pill {
         display: inline-block;
+        margin-top: 10px;
         font-size: 0.75rem;
         padding: 3px 10px;
         border-radius: 999px;
         border: 1px solid #d1d5db;
         background: #f9fafb;
         color: #374151;
-        margin-top: 10px;
-      }
-
-      .hero-highlights {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-        margin-top: 18px;
       }
 
       .hero-box {
         background: #ffffff;
-        border-radius: 6px;
         border: 1px solid #e5e7eb;
-        padding: 10px 12px;
-      }
-
-      .hero-box-title {
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-
-      .hero-box-text {
-        font-size: 0.8rem;
-        color: #6b7280;
-      }
-
-      .hero-side {
-        background: #ffffff;
         border-radius: 6px;
-        border: 1px solid #e5e7eb;
-        padding: 14px 14px 16px;
+        padding: 12px 14px;
         font-size: 0.85rem;
         color: #374151;
       }
 
-      .hero-side h2 {
-        font-size: 1.05rem;
-        margin: 0 0 6px;
-      }
-
-      .hero-side ul {
-        padding-left: 18px;
-        margin: 6px 0 10px;
-      }
-
-      .hero-side li {
-        margin-bottom: 4px;
-      }
-
-      .info-line {
-        font-size: 0.8rem;
-        color: #6b7280;
-      }
-
-      /* Sections */
-      .section {
-        margin-top: 8px;
-      }
-
-      .section h2 {
-        font-size: 1.3rem;
-        margin: 0 0 6px;
-      }
-
-      .section p {
-        margin: 0 0 8px;
+      .hero-box-title {
+        font-weight: 600;
+        margin-bottom: 6px;
         font-size: 0.9rem;
       }
 
-      .three-cols {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 14px;
-        margin-top: 8px;
+      .hero-box ul {
+        margin: 0;
+        padding-left: 18px;
       }
 
-      .plain-card {
-        background: #ffffff;
-        border-radius: 6px;
-        border: 1px solid #e5e7eb;
-        padding: 12px 12px 14px;
-        font-size: 0.86rem;
-        color: #374151;
+      .hero-box li {
+        margin-bottom: 4px;
       }
 
-      .plain-card h3 {
-        font-size: 0.95rem;
-        margin: 0 0 6px;
+      /* Form section */
+      .section-title {
+        font-size: 1.3rem;
+        margin: 4px 0 6px;
       }
 
-      .subtle {
-        font-size: 0.8rem;
+      .section-sub {
+        font-size: 0.85rem;
         color: #6b7280;
+        margin: 0 0 10px;
       }
 
-      /* Form card */
       .card {
         background: #ffffff;
         border-radius: 6px;
         padding: 18px 16px 20px;
         border: 1px solid #e5e7eb;
-        margin-top: 8px;
+        margin-top: 4px;
       }
 
       form {
         display: grid;
         gap: 14px;
-        margin-top: 10px;
+        margin-top: 8px;
       }
 
       label {
@@ -246,7 +180,7 @@
 
       textarea {
         resize: vertical;
-        min-height: 90px;
+        min-height: 80px;
       }
 
       .two-col {
@@ -289,11 +223,16 @@
         margin-top: 2px;
       }
 
+      .subtle {
+        font-size: 0.8rem;
+        color: #6b7280;
+      }
+
       .notice {
         background: #f9fafb;
         border-radius: 6px;
-        padding: 9px 11px;
-        font-size: 0.8rem;
+        padding: 8px 10px;
+        font-size: 0.78rem;
         color: #4b5563;
         border: 1px solid #e5e7eb;
         margin-top: 10px;
@@ -306,13 +245,6 @@
         font-size: 0.75rem;
         color: #6b7280;
         text-align: center;
-      }
-
-      code {
-        font-size: 0.75rem;
-        background: #e5e7eb;
-        padding: 1px 4px;
-        border-radius: 3px;
       }
 
       @media (max-width: 768px) {
@@ -329,135 +261,50 @@
           Amic<span>Bridge</span>
         </div>
         <nav class="nav-links">
-          <a href="#about">About</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#network">The network</a>
-          <a href="#request">Send request</a>
+          <a href="#request">Request</a>
         </nav>
       </div>
     </header>
 
     <main class="page">
-      <!-- HERO -->
-      <section class="hero" id="about">
-        <div class="hero-main">
-          <h1>AmicBridge – a private lending &amp; investment network</h1>
-          <p class="tagline">
-            For people and business people who want to borrow, lend, invest and
-            share profit on clear terms.
-          </p>
+      <!-- SIMPLE HERO -->
+      <section class="hero">
+        <div>
+          <h1>Lending &amp; investment network</h1>
           <p>
-            AmicBridge is not a traditional bank. It is a network where members
-            can create solid deals together: loans, investments and
-            profit-sharing agreements that aim to grow their money in a
-            controlled way.
+            AmicBridge connects people and businesses that want to borrow, lend,
+            invest and share profit on clear terms.
           </p>
-          <span class="pill">Serious money. Simple structure. Clear terms.</span>
-
-          <div class="hero-highlights">
-            <div class="hero-box">
-              <div class="hero-box-title">Borrowing</div>
-              <div class="hero-box-text">
-                Request funding for business, projects or personal needs, with
-                transparent conditions.
-              </div>
-            </div>
-            <div class="hero-box">
-              <div class="hero-box-title">Lending &amp; investing</div>
-              <div class="hero-box-text">
-                Put your capital to work by lending or investing into selected
-                deals.
-              </div>
-            </div>
-            <div class="hero-box">
-              <div class="hero-box-title">Profit sharing</div>
-              <div class="hero-box-text">
-                Build arrangements where both sides share risk and upside in a
-                fair way.
-              </div>
-            </div>
-          </div>
+          <span class="pill">Serious money · Simple structure</span>
         </div>
 
-        <aside class="hero-side" id="how-it-works">
-          <h2>How AmicBridge works</h2>
+        <div class="hero-box">
+          <div class="hero-box-title">What you can request</div>
           <ul>
-            <li>You send a request with your information and what you want.</li>
-            <li>We review it inside the AmicBridge network.</li>
-            <li>
-              If it fits, we connect you with people or businesses interested in
-              a deal.
-            </li>
+            <li>Borrowing</li>
+            <li>Lending</li>
+            <li>Investment</li>
+            <li>Profit sharing</li>
+            <li>Grow your money</li>
           </ul>
-          <p class="info-line">
-            Every agreement is made directly between the parties. AmicBridge
-            focuses on structure, clarity and matching the right people.
-          </p>
-        </aside>
-      </section>
-
-      <!-- WHO IT'S FOR / TRUST SECTION -->
-      <section class="section" id="network">
-        <h2>The AmicBridge network</h2>
-        <p>
-          The network is for people and business people who want to treat money
-          seriously: clear numbers, written agreements, realistic expectations.
-        </p>
-
-        <div class="three-cols">
-          <div class="plain-card">
-            <h3>For borrowers</h3>
-            <p>
-              You may be building a business, handling a project or need a
-              structured private loan.
-            </p>
-            <p class="subtle">
-              You are ready to share your situation honestly and follow clear
-              repayment or profit-sharing terms.
-            </p>
-          </div>
-          <div class="plain-card">
-            <h3>For lenders &amp; investors</h3>
-            <p>
-              You have capital you want to grow, but prefer understandable deals
-              instead of speculation.
-            </p>
-            <p class="subtle">
-              You are open to both fixed interest and structured profit-sharing
-              with agreed risk levels.
-            </p>
-          </div>
-          <div class="plain-card">
-            <h3>For long-term partners</h3>
-            <p>
-              Over time, repeat cooperation inside the network can build trust,
-              track record and better opportunities.
-            </p>
-            <p class="subtle">
-              AmicBridge is built around relationships, not “quick wins”.
-            </p>
-          </div>
         </div>
       </section>
 
       <!-- REQUEST FORM -->
-      <section class="section" id="request">
-        <h2>Send a request to AmicBridge</h2>
-        <p class="subtle">
-          Fill in your information and what you are looking for: borrowing,
-          lending, investment, profit sharing or simply a way to grow your
-          money. We will review and contact you directly if it fits the
-          network.
+      <section id="request">
+        <h2 class="section-title">Send a request</h2>
+        <p class="section-sub">
+          Fill in your details and what you want to do. We review every request
+          manually.
         </p>
 
         <div class="card">
-          <!-- Formspree form -->
           <form
             action="https://formspree.io/f/xzznjkvd"
             method="POST"
             accept-charset="UTF-8"
           >
-            <!-- Metadata for your Formspree inbox -->
+            <!-- Formspree meta -->
             <input
               type="hidden"
               name="_subject"
@@ -478,7 +325,7 @@
                 />
               </div>
               <div>
-                <label for="email">Email address</label>
+                <label for="email">Email</label>
                 <input
                   id="email"
                   name="email"
@@ -510,7 +357,7 @@
                   name="work"
                   type="text"
                   required
-                  placeholder="e.g. Business owner, employee, consultant"
+                  placeholder="e.g. Business owner, employee"
                 />
               </div>
             </div>
@@ -543,20 +390,18 @@
 
             <div class="two-col">
               <div>
-                <label for="requestType">I am interested in</label>
+                <label for="requestType">I want to</label>
                 <select id="requestType" name="request_type" required>
                   <option value="">Select one</option>
-                  <option value="BORROWING">Borrowing</option>
-                  <option value="LENDING">Lending</option>
-                  <option value="INVESTMENT">Investment</option>
+                  <option value="BORROWING">Borrow</option>
+                  <option value="LENDING">Lend</option>
+                  <option value="INVESTMENT">Invest</option>
                   <option value="PROFIT_SHARING">Profit sharing</option>
-                  <option value="GROW_MONEY">
-                    Investment to grow my money
-                  </option>
+                  <option value="GROW_MONEY">Grow my money</option>
                 </select>
               </div>
               <div>
-                <label for="amount">Approximate amount</label>
+                <label for="amount">Amount</label>
                 <input
                   id="amount"
                   name="amount"
@@ -569,14 +414,11 @@
             </div>
 
             <div>
-              <label for="details">
-                Describe your request (purpose, time frame, risk level,
-                expected terms)
-              </label>
+              <label for="details">Short description</label>
               <textarea
                 id="details"
                 name="details"
-                placeholder="Example: I want to borrow 300 000 NOK for my company over 24 months with a fixed interest rate. Or: I want to invest EUR 50 000 into low–medium risk profit-sharing deals."
+                placeholder="Example: Borrow 300 000 NOK for 24 months, or invest EUR 50 000 in profit-sharing deals."
               ></textarea>
             </div>
 
@@ -588,41 +430,33 @@
                 required
               />
               <label for="confirm">
-                I confirm that the information I provide is correct to the best
-                of my knowledge and that AmicBridge may contact me about this
-                request.
+                I confirm that the information is correct and that AmicBridge
+                may contact me about this request.
               </label>
             </div>
 
             <div class="btn-row">
               <button class="btn" type="submit">
-                Send request to AmicBridge
+                Send request
               </button>
             </div>
 
             <p class="subtle">
-              When you submit, this form is sent securely through Formspree
-              (<code>/f/xzznjkvd</code>). Your information is used only to
-              review and follow up on your request inside the AmicBridge
-              network.
+              Your information is sent securely via Formspree and reviewed
+              manually. It is not shared with third parties for marketing.
             </p>
           </form>
 
           <div class="notice">
-            <strong>Important information:</strong><br />
-            AmicBridge is a private network, not a bank and not a broker. We do
-            not promise any specific return and we do not guarantee that your
-            request will be accepted. Every deal is an agreement between the
-            parties involved, and you should always consider your own risk and
-            get independent advice if needed.
+            AmicBridge is a private network, not a traditional bank. We do not
+            guarantee any return or approval. All agreements are made directly
+            between the parties involved.
           </div>
         </div>
       </section>
 
       <footer>
-        AmicBridge &copy; {new Date().getFullYear()} &middot; Private lending
-        and investment network. This page is informational and does not
-        constitute financial advice.
+        AmicBridge &copy; {year} · Lending &amp; investment network
       </footer>
     </main>
   </body>
