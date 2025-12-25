@@ -21,7 +21,6 @@ const year = new Date().getFullYear();
         color: #0f172a;
       }
 
-      /* Header */
       header.site-header {
         background: #0b1726;
         color: #e5e7eb;
@@ -64,14 +63,12 @@ const year = new Date().getFullYear();
         text-decoration: underline;
       }
 
-      /* Layout */
       main.page {
         max-width: 960px;
         margin: 0 auto;
         padding: 0 18px 40px;
       }
 
-      /* Hero */
       .hero {
         display: grid;
         grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
@@ -138,7 +135,6 @@ const year = new Date().getFullYear();
         margin-bottom: 4px;
       }
 
-      /* Form section */
       .section-title {
         font-size: 1.3rem;
         margin: 4px 0 6px;
@@ -255,7 +251,6 @@ const year = new Date().getFullYear();
         margin-top: 10px;
       }
 
-      /* About section */
       .about-section {
         margin-top: 24px;
         padding: 14px 16px;
@@ -292,6 +287,7 @@ const year = new Date().getFullYear();
       }
     </style>
   </head>
+
   <body>
     <header class="site-header">
       <div class="header-inner">
@@ -305,7 +301,6 @@ const year = new Date().getFullYear();
     </header>
 
     <main class="page">
-      <!-- HERO -->
       <section class="hero">
         <div class="hero-left">
           <h1>Lending &amp; investment network</h1>
@@ -330,11 +325,11 @@ const year = new Date().getFullYear();
             <li>Lend capital with agreed return</li>
             <li>Invest in deals in the network</li>
             <li>Set up profit-sharing agreements</li>
+            <li><strong>A written agreement is signed when a deal is made</strong></li>
           </ul>
         </div>
       </section>
 
-      <!-- REQUEST FORM -->
       <section id="request">
         <h2 class="section-title">Send a request</h2>
         <p class="section-sub">
@@ -349,76 +344,35 @@ const year = new Date().getFullYear();
             method="POST"
             accept-charset="UTF-8"
           >
-            <!-- Formspree meta -->
-            <input
-              type="hidden"
-              name="_subject"
-              value="New AmicBridge request"
-            />
+            <input type="hidden" name="_subject" value="New AmicBridge request" />
             <input type="hidden" name="_template" value="table" />
 
             <div class="two-col">
               <div>
                 <label for="name">Full name</label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  autocomplete="name"
-                  placeholder="Your full name"
-                />
+                <input id="name" name="name" type="text" required />
               </div>
               <div>
                 <label for="email">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autocomplete="email"
-                  placeholder="you@example.com"
-                />
+                <input id="email" name="email" type="email" required />
               </div>
             </div>
 
             <div class="two-col">
               <div>
                 <label for="age">Age</label>
-                <input
-                  id="age"
-                  name="age"
-                  type="number"
-                  min="18"
-                  max="120"
-                  required
-                  placeholder="30"
-                />
+                <input id="age" name="age" type="number" min="18" max="120" required />
               </div>
               <div>
                 <label for="work">Work / occupation</label>
-                <input
-                  id="work"
-                  name="work"
-                  type="text"
-                  required
-                  placeholder="e.g. Business owner, employee"
-                />
+                <input id="work" name="work" type="text" required />
               </div>
             </div>
 
             <div class="two-col">
               <div>
-                <label for="income">Monthly income (number)</label>
-                <input
-                  id="income"
-                  name="income"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  required
-                  placeholder="45000"
-                />
+                <label for="income">Monthly income</label>
+                <input id="income" name="income" type="number" required />
               </div>
               <div>
                 <label for="currency">Main currency</label>
@@ -442,41 +396,23 @@ const year = new Date().getFullYear();
                   <option value="LENDING">Lend</option>
                   <option value="INVESTMENT">Invest</option>
                   <option value="PROFIT_SHARING">Profit sharing</option>
-                  <option value="GROW_MONEY">Grow my money</option>
                 </select>
               </div>
               <div>
                 <label for="amount">Amount</label>
-                <input
-                  id="amount"
-                  name="amount"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  placeholder="Amount in chosen currency"
-                />
+                <input id="amount" name="amount" type="number" />
               </div>
             </div>
 
             <div>
               <label for="details">Short description</label>
-              <textarea
-                id="details"
-                name="details"
-                placeholder="Example: Borrow 300 000 NOK for 24 months, or invest EUR 50 000 in profit-sharing deals."
-              ></textarea>
+              <textarea id="details" name="details"></textarea>
             </div>
 
             <div class="checkbox-row">
-              <input
-                id="confirm"
-                name="confirm_information_correct"
-                type="checkbox"
-                required
-              />
+              <input id="confirm" name="confirm_information_correct" type="checkbox" required />
               <label for="confirm">
-                I confirm that the information is correct and that AmicBridge
-                may contact me about this request.
+                I confirm my information is correct and AmicBridge may contact me.
               </label>
             </div>
 
@@ -485,37 +421,31 @@ const year = new Date().getFullYear();
             </div>
 
             <p class="subtle">
-              Your information is processed confidentially and used only to
-              review your request inside the AmicBridge network. It is not
-              shared with third parties for marketing.
+              Your information is confidential and reviewed manually. Not shared for marketing.
             </p>
           </form>
 
           <div class="notice">
-            AmicBridge is a private network, not a traditional bank. We do not
-            guarantee any return or approval. All agreements are made directly
-            between the parties involved, and you should always consider your
-            own risk.
+            AmicBridge is a private network, not a traditional bank.
+            Agreements happen directly between parties.
+            <strong>A written loan or investment agreement is signed when a deal is made.</strong>
           </div>
         </div>
       </section>
 
-      <!-- ABOUT AMICBRIDGE -->
       <section class="about-section">
         <h3>About AmicBridge</h3>
         <p>
-          AmicBridge is a private lending and investment network based in
-          [your city / country]. We connect people and business people who want
-          to make structured agreements around loans, investments and
-          profit-sharing, with a focus on clarity, written terms and long-term
-          cooperation.
+          AmicBridge is a private lending and investment network focused on
+          structured agreements, clear terms and long-term cooperation.
         </p>
       </section>
 
       <footer>
         <div>AmicBridge &copy; {year}</div>
-        <div>Private lending &amp; investment network · Based in [your city / country]</div>
-        <div>Contact: info@amicbridge.com</div>
+        <div>Private lending &amp; investment network</div>
+        <div>CEO: Robert</div>
+        <div>Contact: Robertamicolsen@gmail.com</div>
       </footer>
     </main>
   </body>
