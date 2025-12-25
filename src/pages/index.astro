@@ -1,4 +1,3 @@
-
 ---
 const year = new Date().getFullYear();
 ---
@@ -148,7 +147,11 @@ const year = new Date().getFullYear();
       .section-sub {
         font-size: 0.85rem;
         color: #6b7280;
-        margin: 0 0 10px;
+        margin: 0 0 6px;
+      }
+
+      .section-sub strong {
+        color: #374151;
       }
 
       .card {
@@ -252,6 +255,26 @@ const year = new Date().getFullYear();
         margin-top: 10px;
       }
 
+      /* About section */
+      .about-section {
+        margin-top: 24px;
+        padding: 14px 16px;
+        background: #ffffff;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .about-section h3 {
+        font-size: 1rem;
+        margin: 0 0 6px;
+      }
+
+      .about-section p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #4b5563;
+      }
+
       footer {
         margin-top: 26px;
         padding-top: 14px;
@@ -259,6 +282,7 @@ const year = new Date().getFullYear();
         font-size: 0.75rem;
         color: #6b7280;
         text-align: center;
+        line-height: 1.5;
       }
 
       @media (max-width: 768px) {
@@ -314,8 +338,9 @@ const year = new Date().getFullYear();
       <section id="request">
         <h2 class="section-title">Send a request</h2>
         <p class="section-sub">
-          Fill in your details. We review every request manually inside the
-          AmicBridge network.
+          Simple process:
+          <strong>1)</strong> Send request · <strong>2)</strong> We review it ·
+          <strong>3)</strong> We contact you if it fits the network.
         </p>
 
         <div class="card">
@@ -460,21 +485,37 @@ const year = new Date().getFullYear();
             </div>
 
             <p class="subtle">
-              Your information is sent securely via Formspree and reviewed
-              manually. It is not shared with third parties for marketing.
+              Your information is processed confidentially and used only to
+              review your request inside the AmicBridge network. It is not
+              shared with third parties for marketing.
             </p>
           </form>
 
           <div class="notice">
             AmicBridge is a private network, not a traditional bank. We do not
             guarantee any return or approval. All agreements are made directly
-            between the parties involved.
+            between the parties involved, and you should always consider your
+            own risk.
           </div>
         </div>
       </section>
 
+      <!-- ABOUT AMICBRIDGE -->
+      <section class="about-section">
+        <h3>About AmicBridge</h3>
+        <p>
+          AmicBridge is a private lending and investment network based in
+          [your city / country]. We connect people and business people who want
+          to make structured agreements around loans, investments and
+          profit-sharing, with a focus on clarity, written terms and long-term
+          cooperation.
+        </p>
+      </section>
+
       <footer>
-        AmicBridge &copy; {year} · Lending &amp; investment network
+        <div>AmicBridge &copy; {year}</div>
+        <div>Private lending &amp; investment network · Based in [your city / country]</div>
+        <div>Contact: info@amicbridge.com</div>
       </footer>
     </main>
   </body>
