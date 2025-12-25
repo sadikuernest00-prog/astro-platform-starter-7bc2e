@@ -1,3 +1,4 @@
+
 ---
 const year = new Date().getFullYear();
 ---
@@ -27,6 +28,7 @@ const year = new Date().getFullYear();
         color: #e5e7eb;
         padding: 14px 0;
         margin-bottom: 24px;
+        border-bottom: 1px solid #020617;
       }
 
       .header-inner {
@@ -70,6 +72,7 @@ const year = new Date().getFullYear();
         padding: 0 18px 40px;
       }
 
+      /* Hero */
       .hero {
         display: grid;
         grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
@@ -78,21 +81,32 @@ const year = new Date().getFullYear();
         margin-bottom: 24px;
       }
 
-      .hero h1 {
+      .hero-left h1 {
         font-size: 2rem;
-        margin: 0 0 10px;
+        margin: 0 0 8px;
         font-weight: 600;
       }
 
-      .hero p {
-        margin: 0;
+      .hero-left p {
+        margin: 0 0 4px;
         font-size: 0.95rem;
         color: #4b5563;
       }
 
+      .hero-left .small {
+        font-size: 0.85rem;
+        color: #6b7280;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
       .pill {
         display: inline-block;
-        margin-top: 10px;
         font-size: 0.75rem;
         padding: 3px 10px;
         border-radius: 999px;
@@ -101,7 +115,7 @@ const year = new Date().getFullYear();
         color: #374151;
       }
 
-      .hero-box {
+      .hero-right {
         background: #ffffff;
         border: 1px solid #e5e7eb;
         border-radius: 6px;
@@ -110,18 +124,18 @@ const year = new Date().getFullYear();
         color: #374151;
       }
 
-      .hero-box-title {
+      .hero-right-title {
         font-weight: 600;
         margin-bottom: 6px;
         font-size: 0.9rem;
       }
 
-      .hero-box ul {
+      .hero-right ul {
         margin: 0;
         padding-left: 18px;
       }
 
-      .hero-box li {
+      .hero-right li {
         margin-bottom: 4px;
       }
 
@@ -267,25 +281,31 @@ const year = new Date().getFullYear();
     </header>
 
     <main class="page">
-      <!-- SIMPLE HERO -->
+      <!-- HERO -->
       <section class="hero">
-        <div>
+        <div class="hero-left">
           <h1>Lending &amp; investment network</h1>
           <p>
-            AmicBridge connects people and businesses that want to borrow, lend,
-            invest and share profit on clear terms.
+            AmicBridge connects people and businesses that want to borrow,
+            lend, invest and share profit.
           </p>
-          <span class="pill">Serious money · Simple structure</span>
+          <p class="small">Clear terms. Direct contact. Serious money only.</p>
+
+          <div class="pill-row">
+            <span class="pill">Borrowing</span>
+            <span class="pill">Lending</span>
+            <span class="pill">Investment</span>
+            <span class="pill">Profit sharing</span>
+          </div>
         </div>
 
-        <div class="hero-box">
-          <div class="hero-box-title">What you can request</div>
+        <div class="hero-right">
+          <div class="hero-right-title">What you can request</div>
           <ul>
-            <li>Borrowing</li>
-            <li>Lending</li>
-            <li>Investment</li>
-            <li>Profit sharing</li>
-            <li>Grow your money</li>
+            <li>Borrow for business or private projects</li>
+            <li>Lend capital with agreed return</li>
+            <li>Invest in deals in the network</li>
+            <li>Set up profit-sharing agreements</li>
           </ul>
         </div>
       </section>
@@ -294,8 +314,8 @@ const year = new Date().getFullYear();
       <section id="request">
         <h2 class="section-title">Send a request</h2>
         <p class="section-sub">
-          Fill in your details and what you want to do. We review every request
-          manually.
+          Fill in your details. We review every request manually inside the
+          AmicBridge network.
         </p>
 
         <div class="card">
@@ -436,9 +456,7 @@ const year = new Date().getFullYear();
             </div>
 
             <div class="btn-row">
-              <button class="btn" type="submit">
-                Send request
-              </button>
+              <button class="btn" type="submit">Send request</button>
             </div>
 
             <p class="subtle">
