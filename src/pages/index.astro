@@ -18,16 +18,10 @@
         margin: 0;
         padding: 0;
         background: #f3f4f6;
-        color: #111827;
+        color: #0f172a;
       }
 
-      /* Layout */
-      .page {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 0 16px 40px;
-      }
-
+      /* Header / layout */
       header.site-header {
         background: #0b1726;
         color: #e5e7eb;
@@ -36,9 +30,9 @@
       }
 
       .header-inner {
-        max-width: 1000px;
+        max-width: 1040px;
         margin: 0 auto;
-        padding: 0 16px;
+        padding: 0 18px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -46,7 +40,7 @@
 
       .logo {
         font-weight: 600;
-        font-size: 1.15rem;
+        font-size: 1.2rem;
         letter-spacing: 0.04em;
       }
 
@@ -56,6 +50,7 @@
 
       .nav-links {
         display: flex;
+        flex-wrap: wrap;
         gap: 18px;
         font-size: 0.9rem;
       }
@@ -69,31 +64,37 @@
         text-decoration: underline;
       }
 
-      main {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
+      main.page {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 18px 40px;
       }
 
       /* Hero */
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
         gap: 24px;
-        align-items: start;
+        align-items: flex-start;
+        margin-bottom: 24px;
       }
 
       .hero-main h1 {
         font-size: 2.1rem;
         margin: 0 0 10px;
         font-weight: 600;
-        color: #0f172a;
       }
 
       .hero-main p {
         margin: 0 0 8px;
         font-size: 0.95rem;
         color: #4b5563;
+      }
+
+      .tagline {
+        font-size: 0.9rem;
+        margin-top: 4px;
+        color: #374151;
       }
 
       .pill {
@@ -104,37 +105,37 @@
         border: 1px solid #d1d5db;
         background: #f9fafb;
         color: #374151;
-        margin-top: 8px;
+        margin-top: 10px;
       }
 
-      .highlights {
+      .hero-highlights {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 12px;
-        margin-top: 16px;
+        margin-top: 18px;
       }
 
-      .highlight-card {
+      .hero-box {
         background: #ffffff;
-        border-radius: 8px;
+        border-radius: 6px;
         border: 1px solid #e5e7eb;
         padding: 10px 12px;
       }
 
-      .highlight-title {
+      .hero-box-title {
         font-size: 0.9rem;
         font-weight: 600;
         margin-bottom: 4px;
       }
 
-      .highlight-text {
+      .hero-box-text {
         font-size: 0.8rem;
         color: #6b7280;
       }
 
       .hero-side {
         background: #ffffff;
-        border-radius: 8px;
+        border-radius: 6px;
         border: 1px solid #e5e7eb;
         padding: 14px 14px 16px;
         font-size: 0.85rem;
@@ -146,18 +147,23 @@
         margin: 0 0 6px;
       }
 
-      .hero-list {
+      .hero-side ul {
         padding-left: 18px;
         margin: 6px 0 10px;
       }
 
-      .hero-list li {
+      .hero-side li {
         margin-bottom: 4px;
+      }
+
+      .info-line {
+        font-size: 0.8rem;
+        color: #6b7280;
       }
 
       /* Sections */
       .section {
-        margin-top: 6px;
+        margin-top: 8px;
       }
 
       .section h2 {
@@ -167,13 +173,40 @@
 
       .section p {
         margin: 0 0 8px;
+        font-size: 0.9rem;
       }
 
-      /* Card + form */
+      .three-cols {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 8px;
+      }
+
+      .plain-card {
+        background: #ffffff;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        padding: 12px 12px 14px;
+        font-size: 0.86rem;
+        color: #374151;
+      }
+
+      .plain-card h3 {
+        font-size: 0.95rem;
+        margin: 0 0 6px;
+      }
+
+      .subtle {
+        font-size: 0.8rem;
+        color: #6b7280;
+      }
+
+      /* Form card */
       .card {
         background: #ffffff;
-        border-radius: 8px;
-        padding: 20px 18px 22px;
+        border-radius: 6px;
+        padding: 18px 16px 20px;
         border: 1px solid #e5e7eb;
         margin-top: 8px;
       }
@@ -181,7 +214,7 @@
       form {
         display: grid;
         gap: 14px;
-        margin-top: 12px;
+        margin-top: 10px;
       }
 
       label {
@@ -222,11 +255,6 @@
         gap: 14px;
       }
 
-      .subtle {
-        font-size: 0.8rem;
-        color: #6b7280;
-      }
-
       .btn-row {
         display: flex;
         justify-content: flex-end;
@@ -264,15 +292,15 @@
       .notice {
         background: #f9fafb;
         border-radius: 6px;
-        padding: 10px 12px;
+        padding: 9px 11px;
         font-size: 0.8rem;
         color: #4b5563;
         border: 1px solid #e5e7eb;
-        margin-top: 12px;
+        margin-top: 10px;
       }
 
       footer {
-        margin-top: 28px;
+        margin-top: 26px;
         padding-top: 14px;
         border-top: 1px solid #e5e7eb;
         font-size: 0.75rem;
@@ -303,6 +331,7 @@
         <nav class="nav-links">
           <a href="#about">About</a>
           <a href="#how-it-works">How it works</a>
+          <a href="#network">The network</a>
           <a href="#request">Send request</a>
         </nav>
       </div>
@@ -312,36 +341,39 @@
       <!-- HERO -->
       <section class="hero" id="about">
         <div class="hero-main">
-          <h1>Private lending &amp; investment network</h1>
-          <p>
-            AmicBridge connects people and business people who want to
-            <strong>borrow</strong>, <strong>lend</strong>,
-            <strong>invest</strong> and <strong>share profit</strong> on clear
-            terms.
+          <h1>AmicBridge – a private lending &amp; investment network</h1>
+          <p class="tagline">
+            For people and business people who want to borrow, lend, invest and
+            share profit on clear terms.
           </p>
           <p>
-            Our goal is simple: help you make solid, transparent deals and grow
-            your money in a controlled way.
+            AmicBridge is not a traditional bank. It is a network where members
+            can create solid deals together: loans, investments and
+            profit-sharing agreements that aim to grow their money in a
+            controlled way.
           </p>
-          <span class="pill">AmicBridge.com &mdash; network, not a bank</span>
+          <span class="pill">Serious money. Simple structure. Clear terms.</span>
 
-          <div class="highlights">
-            <div class="highlight-card">
-              <div class="highlight-title">Borrowing</div>
-              <div class="highlight-text">
-                Request funding for projects, business or personal needs.
+          <div class="hero-highlights">
+            <div class="hero-box">
+              <div class="hero-box-title">Borrowing</div>
+              <div class="hero-box-text">
+                Request funding for business, projects or personal needs, with
+                transparent conditions.
               </div>
             </div>
-            <div class="highlight-card">
-              <div class="highlight-title">Lending &amp; investing</div>
-              <div class="highlight-text">
-                Lend money or invest into deals with agreed returns.
+            <div class="hero-box">
+              <div class="hero-box-title">Lending &amp; investing</div>
+              <div class="hero-box-text">
+                Put your capital to work by lending or investing into selected
+                deals.
               </div>
             </div>
-            <div class="highlight-card">
-              <div class="highlight-title">Profit sharing</div>
-              <div class="highlight-text">
-                Structure win–win deals where both sides share upside.
+            <div class="hero-box">
+              <div class="hero-box-title">Profit sharing</div>
+              <div class="hero-box-text">
+                Build arrangements where both sides share risk and upside in a
+                fair way.
               </div>
             </div>
           </div>
@@ -349,28 +381,73 @@
 
         <aside class="hero-side" id="how-it-works">
           <h2>How AmicBridge works</h2>
-          <ol class="hero-list">
+          <ul>
             <li>You send a request with your information and what you want.</li>
             <li>We review it inside the AmicBridge network.</li>
             <li>
               If it fits, we connect you with people or businesses interested in
               a deal.
             </li>
-          </ol>
-          <p class="subtle">
-            AmicBridge is not a traditional bank. We are a private network that
-            helps people find each other and build deals they trust.
+          </ul>
+          <p class="info-line">
+            Every agreement is made directly between the parties. AmicBridge
+            focuses on structure, clarity and matching the right people.
           </p>
         </aside>
       </section>
 
+      <!-- WHO IT'S FOR / TRUST SECTION -->
+      <section class="section" id="network">
+        <h2>The AmicBridge network</h2>
+        <p>
+          The network is for people and business people who want to treat money
+          seriously: clear numbers, written agreements, realistic expectations.
+        </p>
+
+        <div class="three-cols">
+          <div class="plain-card">
+            <h3>For borrowers</h3>
+            <p>
+              You may be building a business, handling a project or need a
+              structured private loan.
+            </p>
+            <p class="subtle">
+              You are ready to share your situation honestly and follow clear
+              repayment or profit-sharing terms.
+            </p>
+          </div>
+          <div class="plain-card">
+            <h3>For lenders &amp; investors</h3>
+            <p>
+              You have capital you want to grow, but prefer understandable deals
+              instead of speculation.
+            </p>
+            <p class="subtle">
+              You are open to both fixed interest and structured profit-sharing
+              with agreed risk levels.
+            </p>
+          </div>
+          <div class="plain-card">
+            <h3>For long-term partners</h3>
+            <p>
+              Over time, repeat cooperation inside the network can build trust,
+              track record and better opportunities.
+            </p>
+            <p class="subtle">
+              AmicBridge is built around relationships, not “quick wins”.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <!-- REQUEST FORM -->
       <section class="section" id="request">
-        <h2>Send a request</h2>
+        <h2>Send a request to AmicBridge</h2>
         <p class="subtle">
-          Use this form to tell us if you want to borrow, lend, invest or make a
-          profit-sharing agreement. We will contact you personally before any
-          deal is made.
+          Fill in your information and what you are looking for: borrowing,
+          lending, investment, profit sharing or simply a way to grow your
+          money. We will review and contact you directly if it fits the
+          network.
         </p>
 
         <div class="card">
@@ -380,11 +457,11 @@
             method="POST"
             accept-charset="UTF-8"
           >
-            <!-- Helpful metadata for your inbox -->
+            <!-- Metadata for your Formspree inbox -->
             <input
               type="hidden"
               name="_subject"
-              value="New AmicBridge network request"
+              value="New AmicBridge request"
             />
             <input type="hidden" name="_template" value="table" />
 
@@ -433,7 +510,7 @@
                   name="work"
                   type="text"
                   required
-                  placeholder="e.g. Business owner, consultant, employee"
+                  placeholder="e.g. Business owner, employee, consultant"
                 />
               </div>
             </div>
@@ -499,7 +576,7 @@
               <textarea
                 id="details"
                 name="details"
-                placeholder="Example: I want to borrow 300 000 NOK for my company over 24 months with a fixed interest rate. Or, I want to invest EUR 50 000 in profit-sharing deals with conservative risk."
+                placeholder="Example: I want to borrow 300 000 NOK for my company over 24 months with a fixed interest rate. Or: I want to invest EUR 50 000 into low–medium risk profit-sharing deals."
               ></textarea>
             </div>
 
@@ -518,23 +595,26 @@
             </div>
 
             <div class="btn-row">
-              <button class="btn" type="submit">Send request to AmicBridge</button>
+              <button class="btn" type="submit">
+                Send request to AmicBridge
+              </button>
             </div>
 
             <p class="subtle">
               When you submit, this form is sent securely through Formspree
-              (<code>/f/xzznjkvd</code>). We do not sell your details to third
-              parties.
+              (<code>/f/xzznjkvd</code>). Your information is used only to
+              review and follow up on your request inside the AmicBridge
+              network.
             </p>
           </form>
 
           <div class="notice">
-            <strong>Important information:</strong>
-            <br />
-            AmicBridge is a private network of people and business people. We do
-            not promise any specific return or guarantee that your loan or
-            investment will be accepted. Every request is reviewed, and any
-            agreement is made directly between the parties involved.
+            <strong>Important information:</strong><br />
+            AmicBridge is a private network, not a bank and not a broker. We do
+            not promise any specific return and we do not guarantee that your
+            request will be accepted. Every deal is an agreement between the
+            parties involved, and you should always consider your own risk and
+            get independent advice if needed.
           </div>
         </div>
       </section>
