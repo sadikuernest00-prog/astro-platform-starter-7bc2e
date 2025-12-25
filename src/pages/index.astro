@@ -1,452 +1,490 @@
 ---
-const year = new Date().getFullYear();
+const base = import.meta.env.BASE_URL ?? "/";
+
+// helper: always build correct URL (works on / and subfolders)
+const img = (path) => `${base}${path.replace(/^\/+/, "")}`;
+
+const products = [
+  {
+    id: "set-black",
+    name: "Black Satin-Look Cami & Shorts Set",
+    price: 499,
+    image: "/images/set-black.png",
+    colors: ["Black"],
+    sizes: ["S", "M", "L"],
+    defaultColor: "Black",
+  },
+  {
+    id: "set-white",
+    name: "White Satin-Look Cami & Shorts Set",
+    price: 499,
+    image: "/images/set-white.png",
+    colors: ["White"],
+    sizes: ["S", "M", "L"],
+    defaultColor: "White",
+  },
+  {
+    id: "nude-slip",
+    name: "Nude Satin-Look Slip Dress",
+    price: 499,
+    image: "/images/nude-slipp-dress.png",
+    colors: ["Nude"],
+    sizes: ["S", "M", "L"],
+    defaultColor: "Nude",
+  },
+  {
+    id: "white-slip",
+    name: "White Satin-Look Slip Dress",
+    price: 499,
+    image: "/images/white-slip-dress.png",
+    colors: ["White"],
+    sizes: ["S", "M", "L"],
+    defaultColor: "White",
+  },
+  {
+    id: "black-chemise",
+    name: "Black Satin-Look Chemise Dress",
+    price: 499,
+    image: "/images/black-chemise.png",
+    colors: ["Black"],
+    sizes: ["S", "M", "L"],
+    defaultColor: "Black",
+  },
+
+  // bras
+  {
+    id: "white-soft-bra",
+    name: "White Soft Comfort Bra",
+    price: 380,
+    image: "/images/white-soft-bra.png",
+    colors: ["White"],
+    sizes: ["75B", "80B", "85B", "90B", "95B"],
+    defaultColor: "White",
+  },
+  {
+    id: "black-soft-bra",
+    name: "Black Soft Comfort Bra",
+    price: 380,
+    image: "/images/black-soft-bra.png",
+    colors: ["Black"],
+    sizes: ["75B", "80B", "85B", "90B", "95B"],
+    defaultColor: "Black",
+  },
+  {
+    id: "grey-soft-bra",
+    name: "Grey Soft Comfort Bra",
+    price: 380,
+    image: "/images/grey-soft.png",
+    colors: ["Grey"],
+    sizes: ["75B", "80B", "85B", "90B", "95B"],
+    defaultColor: "Grey",
+  },
+  {
+    id: "white-sport-bra",
+    name: "White Sport Bra",
+    price: 380,
+    image: "/images/white-sport-bra.png",
+    colors: ["White"],
+    sizes: ["75B", "80B", "85B", "90B", "95B"],
+    defaultColor: "White",
+  },
+  {
+    id: "white-set-bra",
+    name: "White Set Bra",
+    price: 380,
+    image: "/images/white-set-bra.png",
+    colors: ["White"],
+    sizes: ["75B", "80B", "85B", "90B", "95B"],
+    defaultColor: "White",
+  },
+];
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>AmicBridge | Lending & Investment Network</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amicbridge</title>
+
     <style>
-      :root {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        color-scheme: light;
+      :root{
+        --bg:#f7f6f4;
+        --text:#151515;
+        --muted:#6b6b6b;
+        --border:#dedede;
+        --card:#ffffff;
+      }
+      *{ box-sizing:border-box; }
+      body{
+        margin:0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background:var(--bg);
+        color:var(--text);
       }
 
-      body {
-        margin: 0;
-        padding: 0;
-        background: #f3f4f6;
-        color: #0f172a;
+      header{
+        padding:26px 44px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+      }
+      .brand{
+        font-weight:800;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        font-size:18px;
+      }
+      nav{
+        display:flex;
+        gap:26px;
+        align-items:center;
+      }
+      nav a{
+        color:var(--text);
+        text-decoration:none;
+        font-size:16px;
+        font-weight:500;
+      }
+      nav a:hover{ text-decoration:underline; }
+
+      .badge{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        min-width:22px;
+        height:22px;
+        padding:0 6px;
+        border-radius:999px;
+        border:1px solid var(--border);
+        font-size:12px;
+        color:var(--muted);
+        background:#fff;
+        margin-left:8px;
       }
 
-      header.site-header {
-        background: #0b1726;
-        color: #e5e7eb;
-        padding: 14px 0;
-        margin-bottom: 24px;
-        border-bottom: 1px solid #020617;
+      main{
+        max-width:1200px;
+        margin:0 auto;
+        padding:0 44px 80px;
       }
 
-      .header-inner {
-        max-width: 960px;
-        margin: 0 auto;
-        padding: 0 18px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+      .hero{
+        margin-top:110px;
+        max-width:820px;
+      }
+      .hero h1{
+        margin:0 0 18px;
+        font-size:72px;
+        line-height:1.05;
+        letter-spacing:-0.02em;
+      }
+      .hero p{
+        margin:0;
+        color:var(--muted);
+        font-size:20px;
+        max-width:560px;
       }
 
-      .logo {
-        font-weight: 600;
-        font-size: 1.2rem;
-        letter-spacing: 0.04em;
+      .sectionTitle{
+        margin-top:90px;
+        font-size:22px;
+        font-weight:700;
       }
 
-      .logo span {
-        color: #60a5fa;
+      .products{
+        margin-top:18px;
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap:24px;
+      }
+      .card{
+        background:var(--card);
+        border:1px solid var(--border);
+        padding:16px;
+      }
+      .card img{
+        width:100%;
+        height:420px;
+        object-fit:cover;
+        background:#eee;
+        border:1px solid var(--border);
       }
 
-      .nav-links {
-        display: flex;
-        gap: 18px;
-        font-size: 0.9rem;
+      .name{
+        margin:12px 0 4px;
+        font-size:18px;
+        font-weight:700;
+      }
+      .price{
+        margin:0 0 10px;
+        font-weight:800;
       }
 
-      .nav-links a {
-        color: #e5e7eb;
-        text-decoration: none;
+      .label{
+        margin:12px 0 8px;
+        color:var(--muted);
+        font-size:12px;
+        text-transform:uppercase;
+        letter-spacing:.06em;
+      }
+      .grid{
+        display:grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap:10px;
+      }
+      .opt{
+        border:1px solid var(--border);
+        background:#fff;
+        padding:12px 10px;
+        cursor:pointer;
+        text-align:center;
+        font-size:15px;
+      }
+      .opt.active{
+        border-color:var(--text);
+        outline:2px solid rgba(0,0,0,.06);
       }
 
-      .nav-links a:hover {
-        text-decoration: underline;
+      .qty{
+        display:grid;
+        grid-template-columns: 56px 70px 56px;
+        border:1px solid var(--border);
+        width:max-content;
+      }
+      .qty button{
+        border:0;
+        background:#fff;
+        padding:12px 0;
+        cursor:pointer;
+        font-size:18px;
+      }
+      .qty div{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-left:1px solid var(--border);
+        border-right:1px solid var(--border);
+        font-size:14px;
       }
 
-      main.page {
-        max-width: 960px;
-        margin: 0 auto;
-        padding: 0 18px 40px;
+      .actions{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:10px;
+        margin-top:14px;
       }
-
-      .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
-        gap: 24px;
-        align-items: center;
-        margin-bottom: 24px;
+      .btn{
+        padding:12px 10px;
+        border:1px solid var(--text);
+        background:#fff;
+        cursor:pointer;
+        font-size:14px;
+        font-weight:700;
       }
-
-      .hero-left h1 {
-        font-size: 2rem;
-        margin: 0 0 8px;
-        font-weight: 600;
+      .btn.primary{
+        background:var(--text);
+        color:#fff;
       }
-
-      .hero-left p {
-        margin: 0 0 4px;
-        font-size: 0.95rem;
-        color: #4b5563;
+      .btn.secondary{
+        border-color:var(--border);
+        font-weight:700;
       }
-
-      .hero-left .small {
-        font-size: 0.85rem;
-        color: #6b7280;
+      .msg{
+        margin:10px 0 0;
+        font-size:12px;
+        min-height:16px;
+        color:#1a7f37;
       }
+      .msg.bad{ color:#b42318; }
 
-      .pill-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-      }
-
-      .pill {
-        display: inline-block;
-        font-size: 0.75rem;
-        padding: 3px 10px;
-        border-radius: 999px;
-        border: 1px solid #d1d5db;
-        background: #f9fafb;
-        color: #374151;
-      }
-
-      .hero-right {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        padding: 12px 14px;
-        font-size: 0.85rem;
-        color: #374151;
-      }
-
-      .hero-right-title {
-        font-weight: 600;
-        margin-bottom: 6px;
-        font-size: 0.9rem;
-      }
-
-      .hero-right ul {
-        margin: 0;
-        padding-left: 18px;
-      }
-
-      .hero-right li {
-        margin-bottom: 4px;
-      }
-
-      .section-title {
-        font-size: 1.3rem;
-        margin: 4px 0 6px;
-      }
-
-      .section-sub {
-        font-size: 0.85rem;
-        color: #6b7280;
-        margin: 0 0 6px;
-      }
-
-      .section-sub strong {
-        color: #374151;
-      }
-
-      .card {
-        background: #ffffff;
-        border-radius: 6px;
-        padding: 18px 16px 20px;
-        border: 1px solid #e5e7eb;
-        margin-top: 4px;
-      }
-
-      form {
-        display: grid;
-        gap: 14px;
-        margin-top: 8px;
-      }
-
-      label {
-        font-size: 0.85rem;
-        font-weight: 500;
-        display: block;
-        margin-bottom: 4px;
-      }
-
-      input,
-      textarea,
-      select {
-        font: inherit;
-        padding: 8px 10px;
-        border-radius: 4px;
-        border: 1px solid #d1d5db;
-        width: 100%;
-        box-sizing: border-box;
-        background: #f9fafb;
-      }
-
-      input:focus,
-      textarea:focus,
-      select:focus {
-        outline: none;
-        border-color: #2563eb;
-        background: #ffffff;
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 80px;
-      }
-
-      .two-col {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 14px;
-      }
-
-      .btn-row {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 6px;
-      }
-
-      .btn {
-        border-radius: 4px;
-        padding: 9px 20px;
-        font-size: 0.95rem;
-        cursor: pointer;
-        font-weight: 500;
-        background: #0b1726;
-        color: #ffffff;
-        border: 1px solid #0b1726;
-      }
-
-      .btn:hover {
-        background: #111827;
-      }
-
-      .checkbox-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 8px;
-        font-size: 0.8rem;
-        color: #374151;
-      }
-
-      .checkbox-row input {
-        width: auto;
-        margin-top: 2px;
-      }
-
-      .subtle {
-        font-size: 0.8rem;
-        color: #6b7280;
-      }
-
-      .notice {
-        background: #f9fafb;
-        border-radius: 6px;
-        padding: 8px 10px;
-        font-size: 0.78rem;
-        color: #4b5563;
-        border: 1px solid #e5e7eb;
-        margin-top: 10px;
-      }
-
-      .about-section {
-        margin-top: 24px;
-        padding: 14px 16px;
-        background: #ffffff;
-        border-radius: 6px;
-        border: 1px solid #e5e7eb;
-      }
-
-      .about-section h3 {
-        font-size: 1rem;
-        margin: 0 0 6px;
-      }
-
-      .about-section p {
-        margin: 0;
-        font-size: 0.85rem;
-        color: #4b5563;
-      }
-
-      footer {
-        margin-top: 26px;
-        padding-top: 14px;
-        border-top: 1px solid #e5e7eb;
-        font-size: 0.75rem;
-        color: #6b7280;
-        text-align: center;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 768px) {
-        .hero {
-          grid-template-columns: minmax(0, 1fr);
-        }
+      @media (max-width: 900px){
+        header{ padding:18px 18px; }
+        main{ padding:0 18px 60px; }
+        .hero{ margin-top:70px; }
+        .hero h1{ font-size:48px; }
       }
     </style>
   </head>
 
   <body>
-    <header class="site-header">
-      <div class="header-inner">
-        <div class="logo">
-          Amic<span>Bridge</span>
-        </div>
-        <nav class="nav-links">
-          <a href="#request">Request</a>
-        </nav>
-      </div>
+    <header>
+      <div class="brand">AMIC UNDERWEAR</div>
+      <nav>
+        <a href="#shop">Shop</a>
+        <a href="https://wa.me/4792928373" target="_blank" rel="noopener">Contact</a>
+
+        <!-- checkout is src/pages/checkout.astro -->
+        <a href={`${base}checkout`}>
+          Checkout <span class="badge" id="cartCount">0</span>
+        </a>
+      </nav>
     </header>
 
-    <main class="page">
+    <main>
       <section class="hero">
-        <div class="hero-left">
-          <h1>Lending &amp; investment network</h1>
-          <p>
-            AmicBridge connects people and businesses that want to borrow,
-            lend, invest and share profit.
-          </p>
-          <p class="small">Clear terms. Direct contact. Serious money only.</p>
-
-          <div class="pill-row">
-            <span class="pill">Borrowing</span>
-            <span class="pill">Lending</span>
-            <span class="pill">Investment</span>
-            <span class="pill">Profit sharing</span>
-          </div>
-        </div>
-
-        <div class="hero-right">
-          <div class="hero-right-title">What you can request</div>
-          <ul>
-            <li>Borrow for business or private projects</li>
-            <li>Lend capital with agreed return</li>
-            <li>Invest in deals in the network</li>
-            <li>Set up profit-sharing agreements</li>
-            <li><strong>A written agreement is signed when a deal is made</strong></li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="request">
-        <h2 class="section-title">Send a request</h2>
-        <p class="section-sub">
-          Simple process:
-          <strong>1)</strong> Send request · <strong>2)</strong> We review it ·
-          <strong>3)</strong> We contact you if it fits the network.
-        </p>
-
-        <div class="card">
-          <form
-            action="https://formspree.io/f/xzznjkvd"
-            method="POST"
-            accept-charset="UTF-8"
-          >
-            <input type="hidden" name="_subject" value="New AmicBridge request" />
-            <input type="hidden" name="_template" value="table" />
-
-            <div class="two-col">
-              <div>
-                <label for="name">Full name</label>
-                <input id="name" name="name" type="text" required />
-              </div>
-              <div>
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" required />
-              </div>
-            </div>
-
-            <div class="two-col">
-              <div>
-                <label for="age">Age</label>
-                <input id="age" name="age" type="number" min="18" max="120" required />
-              </div>
-              <div>
-                <label for="work">Work / occupation</label>
-                <input id="work" name="work" type="text" required />
-              </div>
-            </div>
-
-            <div class="two-col">
-              <div>
-                <label for="income">Monthly income</label>
-                <input id="income" name="income" type="number" required />
-              </div>
-              <div>
-                <label for="currency">Main currency</label>
-                <select id="currency" name="currency" required>
-                  <option value="">Choose currency</option>
-                  <option value="NOK">NOK</option>
-                  <option value="EUR">EUR</option>
-                  <option value="USD">USD</option>
-                  <option value="SEK">SEK</option>
-                  <option value="CRYPTO">Crypto</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="two-col">
-              <div>
-                <label for="requestType">I want to</label>
-                <select id="requestType" name="request_type" required>
-                  <option value="">Select one</option>
-                  <option value="BORROWING">Borrow</option>
-                  <option value="LENDING">Lend</option>
-                  <option value="INVESTMENT">Invest</option>
-                  <option value="PROFIT_SHARING">Profit sharing</option>
-                </select>
-              </div>
-              <div>
-                <label for="amount">Amount</label>
-                <input id="amount" name="amount" type="number" />
-              </div>
-            </div>
-
-            <div>
-              <label for="details">Short description</label>
-              <textarea id="details" name="details"></textarea>
-            </div>
-
-            <div class="checkbox-row">
-              <input id="confirm" name="confirm_information_correct" type="checkbox" required />
-              <label for="confirm">
-                I confirm my information is correct and AmicBridge may contact me.
-              </label>
-            </div>
-
-            <div class="btn-row">
-              <button class="btn" type="submit">Send request</button>
-            </div>
-
-            <p class="subtle">
-              Your information is confidential and reviewed manually. Not shared for marketing.
-            </p>
-          </form>
-
-          <div class="notice">
-            AmicBridge is a private network, not a traditional bank.
-            Agreements happen directly between parties.
-            <strong>A written loan or investment agreement is signed when a deal is made.</strong>
-          </div>
-        </div>
-      </section>
-
-      <section class="about-section">
-        <h3>About AmicBridge</h3>
+        <h1>everday comfort. Designed beautifully.</h1>
         <p>
-          AmicBridge is a private lending and investment network focused on
-          structured agreements, clear terms and long-term cooperation.
+          Amic Underwear creates soft, supportive essentials designed to move with your body -
+          made for confidence, comfort, and real life.
         </p>
       </section>
 
-      <footer>
-        <div>AmicBridge &copy; {year}</div>
-        <div>Private lending &amp; investment network</div>
-        <div>CEO: Robert</div>
-        <div>Contact: Robertamicolsen@gmail.com</div>
-      </footer>
+      <h2 id="shop" class="sectionTitle">Shop</h2>
+
+      <section class="products" aria-label="Products">
+        {products.map((p) => (
+          <article
+            class="card"
+            data-product
+            data-id={p.id}
+            data-name={p.name}
+            data-price={p.price}
+          >
+            <img src={img(p.image)} alt={p.name} />
+
+            <div class="name">{p.name}</div>
+            <div class="price">{p.price} NOK</div>
+
+            <div class="label">Size</div>
+            <div class="grid sizes">
+              {p.sizes.map((s) => (
+                <button class="opt" type="button" data-size={s}>{s}</button>
+              ))}
+            </div>
+
+            <div class="label">Color</div>
+            <div class="grid colors">
+              {p.colors.map((c) => (
+                <button
+                  class={`opt ${c === p.defaultColor ? "active" : ""}`}
+                  type="button"
+                  data-color={c}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+
+            <div class="label">Quantity</div>
+            <div class="qty" role="group" aria-label="Quantity selector">
+              <button type="button" data-minus>-</button>
+              <div data-qty>1</div>
+              <button type="button" data-plus>+</button>
+            </div>
+
+            <div class="actions">
+              <button class="btn secondary" type="button" data-remove>Remove</button>
+              <button class="btn primary" type="button" data-add>Add to cart</button>
+            </div>
+
+            <p class="msg" data-msg></p>
+          </article>
+        ))}
+      </section>
     </main>
+
+    <script>
+      const CART_KEY = "amicbridge_cart_v1";
+
+      function readCart() {
+        try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
+        catch { return []; }
+      }
+      function writeCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        updateCartCount();
+      }
+      function updateCartCount() {
+        const count = readCart().reduce((sum, i) => sum + (Number(i.qty) || 0), 0);
+        const el = document.getElementById("cartCount");
+        if (el) el.textContent = String(count);
+      }
+      function setMsg(card, text, ok=true){
+        const el = card.querySelector("[data-msg]");
+        if(!el) return;
+        el.textContent = text;
+        el.classList.toggle("bad", !ok);
+      }
+
+      document.querySelectorAll("[data-product]").forEach((card) => {
+        let qty = 1;
+        let size = null;
+        let color = card.querySelector(".colors .opt.active")?.dataset.color || null;
+
+        // Size
+        card.querySelectorAll(".sizes .opt").forEach((b) => {
+          b.addEventListener("click", () => {
+            card.querySelectorAll(".sizes .opt").forEach((x) => x.classList.remove("active"));
+            b.classList.add("active");
+            size = b.dataset.size;
+            setMsg(card, "");
+          });
+        });
+
+        // Color
+        card.querySelectorAll(".colors .opt").forEach((b) => {
+          b.addEventListener("click", () => {
+            card.querySelectorAll(".colors .opt").forEach((x) => x.classList.remove("active"));
+            b.classList.add("active");
+            color = b.dataset.color;
+            setMsg(card, "");
+          });
+        });
+
+        // Quantity
+        const qtyEl = card.querySelector("[data-qty]");
+        card.querySelector("[data-plus]").addEventListener("click", () => {
+          qty = Math.min(99, qty + 1);
+          qtyEl.textContent = String(qty);
+        });
+        card.querySelector("[data-minus]").addEventListener("click", () => {
+          qty = Math.max(1, qty - 1);
+          qtyEl.textContent = String(qty);
+        });
+
+        // Add to cart
+        card.querySelector("[data-add]").addEventListener("click", () => {
+          if (!size) return setMsg(card, "Please select a size.", false);
+          if (!color) return setMsg(card, "Please select a color.", false);
+
+          const cart = readCart();
+          const productId = card.dataset.id;
+          const name = card.dataset.name;
+          const price = Number(card.dataset.price) || 0;
+
+          const existing = cart.find(i => i.productId === productId && i.size === size && i.color === color);
+          if (existing) existing.qty += qty;
+          else cart.push({ productId, name, price, size, color, qty });
+
+          writeCart(cart);
+          setMsg(card, "Added to cart ✓");
+        });
+
+        // Remove exact size+color variant from cart
+        card.querySelector("[data-remove]").addEventListener("click", () => {
+          if (!size || !color) return setMsg(card, "Select size & color to remove.", false);
+
+          let cart = readCart();
+          const before = cart.length;
+
+          cart = cart.filter(
+            (i) =>
+              !(
+                i.productId === card.dataset.id &&
+                i.size === size &&
+                i.color === color
+              )
+          );
+
+          if (cart.length === before) return setMsg(card, "Item not in cart.", false);
+
+          writeCart(cart);
+          setMsg(card, "Removed from cart ✓");
+        });
+      });
+
+      updateCartCount();
+    </script>
   </body>
 </html>
