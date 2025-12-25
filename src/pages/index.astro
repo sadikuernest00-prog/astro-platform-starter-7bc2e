@@ -1,19 +1,295 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Markdown from '../components/Markdown.astro';
-
-const explainer = `
-An Astro website can go way beyond static pages - on the right platform.
-
-Netlify supports not only [Streaming SSR](https://docs.astro.build/en/guides/server-side-rendering/#html-streaming) and fast [Edge Middleware](https://docs.astro.build/en/guides/middleware/), but also [on-demand revalidation](https://www.netlify.com/blog/cache-tags-and-purge-api-on-netlify/) and [stale-while-revalidate](https://www.netlify.com/blog/swr-and-fine-grained-cache-control/). 
-Any page or data can be rebuilt only when needed, without site visitors ever getting a performance hit.
-`;
+/* AmicBridge – Request form wired to Formspree */
 ---
 
-<Layout title="Welcome to Astro.">
-    <h1 class="mb-10">Netlify Platform Starter for Astro</h1>
-    <Markdown content={explainer} class="mb-10 text-lg" />
-    <p>
-        <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a>
-    </p>
-</Layout>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AmicBridge – Request</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f4f4f5;
+        color: #111827;
+      }
+
+      .page {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 40px 16px 80px;
+      }
+
+      h1 {
+        font-size: 2.25rem;
+        margin-bottom: 6px;
+        letter-spacing: -0.04em;
+      }
+
+      p {
+        margin: 0 0 10px;
+      }
+
+      .card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 24px 20px 28px;
+        margin-top: 24px;
+        box-shadow:
+          0 18px 45px rgba(15, 23, 42, 0.06),
+          0 0 0 1px rgba(209, 213, 219, 0.8);
+      }
+
+      form {
+        display: grid;
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      input,
+      textarea,
+      select {
+        font: inherit;
+        padding: 9px 11px;
+        border-radius: 10px;
+        border: 1px solid #d4d4d8;
+        width: 100%;
+        box-sizing: border-box;
+        background: #f9fafb;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 1px #4f46e5;
+        background: #ffffff;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 90px;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 14px;
+      }
+
+      .subtle {
+        font-size: 0.8rem;
+        color: #6b7280;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 22px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        font-weight: 500;
+        background: #111827;
+        color: #ffffff;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.28);
+        transition: transform 0.05s ease, box-shadow 0.05s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+        box-shadow: none;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 6px;
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          padding-top: 24px;
+        }
+
+        h1 {
+          font-size: 1.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <h1>AmicBridge Request</h1>
+        <p>
+          Send a request for <strong>borrowing, lending, investing</strong> or
+          <strong>profit sharing</strong>. The details below will be sent safely
+          to the AmicBridge inbox.
+        </p>
+      </header>
+
+      <section class="card">
+        <h2 style="font-size: 1.3rem; margin-top: 0">
+          Join a deal / ask for a deal
+        </h2>
+        <p class="subtle">
+          Fill out your basic info and what you want to do in the network.
+        </p>
+
+        <!-- Formspree form -->
+        <form
+          action="https://formspree.io/f/xzznjkvd"
+          method="POST"
+          accept-charset="UTF-8"
+        >
+          <!-- Hidden meta fields (optional, helpful in Formspree inbox) -->
+          <input
+            type="hidden"
+            name="_subject"
+            value="New AmicBridge lending / borrowing / investment request"
+          />
+          <input type="hidden" name="_template" value="table" />
+
+          <div class="two-col">
+            <div>
+              <label for="name">Full name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                placeholder="Your name"
+              />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <label for="age">Age</label>
+              <input
+                id="age"
+                name="age"
+                type="number"
+                min="18"
+                max="120"
+                required
+                placeholder="30"
+              />
+            </div>
+            <div>
+              <label for="work">Work / occupation</label>
+              <input
+                id="work"
+                name="work"
+                type="text"
+                required
+                placeholder="Network administrator"
+              />
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <label for="income">Monthly income (number)</label>
+              <input
+                id="income"
+                name="income"
+                type="number"
+                min="0"
+                step="0.01"
+                required
+                placeholder="45000"
+              />
+            </div>
+            <div>
+              <label for="currency">Currency</label>
+              <select id="currency" name="currency" required>
+                <option value="">Choose currency</option>
+                <option value="NOK">NOK</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+                <option value="SEK">SEK</option>
+                <option value="CRYPTO">Crypto</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <label for="requestType">I am interested in</label>
+              <select id="requestType" name="request_type" required>
+                <option value="">Choose type</option>
+                <option value="BORROWING">Borrowing</option>
+                <option value="LENDING">Lending</option>
+                <option value="INVESTMENT">Investment</option>
+                <option value="PROFIT_SHARING">Profit sharing</option>
+              </select>
+            </div>
+            <div>
+              <label for="amount">Deal amount</label>
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Amount in chosen currency"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="details">
+              Describe your request (loan terms, investment idea, profit share,
+              etc.)
+            </label>
+            <textarea
+              id="details"
+              name="details"
+              placeholder="Example: I want to borrow 50 000 NOK for 12 months to invest in equipment. I can offer profit sharing of X% or fixed APR..."
+            ></textarea>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" type="submit">Send request</button>
+          </div>
+
+          <p class="subtle">
+            When you submit, the information is sent to AmicBridge via
+            Formspree at <code>/f/xzznjkvd</code>.
+          </p>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
