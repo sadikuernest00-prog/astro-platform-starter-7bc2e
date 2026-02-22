@@ -1,713 +1,266 @@
-<!DOCTYPE html>
+---
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>AmicBridge – Loans and Investments within a Trusted Network</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="AmicBridge provides loans and investment opportunities within a private, trust-based network. Private people can lend money to others through written agreements and clear contracts." />
-  <meta name="color-scheme" content="light" />
+  <head>
+    <meta charset="utf-8" />
+    <title>AmicBridge – Structured Lending, Borrowing & Investing</title>
+    <meta
+      name="description"
+      content="AmicBridge is a structured private network where people lend, borrow and invest with written agreements, clear expectations and shared profit."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <style>
-    :root {
-      --primary: #1f4f8f;
-      --primary-light: #e4edf8;
-      --background: #f5f5f7;
-      --surface: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #d1d5db;
-      --danger: #b91c1c;
-      --radius-card: 10px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: var(--background);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    a:focus-visible,
-    button:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
-
-    /* Layout */
-
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .header-inner {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--primary);
-    }
-
-    .logo span {
-      color: #111827;
-    }
-
-    .brand-subtitle {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 14px;
-    }
-
-    nav a {
-      padding: 6px 10px;
-      border-radius: 999px;
-      color: var(--muted);
-    }
-
-    nav a:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .nav-cta {
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      font-weight: 500;
-    }
-
-    main {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 24px 20px 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Hero */
-
-    .hero {
-      background: var(--surface);
-      border-radius: var(--radius-card);
-      border: 1px solid var(--border);
-      padding: 24px 22px;
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr);
-      gap: 20px;
-      align-items: center;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 4px 10px;
-      background: var(--primary-light);
-      color: var(--primary);
-      font-size: 12px;
-      font-weight: 500;
-      margin-bottom: 10px;
-    }
-
-    .hero h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-    }
-
-    .hero-subtitle {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 15px;
-      max-width: 600px;
-    }
-
-    .hero-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-      border-radius: 999px;
-      padding: 8px 16px;
-      font-size: 14px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
-    }
-
-    .btn-primary:hover {
-      background: #163a65;
-      border-color: #163a65;
-    }
-
-    .btn-secondary {
-      background: #ffffff;
-      color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    .btn-secondary:hover {
-      background: var(--primary-light);
-    }
-
-    .hero-note {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .hero-side {
-      border-left: 1px solid var(--border);
-      padding-left: 18px;
-    }
-
-    .hero-side h2 {
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
-
-    .hero-side p {
-      margin: 0 0 10px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    .hero-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .hero-list li {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .hero-bullet {
-      margin-top: 6px;
-      width: 5px;
-      height: 5px;
-      border-radius: 999px;
-      background: var(--primary);
-    }
-
-    /* Sections */
-
-    section {
-      background: var(--surface);
-      border-radius: var(--radius-card);
-      border: 1px solid var(--border);
-      padding: 18px 18px 20px;
-    }
-
-    section h2 {
-      margin: 0 0 8px;
-      font-size: 20px;
-    }
-
-    .section-lead {
-      margin: 0 0 10px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .card-simple {
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #fafafa;
-      padding: 10px 11px;
-      font-size: 14px;
-    }
-
-    .card-simple h3 {
-      margin: 0 0 6px;
-      font-size: 15px;
-    }
-
-    .card-simple p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .list-clean {
-      list-style: none;
-      padding: 0;
-      margin: 8px 0 0;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    .list-clean li {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .list-bullet {
-      margin-top: 6px;
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #9ca3af;
-    }
-
-    .note-small {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 8px;
-    }
-
-    /* Contact */
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
-      gap: 14px;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    .contact-card {
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #fafafa;
-      padding: 10px 11px;
-    }
-
-    .contact-card h3 {
-      margin: 0 0 6px;
-      font-size: 15px;
-    }
-
-    .contact-field-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-    }
-
-    .contact-field-value {
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      background: #ffffff;
-      padding: 14px 20px 20px;
-      font-size: 13px;
-      color: var(--muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Responsive */
-
-    @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: minmax(0, 1fr);
+    <style>
+      :root {
+        --bg: #f3f4f6;
+        --white: #ffffff;
+        --primary: #1d4ed8;
+        --primary-dark: #1e3a8a;
+        --border: #d1d5db;
+        --text-main: #111827;
+        --text-muted: #6b7280;
+        --success-bg: #ecfdf3;
+        --success-border: #bbf7d0;
+        --success-text: #166534;
+        --offer-bg: #e6f0ea;
       }
 
-      .hero-side {
-        border-left: none;
-        border-top: 1px solid var(--border);
-        padding-left: 0;
-        padding-top: 14px;
-        margin-top: 6px;
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text-main);
       }
 
-      .grid-3 {
-        grid-template-columns: minmax(0, 1fr);
+      a { color: var(--primary); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      header {
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        padding: 14px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
       }
 
-      .grid-2 {
-        grid-template-columns: minmax(0, 1fr);
+      .brand-block { display: flex; flex-direction: column; gap: 4px; }
+
+      .logo {
+        font-weight: 800;
+        font-size: 20px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
-      .contact-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
+      .logo span { color: var(--primary-dark); }
 
-    @media (max-width: 640px) {
-      .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
+      .top-meta {
+        font-size: 11px;
+        color: var(--text-muted);
       }
 
       nav {
-        justify-content: flex-start;
+        display: flex;
+        gap: 18px;
+        font-size: 14px;
+        flex-wrap: wrap;
       }
 
-      main {
-        padding-inline: 14px;
+      nav a { color: var(--text-main); font-weight: 500; }
+
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 28px 16px 52px;
       }
-    }
-  </style>
-</head>
 
-<body>
-<header>
-  <div class="header-inner">
-    <div class="brand">
-      <div class="logo">AMIC<span>BRIDGE</span></div>
-      <div class="brand-subtitle">Loans and investments within a trusted private network</div>
-    </div>
+      .section-title { font-size: 20px; margin-top: 40px; margin-bottom: 8px; }
+      .section-sub { margin: 0 0 12px; font-size: 13px; color: var(--text-muted); }
 
-    <nav aria-label="Main navigation">
-      <a href="#products">Products</a>
-      <a href="#how">How it works</a>
-      <a href="#who">Who we serve</a>
-      <a href="#safety">Safety & contracts</a>
-      <a href="#contact" class="nav-cta">Contact</a>
-    </nav>
-  </div>
-</header>
+      .card {
+        background: var(--white);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        padding: 14px 16px;
+        font-size: 14px;
+      }
 
-<main>
-  <!-- HERO -->
-  <section class="hero" aria-labelledby="hero-title">
-    <div>
-      <div class="hero-tag">Trust before money</div>
-      <h1 id="hero-title">Loans and investments through the AmicBridge network.</h1>
+      .list {
+        margin: 6px 0 0;
+        padding-left: 18px;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
 
-      <p class="hero-subtitle">
-        AmicBridge connects people who know and trust each other. We help structure
-        loans and investment agreements between private people and businesses – with clear
-        contracts, repayment plans and expectations on both sides.
-      </p>
+      .two-col {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 18px;
+      }
 
-      <div class="hero-cta">
-        <a href="#contact" class="btn-primary">Talk to us</a>
-        <a href="#products" class="btn-secondary">See our products</a>
+      /* Offer */
+      .offer-box {
+        background: var(--offer-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .offer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .offer-header h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .offer-badge {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .offer-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .offer-item {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 13px;
+      }
+
+      .offer-item strong {
+        display: block;
+        font-size: 16px;
+        margin-top: 4px;
+      }
+
+      footer {
+        font-size: 11px;
+        color: var(--text-muted);
+        border-top: 1px solid var(--border);
+        padding: 12px 24px;
+        background: var(--white);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      @media (max-width: 900px) {
+        .two-col { grid-template-columns: 1fr; }
+        .offer-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="brand-block">
+        <div class="logo">AMIC<span>BRIDGE</span></div>
+        <div class="top-meta">
+          Based in Norway · Private lending & investing network
+        </div>
       </div>
 
-      <p class="hero-note">
-        AmicBridge is a structured private network, not a public anonymous lending platform.
-      </p>
-    </div>
+      <nav>
+        <a href="#offer">Current offer</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
 
-    <aside class="hero-side" aria-label="Key points">
-      <h2>What AmicBridge focuses on</h2>
-      <p>
-        We combine a trusted private network with written contracts and simple,
-        transparent loan and investment structures.
-      </p>
-      <ul class="hero-list">
-        <li>
-          <span class="hero-bullet"></span>
-          <span>Loans arranged inside a known, vetted network.</span>
-        </li>
-        <li>
-          <span class="hero-bullet"></span>
-          <span>Private people can lend their money to others through clear agreements.</span>
-        </li>
-        <li>
-          <span class="hero-bullet"></span>
-          <span>Written contracts, clear interest and repayment terms.</span>
-        </li>
-        <li>
-          <span class="hero-bullet"></span>
-          <span>No hidden fees, no unclear conditions.</span>
-        </li>
-      </ul>
-    </aside>
-  </section>
+    <div class="container">
 
-  <!-- PRODUCTS -->
-  <section id="products" aria-labelledby="products-title">
-    <h2 id="products-title">Products and services</h2>
-    <p class="section-lead">
-      We help structure and follow up financial agreements inside the AmicBridge network.
-      All products are based on written contracts and clear terms.
-    </p>
-
-    <div class="grid-3">
-      <div class="card-simple">
-        <h3>Personal loans</h3>
-        <p>
-          Loans between private people arranged inside the AmicBridge network. Agreements
-          define amount, interest, repayment plan and what happens if payments are delayed.
+      <!-- CURRENT OFFER SECTION -->
+      <section id="offer">
+        <h2 class="section-title">Current Offer</h2>
+        <p class="section-sub">
+          Structured lending opportunity with written agreement and defined repayment.
         </p>
-      </div>
 
-      <div class="card-simple">
-        <h3>Private lending as an investor</h3>
-        <p>
-          Private people with savings can lend money to others in the network.
-          We structure the contracts and help set realistic expectations for risk and return.
-        </p>
-      </div>
+        <div class="offer-box">
+          <div class="offer-header">
+            <h3>Lend 45,000 → Receive 52,000</h3>
+            <span class="offer-badge">Profit 7,000</span>
+          </div>
 
-      <div class="card-simple">
-        <h3>Simple business funding</h3>
-        <p>
-          Funding for smaller businesses and projects, backed by people in the network.
-          We focus on clear agreements rather than complex financial products.
-        </p>
-      </div>
-    </div>
-
-    <p class="note-small">
-      Availability of products can depend on local regulation and individual assessment.
-    </p>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section id="how" aria-labelledby="how-title">
-    <h2 id="how-title">How it works</h2>
-    <p class="section-lead">
-      Every agreement in AmicBridge follows a simple, structured process.
-    </p>
-
-    <div class="grid-4">
-      <!-- Use grid-2 with nested cards for clarity -->
-      <div class="grid-2">
-        <div class="card-simple">
-          <h3>1. We match within the network</h3>
-          <p>
-            A borrower or project is matched with lenders or investors from the AmicBridge
-            network – people and businesses that meet our basic criteria.
+          <p class="section-sub" style="margin-bottom:6px;">
+            Repayment terms and timeline are clearly defined in the written agreement.
           </p>
-        </div>
-        <div class="card-simple">
-          <h3>2. Terms are discussed</h3>
-          <p>
-            Amount, duration, interest, risk and security are discussed openly.
-            We help both sides understand what the agreement means in practice.
-          </p>
-        </div>
-        <div class="card-simple">
-          <h3>3. Contract is written</h3>
-          <p>
-            A written agreement is created in clear language. Both sides review and confirm
-            before any money is transferred.
-          </p>
-        </div>
-        <div class="card-simple">
-          <h3>4. Follow-up and overview</h3>
-          <p>
-            Payments and obligations are followed up according to the agreement.
-            Both parties keep an overview of what has been paid and what is still due.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- WHO WE SERVE + SAFETY -->
-  <section id="who" aria-labelledby="who-title">
-    <h2 id="who-title">Who we serve</h2>
-    <p class="section-lead">
-      AmicBridge is for people and businesses who take agreements seriously.
-    </p>
-
-    <div class="grid-2">
-      <div class="card-simple">
-        <h3>Borrowers</h3>
-        <ul class="list-clean">
-          <li>
-            <span class="list-bullet"></span>
-            <span>Private people who need a structured loan from someone they trust.</span>
-          </li>
-          <li>
-            <span class="list-bullet"></span>
-            <span>Small businesses that want simple funding with clear terms.</span>
-          </li>
-          <li>
-            <span class="list-bullet"></span>
-            <span>People who want to avoid unclear private arrangements and conflicts later.</span>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card-simple" id="safety">
-        <h3>Lenders and investors</h3>
-        <ul class="list-clean">
-          <li>
-            <span class="list-bullet"></span>
-            <span>Private people who want to lend money with written contracts and follow-up.</span>
-          </li>
-          <li>
-            <span class="list-bullet"></span>
-            <span>Individuals who want exposure to real people and projects, not anonymous pools.</span>
-          </li>
-          <li>
-            <span class="list-bullet"></span>
-            <span>People who value trust and transparency more than chasing the highest risk.</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- SAFETY & CONTRACTS -->
-  <section aria-labelledby="safety-title">
-    <h2 id="safety-title">Safety, contracts and responsibilities</h2>
-    <p class="section-lead">
-      Trust is the starting point, but written agreements and clear responsibilities
-      are what protect both sides.
-    </p>
-
-    <div class="grid-3">
-      <div class="card-simple">
-        <h3>Written contracts</h3>
-        <p>
-          Every loan and investment in AmicBridge is based on a written contract.
-          The contract describes amounts, interest, timing, security and consequences
-          if payments are not made.
-        </p>
-      </div>
-
-      <div class="card-simple">
-        <h3>Transparent costs</h3>
-        <p>
-          We aim for simple, understandable costs and interest. There are no hidden
-          fees or unexpected conditions in the small print.
-        </p>
-      </div>
-
-      <div class="card-simple">
-        <h3>Network-based trust</h3>
-        <p>
-          Agreements happen inside a network where participants are known and
-          assessed. This is not a fully open, anonymous marketplace.
-        </p>
-      </div>
-    </div>
-
-    <p class="note-small">
-      All financial decisions involve risk. We encourage both borrowers and lenders to
-      understand their obligations fully before signing an agreement.
-    </p>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" aria-labelledby="contact-title">
-    <h2 id="contact-title">Contact AmicBridge</h2>
-    <p class="section-lead">
-      If you want to use the AmicBridge network for loans or investments, or if you are
-      interested in cooperation, you can contact us directly.
-    </p>
-
-    <div class="contact-grid">
-      <div class="contact-card">
-        <h3>Get in touch</h3>
-        <div class="contact-field">
-          <div class="contact-field-label">Contact person</div>
-          <div class="contact-field-value">Your Name Here</div>
-        </div>
-        <div class="contact-field">
-          <div class="contact-field-label">Email</div>
-          <div class="contact-field-value">
-            <a href="mailto:you@example.com">you@example.com</a>
+          <div class="offer-grid">
+            <div class="offer-item">
+              Lend
+              <strong>45,000</strong>
+            </div>
+            <div class="offer-item">
+              Return
+              <strong>52,000</strong>
+            </div>
+            <div class="offer-item">
+              Profit
+              <strong>7,000</strong>
+            </div>
           </div>
         </div>
-        <div class="contact-field">
-          <div class="contact-field-label">Location</div>
-          <div class="contact-field-value">Based in Norway</div>
+      </section>
+
+      <section id="contact" style="margin-top:40px;">
+        <h2 class="section-title">Contact</h2>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Direct contact</h3>
+            <p>CEO: <strong>Ernest</strong></p>
+
+            <p style="font-size:14px;">
+              Phone: 92928373<br />
+              Email:
+              <a href="mailto:amicbridgecontact@gmail.com">
+                amicbridgecontact@gmail.com
+              </a>
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>When contacting</h3>
+            <ul class="list">
+              <li>Your role</li>
+              <li>Amount</li>
+              <li>Preferred currency</li>
+              <li>Short description</li>
+            </ul>
+          </div>
         </div>
-        <p class="note-small">
-          Replace the placeholder name and email with your real details before publishing.
-        </p>
-      </div>
+      </section>
 
-      <div class="contact-card">
-        <h3>What to include in your message</h3>
-        <ul class="list-clean">
-          <li>
-            <span class="list-bullet"></span>
-            <span>Whether you want to borrow, lend, invest – or cooperate.</span>
-          </li>
-          <li>
-            <span class="list-bullet"></span>
-            <span>Where you are based and if you already have a network that might fit AmicBridge.</span>
-          </li>
-          <li>
-            <span class="list-bullet"></span>
-            <span>A short description of your experience with loans or investments so far.</span>
-          </li>
-        </ul>
-      </div>
     </div>
-  </section>
-</main>
 
-<footer>
-  <span>© <span id="year"></span> AmicBridge. All rights reserved.</span>
-  <span>AmicBridge is a private network solution for loans and investments. It is not a bank. Products and availability may depend on local regulations.</span>
-</footer>
-
-<script>
-  // Set current year in footer
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
-</body>
+    <footer>
+      <span>© {year} AmicBridge · Trust Before Money</span>
+      <span>Private financial network.</span>
+    </footer>
+  </body>
 </html>
