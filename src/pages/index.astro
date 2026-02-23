@@ -1,6 +1,3 @@
----
-const year = new Date().getFullYear();
----
 
 <!doctype html>
 <html lang="en">
@@ -25,7 +22,9 @@ const year = new Date().getFullYear();
         --success-bg: #ecfdf3;
         --success-border: #bbf7d0;
         --success-text: #166534;
-        --offer-bg: #e6f0ea;
+        --warn-bg: #fff7ed;
+        --warn-border: #fed7aa;
+        --warn-text: #9a3412;
       }
 
       * { box-sizing: border-box; }
@@ -81,8 +80,84 @@ const year = new Date().getFullYear();
         padding: 28px 16px 52px;
       }
 
-      .section-title { font-size: 20px; margin-top: 40px; margin-bottom: 8px; }
+      .hero {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 28px;
+        align-items: center;
+      }
+
+      .trust-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #0369a1;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .hero h1 { margin: 0 0 8px; font-size: 32px; }
+      .hero-subtitle { margin: 0 0 16px; font-size: 15px; color: var(--text-muted); max-width: 520px; }
+
+      .hero-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+
+      .btn-primary {
+        border-radius: 999px;
+        padding: 9px 16px;
+        border: 1px solid var(--primary-dark);
+        background: var(--primary-dark);
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .btn-secondary {
+        border-radius: 999px;
+        padding: 9px 16px;
+        border: 1px solid var(--border);
+        background: var(--white);
+        color: var(--text-main);
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .hero-card {
+        background: var(--white);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        padding: 14px 16px;
+        font-size: 13px;
+      }
+
+      .hero-card h3 { margin: 0 0 8px; font-size: 15px; }
+
+      .hero-pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .hero-pill {
+        padding: 4px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: #f9fafb;
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      h2.section-title { font-size: 20px; margin-top: 40px; margin-bottom: 8px; }
       .section-sub { margin: 0 0 12px; font-size: 13px; color: var(--text-muted); }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
 
       .card {
         background: var(--white);
@@ -92,6 +167,9 @@ const year = new Date().getFullYear();
         font-size: 14px;
       }
 
+      .card h3 { margin: 0 0 6px; font-size: 15px; }
+      .card p { margin: 0; color: var(--text-muted); }
+
       .list {
         margin: 6px 0 0;
         padding-left: 18px;
@@ -99,62 +177,75 @@ const year = new Date().getFullYear();
         font-size: 13px;
       }
 
+      .list li { margin-bottom: 3px; }
+
       .two-col {
         display: grid;
         grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
         gap: 18px;
       }
 
-      /* Offer */
-      .offer-box {
-        background: var(--offer-bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 16px;
-      }
+      .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 
-      .offer-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 8px;
-      }
-
-      .offer-header h3 {
-        margin: 0;
-        font-size: 16px;
-      }
-
-      .offer-badge {
-        background: var(--white);
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        padding: 4px 10px;
+      .badge {
         font-size: 11px;
-        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--success-bg);
+        border: 1px solid var(--success-border);
+        color: var(--success-text);
       }
 
+      .contact-card {
+        background: var(--white);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        padding: 14px 16px;
+        font-size: 14px;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .step { font-size: 13px; color: var(--text-muted); }
+      .step strong { display: block; color: var(--text-main); margin-bottom: 2px; }
+
+      /* Offer highlight */
+      .offer-card {
+        border: 1px solid var(--warn-border);
+        background: var(--warn-bg);
+      }
       .offer-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
         margin-top: 10px;
       }
-
-      .offer-item {
+      .offer-box {
         background: var(--white);
         border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 10px;
+        border-radius: 8px;
+        padding: 10px 12px;
         font-size: 13px;
       }
-
-      .offer-item strong {
-        display: block;
+      .offer-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-bottom: 2px;
+      }
+      .offer-value {
+        font-weight: 800;
         font-size: 16px;
-        margin-top: 4px;
+        color: var(--text-main);
+      }
+      .offer-note {
+        font-size: 12px;
+        color: var(--warn-text);
+        margin-top: 10px;
+        line-height: 1.35;
       }
 
       footer {
@@ -170,8 +261,13 @@ const year = new Date().getFullYear();
       }
 
       @media (max-width: 900px) {
+        header { flex-direction: column; align-items: flex-start; gap: 6px; }
+        .hero { grid-template-columns: 1fr; }
+        .grid-3 { grid-template-columns: 1fr; }
         .two-col { grid-template-columns: 1fr; }
+        .steps { grid-template-columns: 1fr; }
         .offer-grid { grid-template-columns: 1fr; }
+        .hero h1 { font-size: 26px; }
       }
     </style>
   </head>
@@ -187,80 +283,241 @@ const year = new Date().getFullYear();
 
       <nav>
         <a href="#offer">Current offer</a>
+        <a href="#how">How it works</a>
+        <a href="#who">Who it is for</a>
+        <a href="#trust">Trust & agreements</a>
+        <a href="#currency">Currency</a>
+        <a href="#stablecoin">Stablecoin</a>
         <a href="#contact">Contact</a>
       </nav>
     </header>
 
     <div class="container">
+      <section class="hero">
+        <div>
+          <div class="trust-tag"><span>✔</span> TRUST BEFORE MONEY</div>
 
-      <!-- CURRENT OFFER SECTION -->
-      <section id="offer">
-        <h2 class="section-title">Current Offer</h2>
-        <p class="section-sub">
-          Structured lending opportunity with written agreement and defined repayment.
-        </p>
+          <h1>Structured lending, borrowing and investing between people.</h1>
 
-        <div class="offer-box">
-          <div class="offer-header">
-            <h3>Lend 45,000 → Receive 52,000</h3>
-            <span class="offer-badge">Profit 7,000</span>
+          <p class="hero-subtitle">
+            AmicBridge is a private network where people help each other with
+            capital – always with written agreements, clear expectations and
+            realistic profit sharing.
+          </p>
+
+          <div class="hero-cta">
+            <a href="#contact"><button class="btn-primary">Contact CEO</button></a>
+            <a href="#how"><button class="btn-secondary">Learn how it works</button></a>
           </div>
+        </div>
 
-          <p class="section-sub" style="margin-bottom:6px;">
-            Repayment terms and timeline are clearly defined in the written agreement.
+        <aside class="hero-card">
+          <h3>AmicBridge in one look</h3>
+          <div class="hero-pill-row">
+            <span class="hero-pill">Written agreements</span>
+            <span class="hero-pill">Clear expectations</span>
+            <span class="hero-pill">No hidden fees</span>
+            <span class="hero-pill">Human-to-human network</span>
+            <span class="hero-pill">Current offer: 45,000 → 52,000 (4 weeks)</span>
+          </div>
+        </aside>
+      </section>
+
+      <!-- NEW: Current offer -->
+      <section id="offer">
+        <h2 class="section-title">Current offer</h2>
+        <p class="section-sub">A fixed, written agreement offer available in the network.</p>
+
+        <div class="card offer-card">
+          <h3>Offer terms (example agreement)</h3>
+          <p class="section-sub" style="margin-bottom:0;">
+            AmicBridge can lend out <strong>45,000</strong> and receive <strong>52,000</strong> back in <strong>4 weeks</strong>
+            — only with a written agreement and clear responsibilities.
           </p>
 
           <div class="offer-grid">
-            <div class="offer-item">
-              Lend
-              <strong>45,000</strong>
+            <div class="offer-box">
+              <div class="offer-label">Amount lent</div>
+              <div class="offer-value">45,000</div>
             </div>
-            <div class="offer-item">
-              Return
-              <strong>52,000</strong>
+            <div class="offer-box">
+              <div class="offer-label">Amount returned</div>
+              <div class="offer-value">52,000</div>
             </div>
-            <div class="offer-item">
-              Profit
-              <strong>7,000</strong>
+            <div class="offer-box">
+              <div class="offer-label">Timeframe</div>
+              <div class="offer-value">4 weeks</div>
+            </div>
+          </div>
+
+          <div class="offer-note">
+            Note: This is a private-network offer and requires verification, identity checks where needed,
+            and a signed written agreement describing currency, dates, and responsibilities.
+          </div>
+        </div>
+      </section>
+
+      <section id="how">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Clarity, structure and simplicity.</p>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>1. Lend</h3>
+            <p>Private lenders provide capital under written terms.</p>
+          </div>
+          <div class="card">
+            <h3>2. Borrow</h3>
+            <p>Borrowers receive funding with a clear agreement.</p>
+          </div>
+          <div class="card">
+            <h3>3. Share profit</h3>
+            <p>Success leads to structured profit sharing.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="who">
+        <h2 class="section-title">Who AmicBridge is for</h2>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>Private lenders</h3>
+            <p>Individuals who want professional structure.</p>
+          </div>
+          <div class="card">
+            <h3>Projects & builders</h3>
+            <p>People with concrete plans that need funding.</p>
+          </div>
+          <div class="card">
+            <h3>Long-term investors</h3>
+            <p>Those who prefer agreements over hype.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="trust">
+        <h2 class="section-title">Trust & agreements</h2>
+
+        <div class="two-col">
+          <div>
+            <p class="section-sub">
+              The principle is simple: <strong>Trust before money. Agreement before action.</strong>
+            </p>
+
+            <div class="card">
+              <h3>Written agreements on every deal</h3>
+              <ul class="list">
+                <li>Loan agreements</li>
+                <li>Investment & profit-sharing agreements</li>
+                <li>Clear amounts, timelines and responsibilities</li>
+              </ul>
+
+              <div class="badge-row">
+                <span class="badge">Plain language terms</span>
+                <span class="badge">Professional structure</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="contact" style="margin-top:40px;">
+      <section id="currency">
+        <h2 class="section-title">Currency choice</h2>
+
+        <div class="card">
+          <p class="section-sub">
+            Currency is chosen by both parties and written into the agreement.
+            We can help with transferring funds via bank or crypto (small and large amounts),
+            depending on the agreed setup.
+          </p>
+
+          <ul class="list">
+            <li>Crypto</li>
+            <li>Stablecoins</li>
+            <li>NOK · SEK · EUR · USD</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="stablecoin">
+        <h2 class="section-title">Stablecoin option</h2>
+
+        <div class="card">
+          <p class="section-sub">
+            Stablecoins provide fast and predictable transfers when both sides agree.
+          </p>
+
+          <ul class="list">
+            <li>Fast settlement</li>
+            <li>Predictable transfer value</li>
+            <li>Useful when bank transfers are slow</li>
+            <li>Always linked to a written agreement</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="start">
+        <h2 class="section-title">How to get started</h2>
+
+        <div class="card">
+          <div class="steps">
+            <div class="step">
+              <strong>1. Send an email</strong>
+              Say if you want to lend, borrow or invest.
+            </div>
+            <div class="step">
+              <strong>2. Discuss</strong>
+              Terms, expectations and currency are discussed.
+            </div>
+            <div class="step">
+              <strong>3. Agreement</strong>
+              A written agreement is created and signed.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
         <h2 class="section-title">Contact</h2>
 
         <div class="two-col">
-          <div class="card">
+          <div class="contact-card">
             <h3>Direct contact</h3>
             <p>CEO: <strong>Ernest</strong></p>
 
             <p style="font-size:14px;">
-              Phone: 92928373<br />
+              phone: 92928373
               Email:
-              <a href="mailto:amicbridgecontact@gmail.com">
-                amicbridgecontact@gmail.com
-              </a>
+              <a href="mailto:amicbridgecontact@gmail.com">amicbridgecontact@gmail.com</a>
+            </p>
+
+            <p class="section-sub">
+              Write briefly who you are and whether you want to lend, borrow or invest.
             </p>
           </div>
 
           <div class="card">
-            <h3>When contacting</h3>
+            <h3>Helpful details</h3>
             <ul class="list">
               <li>Your role</li>
-              <li>Amount</li>
+              <li>Approximate amount</li>
               <li>Preferred currency</li>
               <li>Short description</li>
             </ul>
           </div>
         </div>
       </section>
-
     </div>
 
     <footer>
-      <span>© {year} AmicBridge · Trust Before Money</span>
+      <span>© <span id="year"></span> AmicBridge · Trust Before Money</span>
       <span>Private financial network.</span>
     </footer>
+
+    <script>
+      // Current year in plain HTML
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>
