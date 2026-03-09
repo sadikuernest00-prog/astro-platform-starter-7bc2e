@@ -9,13 +9,44 @@ const title = "AmicBridge";
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{title}</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 40px; background:#f3f4f6; }
-.container { max-width: 800px; margin:auto; background:white; padding:30px; border-radius:10px; }
-h1 { margin-bottom: 20px; }
-input, button { display:block; margin:10px 0; padding:10px; width:100%; box-sizing:border-box; }
-button { background:#1d4ed8; color:white; border:none; border-radius:5px; cursor:pointer; }
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  background:#f3f4f6;
+}
+.container {
+  max-width: 800px;
+  margin:auto;
+  background:white;
+  padding:30px;
+  border-radius:10px;
+}
+h1 {
+  margin-bottom: 20px;
+}
+input, button {
+  display:block;
+  margin:10px 0;
+  padding:10px;
+  width:100%;
+  box-sizing:border-box;
+}
+button {
+  background:#1d4ed8;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
 button:hover { background:#2563eb; }
-.log { margin-top:20px; background:#f9fafb; padding:10px; border-radius:5px; font-family:monospace; white-space: pre-wrap; }
+.log {
+  margin-top:20px;
+  background:#f9fafb;
+  padding:10px;
+  border-radius:5px;
+  font-family:monospace;
+  white-space: pre-wrap;
+}
 .section { margin-top:30px; }
 </style>
 </head>
@@ -23,13 +54,13 @@ button:hover { background:#2563eb; }
 <body>
 <div class="container">
 <h1>AmicBridge</h1>
-<p>Peer-to-peer trust network based on Ryan Fugger's original RipplePay idea.</p>
+<p>Peer-to-peer trust network inspired by Ryan Fugger's RipplePay.</p>
 
 <!-- Create User -->
 <div class="section">
 <h2>Create User</h2>
 <input id="username" placeholder="Enter name"/>
-<button onclick="createUser()">Create User</button>
+<button id="createUserBtn">Create User</button>
 </div>
 
 <!-- Add Trust -->
@@ -38,7 +69,7 @@ button:hover { background:#2563eb; }
 <input id="fromUser" placeholder="From user ID"/>
 <input id="toUser" placeholder="To user ID"/>
 <input id="limit" placeholder="Credit limit"/>
-<button onclick="addTrust()">Add Trust Line</button>
+<button id="addTrustBtn">Add Trust Line</button>
 </div>
 
 <!-- Send Payment -->
@@ -47,7 +78,7 @@ button:hover { background:#2563eb; }
 <input id="payer" placeholder="From user ID"/>
 <input id="receiver" placeholder="To user ID"/>
 <input id="amount" placeholder="Amount"/>
-<button onclick="sendPayment()">Send Payment</button>
+<button id="sendPaymentBtn">Send Payment</button>
 </div>
 
 <!-- Log Output -->
@@ -56,46 +87,72 @@ button:hover { background:#2563eb; }
 
 <script>
 const logEl = document.getElementById("log");
+
+// Base API path
 const API = "/api";
 
-function log(msg){ logEl.innerText = JSON.stringify(msg,null,2); }
-
-async function createUser(){
-  const name = document.getElementById("username").value.trim();
-  if(!name){ alert("Enter a valid name"); return; }
-  const r = await fetch(`${API}/users`, {
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({name})
-  });
-  log(await r.json());
+// Utility to show log
+function log(msg){ 
+  logEl.innerText = JSON.stringify(msg,null,2); 
 }
 
-async function addTrust(){
+// ===== CREATE USER =====
+document.getElementById("createUserBtn").addEventListener("click", async () => {
+  const name = document.getElementById("username").value.trim();
+  if(!name){ alert("Enter a valid name"); return; }
+
+  try {
+    const res = await fetch(`${API}/users`, {
+      method:"POST",
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name})
+    });
+    const data = await res.json();
+    log(data);
+  } catch(e){
+    log({error: e.message});
+  }
+});
+
+// ===== ADD TRUST =====
+document.getElementById("addTrustBtn").addEventListener("click", async () => {
   const from = Number(document.getElementById("fromUser").value);
   const to = Number(document.getElementById("toUser").value);
   const limit = Number(document.getElementById("limit").value);
   if(!from || !to || !limit){ alert("Enter valid numbers"); return; }
-  const r = await fetch(`${API}/trust`, {
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({from,to,limit})
-  });
-  log(await r.json());
-}
 
-async function sendPayment(){
+  try {
+    const res = await fetch(`${API}/trust`, {
+      method:"POST",
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({from,to,limit})
+    });
+    const data = await res.json();
+    log(data);
+  } catch(e){
+    log({error: e.message});
+  }
+});
+
+// ===== SEND PAYMENT =====
+document.getElementById("sendPaymentBtn").addEventListener("click", async () => {
   const from = Number(document.getElementById("payer").value);
   const to = Number(document.getElementById("receiver").value);
   const amount = Number(document.getElementById("amount").value);
   if(!from || !to || !amount){ alert("Enter valid numbers"); return; }
-  const r = await fetch(`${API}/payments`, {
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({from,to,amount})
-  });
-  log(await r.json());
-}
+
+  try {
+    const res = await fetch(`${API}/payments`, {
+      method:"POST",
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({from,to,amount})
+    });
+    const data = await res.json();
+    log(data);
+  } catch(e){
+    log({error: e.message});
+  }
+});
 </script>
 
 </body>
