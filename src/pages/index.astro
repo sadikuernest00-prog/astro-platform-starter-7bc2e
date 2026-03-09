@@ -2,188 +2,100 @@
 const title = "AmicBridge";
 ---
 
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<title>{title} – Trust Network</title>
-
+<title>{title}</title>
 <style>
-
-body{
-font-family: Arial, sans-serif;
-background:#f3f4f6;
-margin:0;
-padding:40px;
-}
-
-.container{
-max-width:900px;
-margin:auto;
-background:white;
-padding:30px;
-border-radius:10px;
-box-shadow:0 10px 25px rgba(0,0,0,0.05);
-}
-
-h1{
-margin-bottom:10px;
-}
-
-button{
-padding:10px 16px;
-border:none;
-background:#1d4ed8;
-color:white;
-border-radius:6px;
-cursor:pointer;
-margin-top:10px;
-}
-
-input{
-padding:10px;
-margin:6px 0;
-width:100%;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-.section{
-margin-top:40px;
-}
-
-.log{
-margin-top:20px;
-background:#f9fafb;
-padding:15px;
-border-radius:8px;
-font-family:monospace;
-}
-
+body { font-family: Arial, sans-serif; margin: 40px; background:#f3f4f6; }
+.container { max-width: 800px; margin:auto; background:white; padding:30px; border-radius:10px; }
+h1 { margin-bottom: 20px; }
+input, button { display:block; margin:10px 0; padding:10px; width:100%; box-sizing:border-box; }
+button { background:#1d4ed8; color:white; border:none; border-radius:5px; cursor:pointer; }
+button:hover { background:#2563eb; }
+.log { margin-top:20px; background:#f9fafb; padding:10px; border-radius:5px; font-family:monospace; white-space: pre-wrap; }
+.section { margin-top:30px; }
 </style>
-
 </head>
 
 <body>
-
 <div class="container">
-
 <h1>AmicBridge</h1>
+<p>Peer-to-peer trust network based on Ryan Fugger's original RipplePay idea.</p>
 
-<p>
-A peer-to-peer trust credit network where users create trust lines and send value through connections.
-</p>
-
+<!-- Create User -->
 <div class="section">
-
 <h2>Create User</h2>
-
 <input id="username" placeholder="Enter name"/>
-
-<button onclick="createUser()">
-Create User
-</button>
-
+<button onclick="createUser()">Create User</button>
 </div>
 
+<!-- Add Trust -->
 <div class="section">
-
-<h2>Add Trust</h2>
-
+<h2>Add Trust Line</h2>
 <input id="fromUser" placeholder="From user ID"/>
 <input id="toUser" placeholder="To user ID"/>
 <input id="limit" placeholder="Credit limit"/>
-
-<button onclick="addTrust()">
-Add Trust Line
-</button>
-
+<button onclick="addTrust()">Add Trust Line</button>
 </div>
 
+<!-- Send Payment -->
 <div class="section">
-
 <h2>Send Payment</h2>
-
 <input id="payer" placeholder="From user ID"/>
 <input id="receiver" placeholder="To user ID"/>
 <input id="amount" placeholder="Amount"/>
-
-<button onclick="sendPayment()">
-Send Payment
-</button>
-
+<button onclick="sendPayment()">Send Payment</button>
 </div>
 
-<div class="log" id="log">
-System ready
-</div>
-
+<!-- Log Output -->
+<div class="log" id="log">System ready</div>
 </div>
 
 <script>
+const logEl = document.getElementById("log");
+const API = "/api";
 
-const API = "http://localhost:3000"
-
-function log(msg){
-document.getElementById("log").innerText =
-JSON.stringify(msg,null,2)
-}
+function log(msg){ logEl.innerText = JSON.stringify(msg,null,2); }
 
 async function createUser(){
-
-let name = document.getElementById("username").value
-
-let r = await fetch(API+"/users/create",{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({name})
-})
-
-let data = await r.json()
-
-log(data)
-
+  const name = document.getElementById("username").value.trim();
+  if(!name){ alert("Enter a valid name"); return; }
+  const r = await fetch(`${API}/users`, {
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name})
+  });
+  log(await r.json());
 }
 
 async function addTrust(){
-
-let from = document.getElementById("fromUser").value
-let to = document.getElementById("toUser").value
-let limit = document.getElementById("limit").value
-
-let r = await fetch(API+"/trust/add",{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({from,to,limit})
-})
-
-let data = await r.json()
-
-log(data)
-
+  const from = Number(document.getElementById("fromUser").value);
+  const to = Number(document.getElementById("toUser").value);
+  const limit = Number(document.getElementById("limit").value);
+  if(!from || !to || !limit){ alert("Enter valid numbers"); return; }
+  const r = await fetch(`${API}/trust`, {
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({from,to,limit})
+  });
+  log(await r.json());
 }
 
 async function sendPayment(){
-
-let from = document.getElementById("payer").value
-let to = document.getElementById("receiver").value
-let amount = document.getElementById("amount").value
-
-let r = await fetch(API+"/payments/send",{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({from,to,amount})
-})
-
-let data = await r.json()
-
-log(data)
-
+  const from = Number(document.getElementById("payer").value);
+  const to = Number(document.getElementById("receiver").value);
+  const amount = Number(document.getElementById("amount").value);
+  if(!from || !to || !amount){ alert("Enter valid numbers"); return; }
+  const r = await fetch(`${API}/payments`, {
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({from,to,amount})
+  });
+  log(await r.json());
 }
-
 </script>
 
 </body>
