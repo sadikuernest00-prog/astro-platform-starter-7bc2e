@@ -1,33 +1,37 @@
-import type { APIRoute } from 'astro';
+import type { APIRoute } from "astro"
+import { users, createUser } from "../../utils/store"
 
-interface User {
-  id: number;
-  name: string;
+export const GET: APIRoute = async () => {
+  return new Response(JSON.stringify({ users }), {
+    headers: { "Content-Type": "application/json" }
+  })
 }
 
-// In-memory users array (replace with a real database later)
-let users: User[] = [];
-let nextId = 1;
-
-export const GET: APIRoute = () => {
-  return new Response(JSON.stringify(users), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
-};
-
 export const POST: APIRoute = async ({ request }) => {
-  const { name } = await request.json();
+  try {
+    const body = await request.json()
+    const name = String(body.name || "").trim()
 
-  if (!name || typeof name !== 'string') {
-    return new Response(JSON.stringify({ error: 'Invalid or missing name' }), { status: 400 });
+    if (!name) {
+      return new Response(
+        JSON.stringify({ error: "Name is required" }),
+        { status: 400 }
+      )
+    }
+
+    const user = createUser(name)
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        user
+      }),
+      { headers: { "Content-Type": "application/json" } }
+    )
+  } catch {
+    return new Response(
+      JSON.stringify({ error: "Invalid request body" }),
+      { status: 400 }
+    )
   }
-
-  const newUser: User = { id: nextId++, name };
-  users.push(newUser);
-
-  return new Response(JSON.stringify(newUser), {
-    status: 201,
-    headers: { 'Content-Type': 'application/json' },
-  });
-};
+}
