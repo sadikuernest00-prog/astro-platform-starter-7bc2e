@@ -338,7 +338,6 @@ const process = [
         background:#0f0f0f;
         padding:36px;
         border-radius:24px;
-        position:relative;
       }
 
       .step{
@@ -683,34 +682,72 @@ const process = [
 
         </p>
 
-        <form class="quote-form">
+        <form
+          class="quote-form"
+          action="https://formsubmit.co/sadikuernest00@gmail.com"
+          method="POST"
+        >
+
+          <input
+            type="hidden"
+            name="_subject"
+            value="New AmicBridge Institutional Request"
+          />
+
+          <input
+            type="hidden"
+            name="_captcha"
+            value="false"
+          />
+
+          <input
+            type="hidden"
+            name="_template"
+            value="table"
+          />
 
           <input
             type="text"
+            name="company"
             placeholder="Company Name"
+            required
           />
 
           <input
             type="email"
+            name="email"
             placeholder="Business Email"
+            required
           />
 
           <input
             type="text"
+            name="country"
             placeholder="Country"
+            required
           />
 
           <input
             type="text"
+            name="commodity"
             placeholder="Commodity Interest"
+            required
+          />
+
+          <input
+            type="text"
+            name="wallet"
+            placeholder="USDC Wallet Address"
           />
 
           <textarea
+            name="details"
             placeholder="Transaction details..."
+            required
           ></textarea>
 
-          <button>
-            Submit Request
+          <button type="submit">
+            Submit Institutional Request
           </button>
 
         </form>
@@ -732,7 +769,7 @@ const process = [
 
         <br /><br />
 
-        trade@amicbridge.com
+        sadikuernest00@gmail.com
 
       </p>
 
