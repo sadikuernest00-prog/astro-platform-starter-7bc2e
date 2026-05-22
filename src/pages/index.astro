@@ -1,44 +1,345 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import { contractAddress, abi } from "../lib/contract.js";
+
+const markets = [
+  {
+    symbol: "BRENT",
+    price: "$82.31",
+    change: "+2.1%",
+  },
+
+  {
+    symbol: "WTI",
+    price: "$79.44",
+    change: "+1.7%",
+  },
+
+  {
+    symbol: "BTC",
+    price: "$108,220",
+    change: "+4.8%",
+  },
+
+  {
+    symbol: "USDC",
+    price: "$1.00",
+    change: "Stable",
+  },
+];
+
+const services = [
+  {
+    title: "Crypto Escrow",
+    text: "Funds remain protected until both parties verify shipment and documentation.",
+  },
+
+  {
+    title: "OTC Trading Desk",
+    text: "Private institutional commodity transactions with stablecoin settlement.",
+  },
+
+  {
+    title: "Global Settlement",
+    text: "International energy transactions settled using USDC and blockchain infrastructure.",
+  },
+
+  {
+    title: "Verified Suppliers",
+    text: "Supplier verification and trade documentation for higher transaction trust.",
+  },
+];
+
+const process = [
+  "Buyer requests quote",
+  "Supplier confirms deal",
+  "USDC escrow funded",
+  "Shipment released",
+  "Documents verified",
+  "Payment settled",
+];
 ---
 
-<Layout title="AmicBridge Escrow">
+<html lang="en">
+<head>
 
-  <main class="container">
+<meta charset="UTF-8" />
 
-    <h1>AmicBridge Escrow</h1>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
 
-    <p>
-      Secure crypto escrow payments on Base network.
-    </p>
+<title>
+  AmicBridge | Global Commodity Settlement
+</title>
 
-    <button id="connectButton">
-      Connect MetaMask
-    </button>
+<style>
 
-    <button id="depositButton">
-      Deposit ETH
-    </button>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    <button id="releaseButton">
-      Release Funds
-    </button>
+html{
+  scroll-behavior:smooth;
+}
 
-    <p id="status"></p>
+body{
+  font-family:Arial, sans-serif;
+  background:#050505;
+  color:white;
+}
 
-  </main>
+a{
+  text-decoration:none;
+}
 
-</Layout>
+.ticker{
+  width:100%;
+  background:#0d0d0d;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+.ticker-track{
+  display:flex;
+  gap:60px;
+  padding:14px 0;
+  animation:ticker 20s linear infinite;
+}
+
+.ticker-item{
+  font-size:15px;
+  color:#d6d6d6;
+}
+
+.green{
+  color:#3ddc84;
+  font-weight:bold;
+}
+
+@keyframes ticker{
+  0%{
+    transform:translateX(0);
+  }
+
+  100%{
+    transform:translateX(-50%);
+  }
+}
+
+.navbar{
+  width:100%;
+  padding:28px 60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  background:rgba(5,5,5,0.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.logo{
+  font-size:40px;
+  font-weight:900;
+}
+
+.logo span{
+  color:#d6a85f;
+}
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:100px 20px;
+}
+
+.hero-content{
+  max-width:1100px;
+}
+
+.hero-tag{
+  display:inline-block;
+  padding:12px 20px;
+  border-radius:999px;
+  background:rgba(214,168,95,0.12);
+  border:1px solid rgba(214,168,95,0.25);
+  color:#d6a85f;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:28px;
+}
+
+.hero h1{
+  font-size:72px;
+  line-height:1.05;
+  margin-bottom:30px;
+  font-weight:900;
+}
+
+.hero span{
+  color:#d6a85f;
+}
+
+.hero p{
+  color:#b9b9b9;
+  font-size:24px;
+  line-height:1.7;
+  margin-bottom:40px;
+}
+
+.hero-buttons{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:18px 34px;
+  border-radius:999px;
+  font-size:17px;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+}
+
+.primary-btn{
+  background:#d6a85f;
+  color:black;
+}
+
+.secondary-btn{
+  background:#111;
+  color:white;
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+.status{
+  margin-top:30px;
+  color:#3ddc84;
+  font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="ticker">
+
+<div class="ticker-track">
+
+{
+  [...markets, ...markets].map((market) => (
+
+    <div class="ticker-item">
+
+      {market.symbol} — {market.price}
+
+      <span class="green">
+        {market.change}
+      </span>
+
+    </div>
+
+  ))
+}
+
+</div>
+
+</div>
+
+<nav class="navbar">
+
+<div class="logo">
+  Amic<span>Bridge</span>
+</div>
+
+</nav>
+
+<section class="hero">
+
+<div class="hero-content">
+
+<div class="hero-tag">
+GLOBAL CRYPTO COMMODITY INFRASTRUCTURE
+</div>
+
+<h1>
+
+Secure Escrow Infrastructure
+For International
+<span>Energy Trade</span>
+
+</h1>
+
+<p>
+
+AmicBridge provides OTC commodity settlement
+infrastructure powered by stablecoins, escrow
+protection and blockchain-based payments.
+
+</p>
+
+<div class="hero-buttons">
+
+<button
+  id="connectButton"
+  class="btn primary-btn"
+>
+  Connect MetaMask
+</button>
+
+<button
+  id="depositButton"
+  class="btn secondary-btn"
+>
+  Deposit 0.01 ETH
+</button>
+
+<button
+  id="releaseButton"
+  class="btn secondary-btn"
+>
+  Release Funds
+</button>
+
+</div>
+
+<div
+  id="status"
+  class="status"
+></div>
+
+</div>
+
+</section>
 
 <script type="module">
 
 import { ethers } from "ethers";
-import { contractAddress, abi } from "../lib/contract.js";
 
-const connectButton = document.getElementById("connectButton");
-const depositButton = document.getElementById("depositButton");
-const releaseButton = document.getElementById("releaseButton");
-const status = document.getElementById("status");
+const connectButton =
+  document.getElementById("connectButton");
+
+const depositButton =
+  document.getElementById("depositButton");
+
+const releaseButton =
+  document.getElementById("releaseButton");
+
+const status =
+  document.getElementById("status");
 
 let signer;
 let contract;
@@ -46,76 +347,97 @@ let contract;
 async function connectWallet() {
 
   if (!window.ethereum) {
+
     alert("Please install MetaMask");
+
     return;
   }
 
   await window.ethereum.request({
-    method: "eth_requestAccounts"
+    method: "eth_requestAccounts",
   });
 
-  const provider = new ethers.BrowserProvider(window.ethereum);
+  const provider =
+    new ethers.BrowserProvider(window.ethereum);
 
-  signer = await provider.getSigner();
+  signer =
+    await provider.getSigner();
 
-  contract = new ethers.Contract(
-    contractAddress,
-    abi,
-    signer
-  );
+  contract =
+    new ethers.Contract(
+      contractAddress,
+      abi,
+      signer
+    );
 
-  status.innerText = "Wallet Connected";
+  status.innerText =
+    "Wallet Connected";
 }
 
 async function depositETH() {
 
   if (!contract) {
+
     alert("Connect wallet first");
+
     return;
   }
 
   try {
 
-    const tx = await contract.deposit({
-      value: ethers.parseEther("0.01")
-    });
+    const tx =
+      await contract.deposit({
 
-    status.innerText = "Depositing ETH...";
+        value:
+          ethers.parseEther("0.01"),
+
+      });
+
+    status.innerText =
+      "Depositing ETH...";
 
     await tx.wait();
 
-    status.innerText = "Deposit Successful";
+    status.innerText =
+      "Deposit Successful";
 
   } catch (error) {
 
     console.error(error);
 
-    status.innerText = "Deposit Failed";
+    status.innerText =
+      "Deposit Failed";
   }
 }
 
 async function releaseFunds() {
 
   if (!contract) {
+
     alert("Connect wallet first");
+
     return;
   }
 
   try {
 
-    const tx = await contract.releaseFunds();
+    const tx =
+      await contract.releaseFunds();
 
-    status.innerText = "Releasing Funds...";
+    status.innerText =
+      "Releasing Funds...";
 
     await tx.wait();
 
-    status.innerText = "Funds Released";
+    status.innerText =
+      "Funds Released";
 
   } catch (error) {
 
     console.error(error);
 
-    status.innerText = "Release Failed";
+    status.innerText =
+      "Release Failed";
   }
 }
 
@@ -136,59 +458,5 @@ releaseButton.addEventListener(
 
 </script>
 
-<style>
-
-.container {
-
-  max-width: 700px;
-  margin: 100px auto;
-  text-align: center;
-  font-family: Arial;
-}
-
-h1 {
-
-  font-size: 48px;
-  margin-bottom: 20px;
-}
-
-p {
-
-  margin-bottom: 30px;
-}
-
-button {
-
-  padding: 15px 25px;
-  margin: 10px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-#connectButton {
-
-  background: black;
-  color: white;
-}
-
-#depositButton {
-
-  background: green;
-  color: white;
-}
-
-#releaseButton {
-
-  background: blue;
-  color: white;
-}
-
-#status {
-
-  margin-top: 30px;
-  font-size: 18px;
-}
-
-</style>
+</body>
+</html>
