@@ -1,9 +1,10 @@
 import { ethers } from "ethers";
 
 export const contractAddress =
-  "0x6B4e40CA4A4C86541333aAAAEfd360a6CC3885bd";
+  "0x6B4e40CA4A4C86541333aAAEfd360a6CC3885bd";
 
 export const abi = [
+
   {
     "inputs": [
       {
@@ -15,6 +16,7 @@ export const abi = [
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
+
   {
     "inputs": [],
     "name": "buyer",
@@ -28,6 +30,7 @@ export const abi = [
     "stateMutability": "view",
     "type": "function"
   },
+
   {
     "inputs": [],
     "name": "deposit",
@@ -35,6 +38,7 @@ export const abi = [
     "stateMutability": "payable",
     "type": "function"
   },
+
   {
     "inputs": [],
     "name": "getBalance",
@@ -48,6 +52,7 @@ export const abi = [
     "stateMutability": "view",
     "type": "function"
   },
+
   {
     "inputs": [],
     "name": "isFunded",
@@ -61,6 +66,7 @@ export const abi = [
     "stateMutability": "view",
     "type": "function"
   },
+
   {
     "inputs": [],
     "name": "isReleased",
@@ -74,6 +80,7 @@ export const abi = [
     "stateMutability": "view",
     "type": "function"
   },
+
   {
     "inputs": [],
     "name": "releaseFunds",
@@ -81,6 +88,7 @@ export const abi = [
     "stateMutability": "nonpayable",
     "type": "function"
   },
+
   {
     "inputs": [],
     "name": "seller",
@@ -94,26 +102,5 @@ export const abi = [
     "stateMutability": "view",
     "type": "function"
   }
+
 ];
-
-export async function getContract() {
-
-  if (!window.ethereum) {
-    alert("Please install MetaMask");
-    return;
-  }
-
-  await window.ethereum.request({
-    method: "eth_requestAccounts",
-  });
-
-  const provider = new ethers.BrowserProvider(window.ethereum);
-
-  const signer = await provider.getSigner();
-
-  return new ethers.Contract(
-    contractAddress,
-    abi,
-    signer
-  );
-}
