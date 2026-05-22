@@ -9,126 +9,127 @@
   <title>AmicBridge</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
     }
 
-    body {
-      background: black;
-      color: white;
+    body{
+      background:black;
+      color:white;
+      overflow-x:hidden;
     }
 
-    .topbar {
-      width: 100%;
-      padding: 10px;
-      border-bottom: 1px solid #222;
-      overflow: hidden;
-      white-space: nowrap;
-      color: #55ff99;
-      font-size: 14px;
+    .ticker{
+      width:100%;
+      border-bottom:1px solid #222;
+      padding:10px;
+      color:#4dff88;
+      font-size:14px;
+      white-space:nowrap;
+      overflow:hidden;
     }
 
-    .navbar {
-      padding: 30px 50px;
-      border-bottom: 1px solid #111;
+    .navbar{
+      padding:40px;
+      border-bottom:1px solid #111;
     }
 
-    .logo {
-      font-size: 60px;
-      font-weight: bold;
+    .logo{
+      font-size:64px;
+      font-weight:800;
     }
 
-    .logo span {
-      color: #c89b4f;
+    .gold{
+      color:#c89b4f;
     }
 
-    .hero {
-      min-height: 85vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px;
+    .hero{
+      min-height:85vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:40px;
     }
 
-    .hero-content {
-      max-width: 1200px;
+    .hero-content{
+      max-width:1300px;
     }
 
-    .badge {
-      display: inline-block;
-      padding: 12px 25px;
-      border: 1px solid #5c3d14;
-      border-radius: 50px;
-      color: #c89b4f;
-      margin-bottom: 40px;
-      background: rgba(200,155,79,0.1);
-      font-weight: bold;
+    .badge{
+      display:inline-block;
+      padding:14px 30px;
+      border:1px solid #4a3312;
+      border-radius:50px;
+      color:#c89b4f;
+      background:rgba(200,155,79,0.08);
+      margin-bottom:50px;
+      font-weight:bold;
     }
 
-    h1 {
-      font-size: 90px;
-      line-height: 1;
-      font-weight: 800;
-      margin-bottom: 40px;
+    h1{
+      font-size:92px;
+      line-height:1;
+      font-weight:900;
+      margin-bottom:40px;
     }
 
-    .gold {
-      color: #c89b4f;
+    .subtitle{
+      color:#aaa;
+      font-size:26px;
+      line-height:1.6;
+      max-width:1000px;
+      margin:auto;
+      margin-bottom:60px;
     }
 
-    .subtitle {
-      color: #aaa;
-      font-size: 24px;
-      line-height: 1.6;
-      margin-bottom: 50px;
+    .buttons{
+      display:flex;
+      justify-content:center;
+      gap:20px;
+      flex-wrap:wrap;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
+    button{
+      padding:24px 40px;
+      border-radius:50px;
+      border:none;
+      cursor:pointer;
+      font-size:22px;
+      font-weight:bold;
+      transition:0.3s;
     }
 
-    button {
-      padding: 22px 40px;
-      border-radius: 50px;
-      border: none;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
+    button:hover{
+      transform:scale(1.05);
     }
 
-    .connect {
-      background: #c89b4f;
-      color: black;
+    .connect{
+      background:#c89b4f;
+      color:black;
     }
 
     .deposit,
-    .release {
-      background: #111;
-      color: white;
-      border: 1px solid #222;
+    .release{
+      background:#111;
+      color:white;
+      border:1px solid #222;
     }
 
-    button:hover {
-      transform: scale(1.05);
-    }
-
-    #status {
-      margin-top: 40px;
-      color: #55ff99;
-      font-size: 22px;
+    #status{
+      margin-top:40px;
+      font-size:22px;
+      color:#4dff88;
     }
 
     @media(max-width:900px){
+
       h1{
-        font-size:55px;
+        font-size:56px;
       }
 
       .logo{
@@ -138,13 +139,15 @@
       .subtitle{
         font-size:18px;
       }
+
     }
+
   </style>
 </head>
 
 <body>
 
-  <div class="topbar">
+  <div class="ticker">
     BTC — $108,220 +4.8% &nbsp;&nbsp;&nbsp;
     USDC — $1.00 Stable &nbsp;&nbsp;&nbsp;
     BRENT — $82.31 +2.1% &nbsp;&nbsp;&nbsp;
@@ -153,11 +156,12 @@
 
   <div class="navbar">
     <div class="logo">
-      Amic<span>Bridge</span>
+      Amic<span class="gold">Bridge</span>
     </div>
   </div>
 
   <section class="hero">
+
     <div class="hero-content">
 
       <div class="badge">
@@ -170,8 +174,8 @@
       </h1>
 
       <p class="subtitle">
-        AmicBridge provides OTC commodity settlement infrastructure
-        powered by stablecoins, escrow protection and blockchain-based payments.
+        AmicBridge provides OTC commodity settlement infrastructure powered by stablecoins,
+        escrow protection and blockchain-based payments.
       </p>
 
       <div class="buttons">
@@ -193,11 +197,12 @@
       <div id="status"></div>
 
     </div>
+
   </section>
 
-  <script type="module">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
 
-    import { ethers } from "ethers";
+  <script>
 
     const contractAddress = "0x6B4e40CA4A4C86541333aAAAEfd360a6CC3885bd";
 
@@ -238,7 +243,7 @@
     const releaseButton = document.getElementById("releaseButton");
     const status = document.getElementById("status");
 
-    connectButton.addEventListener("click", async () => {
+    connectButton.onclick = async () => {
 
       try {
 
@@ -248,7 +253,7 @@
         }
 
         await window.ethereum.request({
-          method: "eth_requestAccounts",
+          method: "eth_requestAccounts"
         });
 
         provider = new ethers.BrowserProvider(window.ethereum);
@@ -264,13 +269,16 @@
         status.innerHTML = "✅ MetaMask Connected";
 
       } catch (error) {
+
         console.log(error);
-        alert("Connection failed");
+
+        alert("Connection Failed");
+
       }
 
-    });
+    };
 
-    depositButton.addEventListener("click", async () => {
+    depositButton.onclick = async () => {
 
       try {
 
@@ -283,20 +291,23 @@
           value: ethers.parseEther("0.001")
         });
 
-        status.innerHTML = "⏳ Waiting for deposit confirmation...";
+        status.innerHTML = "⏳ Deposit Pending...";
 
         await tx.wait();
 
         status.innerHTML = "✅ Deposit Successful";
 
       } catch (error) {
+
         console.log(error);
-        alert("Deposit failed");
+
+        alert("Deposit Failed");
+
       }
 
-    });
+    };
 
-    releaseButton.addEventListener("click", async () => {
+    releaseButton.onclick = async () => {
 
       try {
 
@@ -307,18 +318,21 @@
 
         const tx = await contract.releaseFunds();
 
-        status.innerHTML = "⏳ Releasing funds...";
+        status.innerHTML = "⏳ Releasing Funds...";
 
         await tx.wait();
 
         status.innerHTML = "✅ Funds Released";
 
       } catch (error) {
+
         console.log(error);
-        alert("Release failed");
+
+        alert("Release Failed");
+
       }
 
-    });
+    };
 
   </script>
 
