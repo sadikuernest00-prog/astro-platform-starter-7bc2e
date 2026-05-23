@@ -1,44 +1,59 @@
 import { ethers } from "ethers";
 
-const CONTRACT_ADDRESS =
-  "0xA8B54F5D962c3F7857e77F969873a14eDe5f2191";
+export const ESCROW_ADDRESS =
+  "0x314ED0AEDfe5Be6B62ec603EAeffD7Cbdcfec197";
 
-const USDC_ADDRESS =
-  "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
+/*
+ BASE USDC CONTRACT
+*/
+export const USDC_ADDRESS =
+  "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
 
-const ABI = [
+/*
+ ESCROW CONTRACT ABI
+*/
+export const ESCROW_ABI = [
+  "function createEscrow(address seller, uint256 amount) external",
 
-  "function createEscrow(address seller,uint256 amount)",
+  "function releaseFunds(uint256 escrowId) external",
 
-  "function depositUSDC(uint256 escrowId)",
+  "function escrowCount() view returns (uint256)",
 
-  "function releaseFunds(uint256 escrowId)",
-
-  "function openDispute(uint256 escrowId)",
-
-  "function getEscrow(uint256 escrowId) view returns(uint256,address,address,uint256,uint8,uint256)"
+  "function escrows(uint256) view returns (uint256 id,address buyer,address seller,uint256 amount,uint8 state)"
 ];
 
-const USDC_ABI = [
+/*
+ ERC20 / USDC ABI
+*/
+export const ERC20_ABI = [
+  "function approve(address spender, uint256 amount) external returns (bool)",
 
-  "function approve(address spender,uint256 amount) returns(bool)"
+  "function allowance(address owner, address spender) view returns (uint256)",
+
+  "function balanceOf(address account) view returns (uint256)",
+
+  "function decimals() view returns (uint8)"
 ];
 
+/*
+ CONNECT WALLET
+*/
 export async function connectWallet() {
 
   if (!window.ethereum) {
     alert("Please install MetaMask");
-    return;
+    return null;
   }
-
-  await window.ethereum.request({
-    method: "eth_requestAccounts",
-  });
 
   const provider =
     new ethers.BrowserProvider(
       window.ethereum
     );
+
+  await provider.send(
+    "eth_requestAccounts",
+    []
+  );
 
   const signer =
     await provider.getSigner();
@@ -46,26 +61,91 @@ export async function connectWallet() {
   const address =
     await signer.getAddress();
 
-  return address;
+  console.log(
+    "CONNECTED:",
+    address
+  );
+
+  return {
+    provider,
+    signer,
+    address
+  };
 }
 
-async function getContract() {
+/*
+ GET ESCROW CONTRACT
+*/
+export async function getEscrowContract() {
 
-  const provider =
-    new ethers.BrowserProvider(
-      window.ethereum
-    );
-
-  const signer =
-    await provider.getSigner();
+  const { signer } =
+    await connectWallet();
 
   return new ethers.Contract(
-    CONTRACT_ADDRESS,
-    ABI,
+    ESCROW_ADDRESS,
+    ESCROW_ABI,
     signer
   );
 }
 
+/*
+ GET USDC CONTRACT
+*/
+export async function getUSDCContract() {
+
+  const { signer } =
+    await connectWallet();
+
+  return new ethers.Contract(
+    USDC_ADDRESS,
+    ERC20_ABI,
+    signer
+  );
+}
+
+/*
+ APPROVE USDC
+*/
+export async function approveUSDC(
+  amount
+) {
+
+  try {
+
+    const usdc =
+      await getUSDCContract();
+
+    const parsedAmount =
+      ethers.parseUnits(
+        amount.toString(),
+        6
+      );
+
+    const tx =
+      await usdc.approve(
+        ESCROW_ADDRESS,
+        parsedAmount
+      );
+
+    await tx.wait();
+
+    console.log(
+      "USDC APPROVED"
+    );
+
+    return tx;
+
+  } catch (error) {
+
+    console.error(error);
+
+    throw error;
+  }
+}
+
+/*
+ CREATE ESCROW
+*/
 export async function createEscrow(
   seller,
   amount
@@ -73,169 +153,66 @@ export async function createEscrow(
 
   try {
 
-    const contract =
-      await getContract();
+    const escrow =
+      await getEscrowContract();
 
-    const usdcAmount =
+    const parsedAmount =
       ethers.parseUnits(
-        amount,
+        amount.toString(),
         6
       );
 
     const tx =
-      await contract.createEscrow(
+      await escrow.createEscrow(
         seller,
-        usdcAmount
+        parsedAmount
       );
 
     await tx.wait();
 
-    alert(
-      "Escrow created successfully!"
+    console.log(
+      "ESCROW CREATED"
     );
+
+    return tx;
 
   } catch (error) {
 
     console.error(error);
 
-    alert(
-      "Create escrow failed"
-    );
+    throw error;
   }
 }
 
-export async function approveUSDC(
-  amount
-) {
-
-  try {
-
-    const provider =
-      new ethers.BrowserProvider(
-        window.ethereum
-      );
-
-    const signer =
-      await provider.getSigner();
-
-    const usdc =
-      new ethers.Contract(
-        USDC_ADDRESS,
-        USDC_ABI,
-        signer
-      );
-
-    const tx =
-      await usdc.approve(
-        CONTRACT_ADDRESS,
-        ethers.parseUnits(
-          amount,
-          6
-        )
-      );
-
-    await tx.wait();
-
-    alert(
-      "USDC approved!"
-    );
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "USDC approval failed"
-    );
-  }
-}
-
-export async function depositUSDC(
-  escrowId
-) {
-
-  try {
-
-    const contract =
-      await getContract();
-
-    const tx =
-      await contract.depositUSDC(
-        escrowId
-      );
-
-    await tx.wait();
-
-    alert(
-      "USDC deposited into escrow!"
-    );
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Deposit failed"
-    );
-  }
-}
-
+/*
+ RELEASE FUNDS
+*/
 export async function releaseFunds(
   escrowId
 ) {
 
   try {
 
-    const contract =
-      await getContract();
+    const escrow =
+      await getEscrowContract();
 
     const tx =
-      await contract.releaseFunds(
+      await escrow.releaseFunds(
         escrowId
       );
 
     await tx.wait();
 
-    alert(
-      "Funds released!"
+    console.log(
+      "FUNDS RELEASED"
     );
+
+    return tx;
 
   } catch (error) {
 
     console.error(error);
 
-    alert(
-      "Release failed"
-    );
-  }
-}
-
-export async function openDispute(
-  escrowId
-) {
-
-  try {
-
-    const contract =
-      await getContract();
-
-    const tx =
-      await contract.openDispute(
-        escrowId
-      );
-
-    await tx.wait();
-
-    alert(
-      "Dispute opened!"
-    );
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Dispute failed"
-    );
+    throw error;
   }
 }
