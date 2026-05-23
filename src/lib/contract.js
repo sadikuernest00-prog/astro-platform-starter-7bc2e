@@ -1,106 +1,38 @@
 import { ethers } from "ethers";
 
-export const contractAddress =
-  "0x6B4e40CA4A4C86541333aAAEfd360a6CC3885bd";
+export const CONTRACT_ADDRESS =
+  "0xABD89d64ece71a87C6F3d20DE038930D8f99B02E";
 
-export const abi = [
+export const CONTRACT_ABI = [
+  "function createEscrow(address seller,uint256 amount)",
+  "function deposit(uint256 escrowId)",
+  "function releaseFunds(uint256 escrowId)",
+  "function refundBuyer(uint256 escrowId)",
+  "function openDispute(uint256 escrowId)",
+  "function getEscrow(uint256 escrowId) view returns(tuple(uint256 id,address buyer,address seller,uint256 amount,uint8 state,bool exists))"
+];
 
-  {
-    "inputs": [
-      {
-        "internalType": "address payable",
-        "name": "_seller",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
+export async function getContract() {
 
-  {
-    "inputs": [],
-    "name": "buyer",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-
-  {
-    "inputs": [],
-    "name": "deposit",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-
-  {
-    "inputs": [],
-    "name": "getBalance",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-
-  {
-    "inputs": [],
-    "name": "isFunded",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-
-  {
-    "inputs": [],
-    "name": "isReleased",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-
-  {
-    "inputs": [],
-    "name": "releaseFunds",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-
-  {
-    "inputs": [],
-    "name": "seller",
-    "outputs": [
-      {
-        "internalType": "address payable",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
+  if (!window.ethereum) {
+    alert("Install MetaMask");
+    return;
   }
 
-];
+  await window.ethereum.request({
+    method: "eth_requestAccounts",
+  });
+
+  const provider =
+    new ethers.providers.Web3Provider(
+      window.ethereum
+    );
+
+  const signer = provider.getSigner();
+
+  return new ethers.Contract(
+    CONTRACT_ADDRESS,
+    CONTRACT_ABI,
+    signer
+  );
+}
