@@ -1,22 +1,10 @@
 ---
-import { ethers } from "ethers";
-
-const CONTRACT_ADDRESS =
-  "0xABD89d64ece71a87C6F3d20DE038930D8f99B02E";
-
-const CONTRACT_ABI = [
-  "function createEscrow(address seller,uint256 amount)",
-  "function deposit(uint256 escrowId)",
-  "function releaseFunds(uint256 escrowId)",
-  "function refundBuyer(uint256 escrowId)",
-  "function openDispute(uint256 escrowId)",
-  "function getEscrow(uint256 escrowId) view returns(tuple(uint256 id,address buyer,address seller,uint256 amount,uint8 state,bool exists))"
-];
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0"
@@ -25,11 +13,12 @@ const CONTRACT_ABI = [
     <title>AmicBridge Escrow</title>
 
     <style>
+
       body {
         margin: 0;
-        font-family: Arial;
-        background: #000;
+        background: black;
         color: white;
+        font-family: Arial, sans-serif;
       }
 
       .container {
@@ -41,11 +30,20 @@ const CONTRACT_ABI = [
         padding: 40px;
       }
 
+      .badge {
+        border: 1px solid #333;
+        padding: 10px 20px;
+        border-radius: 999px;
+        color: #d4a24c;
+        margin-bottom: 40px;
+      }
+
       h1 {
-        font-size: 72px;
+        font-size: 82px;
         text-align: center;
+        line-height: 1;
+        margin: 0;
         max-width: 1000px;
-        line-height: 1.1;
       }
 
       .gold {
@@ -53,28 +51,48 @@ const CONTRACT_ABI = [
       }
 
       p {
-        color: #999;
-        max-width: 700px;
+        margin-top: 40px;
+        max-width: 800px;
         text-align: center;
-        font-size: 20px;
+        color: #888;
+        font-size: 22px;
         line-height: 1.6;
       }
 
+      .form {
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      input {
+        width: 360px;
+        padding: 18px;
+        border-radius: 14px;
+        border: 1px solid #333;
+        background: #111;
+        color: white;
+        font-size: 16px;
+      }
+
       .buttons {
+        margin-top: 40px;
         display: flex;
         gap: 20px;
-        margin-top: 40px;
         flex-wrap: wrap;
+        justify-content: center;
       }
 
       button {
-        background: #111;
+        padding: 20px 35px;
+        border-radius: 18px;
         border: 1px solid #333;
+        background: #111;
         color: white;
-        padding: 18px 30px;
-        border-radius: 14px;
-        font-size: 18px;
+        font-size: 22px;
         cursor: pointer;
+        transition: 0.2s;
       }
 
       button:hover {
@@ -88,42 +106,31 @@ const CONTRACT_ABI = [
       }
 
       .status {
-        margin-top: 30px;
+        margin-top: 40px;
         color: #00ff99;
-        font-size: 18px;
+        font-size: 22px;
       }
 
-      input {
-        width: 300px;
-        padding: 14px;
-        border-radius: 10px;
-        border: 1px solid #333;
-        background: #111;
-        color: white;
-        margin-top: 10px;
+      @media(max-width:900px){
+
+        h1{
+          font-size:56px;
+        }
+
+        input{
+          width:100%;
+        }
+
       }
 
-      .form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 30px;
-      }
     </style>
   </head>
 
   <body>
+
     <div class="container">
 
-      <div
-        style="
-          border:1px solid #333;
-          padding:10px 20px;
-          border-radius:999px;
-          margin-bottom:40px;
-          color:#d4a24c;
-        "
-      >
+      <div class="badge">
         GLOBAL CRYPTO COMMODITY INFRASTRUCTURE
       </div>
 
@@ -158,18 +165,14 @@ const CONTRACT_ABI = [
       <div class="buttons">
 
         <button
-          class="primary"
           id="connectBtn"
+          class="primary"
         >
           Connect MetaMask
         </button>
 
         <button id="createBtn">
           Create Escrow
-        </button>
-
-        <button id="releaseBtn">
-          Release Funds
         </button>
 
       </div>
@@ -183,17 +186,19 @@ const CONTRACT_ABI = [
 
     </div>
 
-    <script type="module">
+    <script is:inline type="module">
 
-      import { ethers }
-      from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
+      import {
+        ethers
+      } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
 
       const CONTRACT_ADDRESS =
         "0xABD89d64ece71a87C6F3d20DE038930D8f99B02E";
 
       const CONTRACT_ABI = [
-        "function createEscrow(address seller,uint256 amount)",
-        "function releaseFunds(uint256 escrowId)"
+
+        "function createEscrow(address seller,uint256 amount)"
+
       ];
 
       let provider;
@@ -205,65 +210,111 @@ const CONTRACT_ABI = [
 
       async function connectWallet() {
 
-        if (!window.ethereum) {
-          alert("Install MetaMask");
-          return;
+        try {
+
+          if (!window.ethereum) {
+
+            alert(
+              "MetaMask is not installed"
+            );
+
+            return;
+          }
+
+          await window.ethereum.request({
+
+            method:
+              "eth_requestAccounts"
+
+          });
+
+          provider =
+            new ethers.providers.Web3Provider(
+              window.ethereum
+            );
+
+          signer =
+            provider.getSigner();
+
+          contract =
+            new ethers.Contract(
+
+              CONTRACT_ADDRESS,
+
+              CONTRACT_ABI,
+
+              signer
+
+            );
+
+          const address =
+            await signer.getAddress();
+
+          status.innerHTML =
+            "Connected: " + address;
+
+        } catch (err) {
+
+          console.error(err);
+
+          status.innerHTML =
+            "Wallet connection failed";
+
         }
-
-        await window.ethereum.request({
-          method: "eth_requestAccounts"
-        });
-
-        provider =
-          new ethers.providers.Web3Provider(
-            window.ethereum
-          );
-
-        signer = provider.getSigner();
-
-        contract =
-          new ethers.Contract(
-            CONTRACT_ADDRESS,
-            CONTRACT_ABI,
-            signer
-          );
-
-        const address =
-          await signer.getAddress();
-
-        status.innerHTML =
-          "Connected: " + address;
       }
 
       async function createEscrow() {
 
-        if (!contract) {
-          alert("Connect wallet first");
-          return;
-        }
-
-        const seller =
-          document.getElementById("seller").value;
-
-        const amount =
-          document.getElementById("amount").value;
-
-        const parsedAmount =
-          ethers.utils.parseUnits(
-            amount,
-            6
-          );
-
-        status.innerHTML =
-          "Creating escrow...";
-
         try {
+
+          if (!contract) {
+
+            alert(
+              "Connect MetaMask first"
+            );
+
+            return;
+          }
+
+          const seller =
+            document.getElementById(
+              "seller"
+            ).value;
+
+          const amount =
+            document.getElementById(
+              "amount"
+            ).value;
+
+          if (!seller || !amount) {
+
+            alert(
+              "Fill all fields"
+            );
+
+            return;
+          }
+
+          const parsedAmount =
+            ethers.utils.parseUnits(
+              amount,
+              6
+            );
+
+          status.innerHTML =
+            "Creating escrow...";
 
           const tx =
             await contract.createEscrow(
+
               seller,
+
               parsedAmount
+
             );
+
+          status.innerHTML =
+            "Waiting for confirmation...";
 
           await tx.wait();
 
@@ -276,36 +327,6 @@ const CONTRACT_ABI = [
 
           status.innerHTML =
             "Transaction failed";
-
-        }
-      }
-
-      async function releaseFunds() {
-
-        if (!contract) {
-          alert("Connect wallet first");
-          return;
-        }
-
-        try {
-
-          status.innerHTML =
-            "Releasing funds...";
-
-          const tx =
-            await contract.releaseFunds(1);
-
-          await tx.wait();
-
-          status.innerHTML =
-            "Funds released successfully!";
-
-        } catch (err) {
-
-          console.error(err);
-
-          status.innerHTML =
-            "Release failed";
 
         }
       }
@@ -324,13 +345,7 @@ const CONTRACT_ABI = [
           createEscrow
         );
 
-      document
-        .getElementById("releaseBtn")
-        .addEventListener(
-          "click",
-          releaseFunds
-        );
-
     </script>
+
   </body>
 </html>
