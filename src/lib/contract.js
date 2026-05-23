@@ -1,24 +1,35 @@
 import { ethers } from "ethers";
 
 const CONTRACT_ADDRESS =
-  "PASTE_NEW_CONTRACT";
+  "0xA8B54F5D962c3F7857e77F969873a14eDe5f2191";
 
 const USDC_ADDRESS =
-  "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
+  "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
 
 const ABI = [
+
   "function createEscrow(address seller,uint256 amount)",
+
   "function depositUSDC(uint256 escrowId)",
+
   "function releaseFunds(uint256 escrowId)",
+
   "function openDispute(uint256 escrowId)",
+
   "function getEscrow(uint256 escrowId) view returns(uint256,address,address,uint256,uint8,uint256)"
 ];
 
 const USDC_ABI = [
-  "function approve(address spender,uint256 amount) public returns(bool)"
+
+  "function approve(address spender,uint256 amount) returns(bool)"
 ];
 
-async function getProvider() {
+export async function connectWallet() {
+
+  if (!window.ethereum) {
+    alert("Please install MetaMask");
+    return;
+  }
 
   await window.ethereum.request({
     method: "eth_requestAccounts",
@@ -29,7 +40,30 @@ async function getProvider() {
       window.ethereum
     );
 
-  return provider;
+  const signer =
+    await provider.getSigner();
+
+  const address =
+    await signer.getAddress();
+
+  return address;
+}
+
+async function getContract() {
+
+  const provider =
+    new ethers.BrowserProvider(
+      window.ethereum
+    );
+
+  const signer =
+    await provider.getSigner();
+
+  return new ethers.Contract(
+    CONTRACT_ADDRESS,
+    ABI,
+    signer
+  );
 }
 
 export async function createEscrow(
@@ -37,141 +71,171 @@ export async function createEscrow(
   amount
 ) {
 
-  const provider =
-    await getProvider();
+  try {
 
-  const signer =
-    await provider.getSigner();
+    const contract =
+      await getContract();
 
-  const contract =
-    new ethers.Contract(
-      CONTRACT_ADDRESS,
-      ABI,
-      signer
+    const usdcAmount =
+      ethers.parseUnits(
+        amount,
+        6
+      );
+
+    const tx =
+      await contract.createEscrow(
+        seller,
+        usdcAmount
+      );
+
+    await tx.wait();
+
+    alert(
+      "Escrow created successfully!"
     );
 
-  const usdcAmount =
-    ethers.parseUnits(
-      amount,
-      6
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Create escrow failed"
     );
-
-  const tx =
-    await contract.createEscrow(
-      seller,
-      usdcAmount
-    );
-
-  await tx.wait();
-
-  alert("Escrow created");
+  }
 }
 
 export async function approveUSDC(
   amount
 ) {
 
-  const provider =
-    await getProvider();
+  try {
 
-  const signer =
-    await provider.getSigner();
+    const provider =
+      new ethers.BrowserProvider(
+        window.ethereum
+      );
 
-  const usdc =
-    new ethers.Contract(
-      USDC_ADDRESS,
-      USDC_ABI,
-      signer
+    const signer =
+      await provider.getSigner();
+
+    const usdc =
+      new ethers.Contract(
+        USDC_ADDRESS,
+        USDC_ABI,
+        signer
+      );
+
+    const tx =
+      await usdc.approve(
+        CONTRACT_ADDRESS,
+        ethers.parseUnits(
+          amount,
+          6
+        )
+      );
+
+    await tx.wait();
+
+    alert(
+      "USDC approved!"
     );
 
-  const tx =
-    await usdc.approve(
-      CONTRACT_ADDRESS,
-      ethers.parseUnits(amount, 6)
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "USDC approval failed"
     );
-
-  await tx.wait();
-
-  alert("USDC approved");
+  }
 }
 
 export async function depositUSDC(
   escrowId
 ) {
 
-  const provider =
-    await getProvider();
+  try {
 
-  const signer =
-    await provider.getSigner();
+    const contract =
+      await getContract();
 
-  const contract =
-    new ethers.Contract(
-      CONTRACT_ADDRESS,
-      ABI,
-      signer
+    const tx =
+      await contract.depositUSDC(
+        escrowId
+      );
+
+    await tx.wait();
+
+    alert(
+      "USDC deposited into escrow!"
     );
 
-  const tx =
-    await contract.depositUSDC(
-      escrowId
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Deposit failed"
     );
-
-  await tx.wait();
-
-  alert("USDC deposited");
+  }
 }
 
 export async function releaseFunds(
   escrowId
 ) {
 
-  const provider =
-    await getProvider();
+  try {
 
-  const signer =
-    await provider.getSigner();
+    const contract =
+      await getContract();
 
-  const contract =
-    new ethers.Contract(
-      CONTRACT_ADDRESS,
-      ABI,
-      signer
+    const tx =
+      await contract.releaseFunds(
+        escrowId
+      );
+
+    await tx.wait();
+
+    alert(
+      "Funds released!"
     );
 
-  const tx =
-    await contract.releaseFunds(
-      escrowId
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Release failed"
     );
-
-  await tx.wait();
-
-  alert("Funds released");
+  }
 }
 
 export async function openDispute(
   escrowId
 ) {
 
-  const provider =
-    await getProvider();
+  try {
 
-  const signer =
-    await provider.getSigner();
+    const contract =
+      await getContract();
 
-  const contract =
-    new ethers.Contract(
-      CONTRACT_ADDRESS,
-      ABI,
-      signer
+    const tx =
+      await contract.openDispute(
+        escrowId
+      );
+
+    await tx.wait();
+
+    alert(
+      "Dispute opened!"
     );
 
-  const tx =
-    await contract.openDispute(
-      escrowId
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Dispute failed"
     );
-
-  await tx.wait();
-
-  alert("Dispute opened");
+  }
 }
