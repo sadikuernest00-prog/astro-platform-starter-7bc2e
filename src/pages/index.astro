@@ -1,4 +1,5 @@
 ---
+
 ---
 
 <html lang="en">
@@ -90,10 +91,36 @@
         font-weight: bold;
       }
 
+      .green {
+        background: #00aa66;
+      }
+
+      .red {
+        background: #cc3333;
+      }
+
       .status {
         margin-top: 40px;
         color: #00ff99;
         font-size: 22px;
+      }
+
+      .escrow-list {
+        margin-top: 60px;
+        width: 100%;
+        max-width: 700px;
+      }
+
+      .escrow-card {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+
+      .escrow-card h3 {
+        margin-top: 0;
       }
 
     </style>
@@ -157,6 +184,20 @@
           Deposit USDC
         </button>
 
+        <button
+          id="releaseBtn"
+          class="green"
+        >
+          Release Funds
+        </button>
+
+        <button
+          id="refundBtn"
+          class="red"
+        >
+          Refund Buyer
+        </button>
+
       </div>
 
       <div
@@ -164,6 +205,18 @@
         class="status"
       >
         Waiting for wallet connection...
+      </div>
+
+      <div class="escrow-list">
+
+        <h2>
+          Active Escrows
+        </h2>
+
+        <div id="escrowContainer">
+
+        </div>
+
       </div>
 
     </div>
@@ -174,24 +227,24 @@
         ethers
       } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
 
-      // LIVE ESCROW CONTRACT
       const ESCROW_ADDRESS =
-        "0xABD89d64ece71a87C6F3d20DE038930D8f99B02E";
+        "0x46E3829422A899D61eb63F34A754ea67A06D3928";
 
-      // BASE USDC
       const USDC_ADDRESS =
         "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 
-      // ESCROW ABI
       const ESCROW_ABI = [
 
-        "function createEscrow(address seller,uint256 amount)",
+        "function createEscrow(address _seller,uint256 _amount,string memory _escrowReference) external",
 
-        "function deposit(uint256 escrowId)"
+        "function depositFunds(uint256 _escrowId) external",
+
+        "function releaseFunds(uint256 _escrowId) external",
+
+        "function refundBuyer(uint256 _escrowId) external"
 
       ];
 
-      // USDC ABI
       const USDC_ABI = [
 
         "function approve(address spender,uint256 amount) public returns (bool)"
@@ -203,8 +256,45 @@
       let escrowContract;
       let usdcContract;
 
+      let escrows = [];
+
       const status =
         document.getElementById("status");
+
+      const escrowContainer =
+        document.getElementById(
+          "escrowContainer"
+        );
+
+      function renderEscrows() {
+
+        escrowContainer.innerHTML = "";
+
+        escrows.forEach((escrow) => {
+
+          escrowContainer.innerHTML += `
+            <div class="escrow-card">
+
+              <h3>
+                Escrow #${escrow.id}
+              </h3>
+
+              <p>
+                Seller: ${escrow.seller}
+              </p>
+
+              <p>
+                Amount: ${escrow.amount} USDC
+              </p>
+
+              <p>
+                Status: ${escrow.status}
+              </p>
+
+            </div>
+          `;
+        });
+      }
 
       async function connectWallet() {
 
@@ -286,6 +376,11 @@
               "amount"
             ).value;
 
+          const escrowId =
+            document.getElementById(
+              "escrowId"
+            ).value;
+
           const parsedAmount =
             ethers.utils.parseUnits(
               amount,
@@ -300,11 +395,25 @@
 
               seller,
 
-              parsedAmount
+              parsedAmount,
+
+              escrowId
 
             );
 
           await tx.wait();
+
+          escrows.push({
+
+            id: escrowId,
+            seller,
+            amount,
+            status:
+              "AWAITING PAYMENT"
+
+          });
+
+          renderEscrows();
 
           status.innerHTML =
             "Escrow created successfully!";
@@ -374,11 +483,27 @@
             "Depositing USDC...";
 
           const tx =
-            await escrowContract.deposit(
+            await escrowContract.depositFunds(
               escrowId
             );
 
           await tx.wait();
+
+          escrows =
+            escrows.map((e) =>
+
+              e.id == escrowId
+
+                ? {
+                    ...e,
+                    status:
+                      "FUNDED"
+                  }
+
+                : e
+            );
+
+          renderEscrows();
 
           status.innerHTML =
             "Funds locked in escrow!";
@@ -389,6 +514,102 @@
 
           status.innerHTML =
             "Deposit failed";
+
+        }
+      }
+
+      async function releaseFunds() {
+
+        try {
+
+          const escrowId =
+            document.getElementById(
+              "escrowId"
+            ).value;
+
+          status.innerHTML =
+            "Releasing funds...";
+
+          const tx =
+            await escrowContract.releaseFunds(
+              escrowId
+            );
+
+          await tx.wait();
+
+          escrows =
+            escrows.map((e) =>
+
+              e.id == escrowId
+
+                ? {
+                    ...e,
+                    status:
+                      "RELEASED"
+                  }
+
+                : e
+            );
+
+          renderEscrows();
+
+          status.innerHTML =
+            "Funds released!";
+
+        } catch (err) {
+
+          console.error(err);
+
+          status.innerHTML =
+            "Release failed";
+
+        }
+      }
+
+      async function refundBuyer() {
+
+        try {
+
+          const escrowId =
+            document.getElementById(
+              "escrowId"
+            ).value;
+
+          status.innerHTML =
+            "Refunding buyer...";
+
+          const tx =
+            await escrowContract.refundBuyer(
+              escrowId
+            );
+
+          await tx.wait();
+
+          escrows =
+            escrows.map((e) =>
+
+              e.id == escrowId
+
+                ? {
+                    ...e,
+                    status:
+                      "REFUNDED"
+                  }
+
+                : e
+            );
+
+          renderEscrows();
+
+          status.innerHTML =
+            "Buyer refunded!";
+
+        } catch (err) {
+
+          console.error(err);
+
+          status.innerHTML =
+            "Refund failed";
 
         }
       }
@@ -419,6 +640,20 @@
         .addEventListener(
           "click",
           depositUSDC
+        );
+
+      document
+        .getElementById("releaseBtn")
+        .addEventListener(
+          "click",
+          releaseFunds
+        );
+
+      document
+        .getElementById("refundBtn")
+        .addEventListener(
+          "click",
+          refundBuyer
         );
 
     </script>
