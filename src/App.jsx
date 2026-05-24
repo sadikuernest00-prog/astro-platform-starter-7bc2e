@@ -5,6 +5,7 @@ const ESCROW_ADDRESS =
   "0x46E3829422A899D61eb63F34A754ea67A06D3928";
 
 const ESCROW_ABI = [
+
   "function createEscrow(address _seller,uint256 _amount,string memory _escrowReference) external",
 
   "function depositFunds(uint256 _escrowId) external",
@@ -12,6 +13,7 @@ const ESCROW_ABI = [
   "function releaseFunds(uint256 _escrowId) external",
 
   "function refundBuyer(uint256 _escrowId) external"
+
 ];
 
 export default function App() {
