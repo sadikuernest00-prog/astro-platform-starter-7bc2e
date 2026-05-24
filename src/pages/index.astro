@@ -26,7 +26,6 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
         padding: 40px;
       }
@@ -241,7 +240,11 @@
 
         "function releaseFunds(uint256 _escrowId) external",
 
-        "function refundBuyer(uint256 _escrowId) external"
+        "function refundBuyer(uint256 _escrowId) external",
+
+        "function escrowCount() view returns (uint256)",
+
+        "function getEscrow(uint256 _escrowId) view returns (uint256,address,address,uint256,string,uint8)"
 
       ];
 
@@ -294,6 +297,76 @@
             </div>
           `;
         });
+      }
+
+      async function loadEscrows() {
+
+        try {
+
+          const total =
+            await escrowContract.escrowCount();
+
+          escrows = [];
+
+          for (
+            let i = 1;
+            i <= total;
+            i++
+          ) {
+
+            const escrow =
+              await escrowContract.getEscrow(i);
+
+            let stateText =
+              "UNKNOWN";
+
+            if (escrow[5] == 0)
+              stateText =
+                "AWAITING PAYMENT";
+
+            if (escrow[5] == 1)
+              stateText =
+                "FUNDED";
+
+            if (escrow[5] == 2)
+              stateText =
+                "RELEASED";
+
+            if (escrow[5] == 3)
+              stateText =
+                "REFUNDED";
+
+            if (escrow[5] == 4)
+              stateText =
+                "DISPUTED";
+
+            escrows.push({
+
+              id:
+                escrow[0].toString(),
+
+              seller:
+                escrow[2],
+
+              amount:
+                ethers.utils.formatUnits(
+                  escrow[3],
+                  6
+                ),
+
+              status:
+                stateText
+
+            });
+          }
+
+          renderEscrows();
+
+        } catch (err) {
+
+          console.error(err);
+
+        }
       }
 
       async function connectWallet() {
@@ -352,6 +425,8 @@
           status.innerHTML =
             "Connected: " + address;
 
+          await loadEscrows();
+
         } catch (err) {
 
           console.error(err);
@@ -403,17 +478,7 @@
 
           await tx.wait();
 
-          escrows.push({
-
-            id: escrowId,
-            seller,
-            amount,
-            status:
-              "AWAITING PAYMENT"
-
-          });
-
-          renderEscrows();
+          await loadEscrows();
 
           status.innerHTML =
             "Escrow created successfully!";
@@ -489,21 +554,7 @@
 
           await tx.wait();
 
-          escrows =
-            escrows.map((e) =>
-
-              e.id == escrowId
-
-                ? {
-                    ...e,
-                    status:
-                      "FUNDED"
-                  }
-
-                : e
-            );
-
-          renderEscrows();
+          await loadEscrows();
 
           status.innerHTML =
             "Funds locked in escrow!";
@@ -537,21 +588,7 @@
 
           await tx.wait();
 
-          escrows =
-            escrows.map((e) =>
-
-              e.id == escrowId
-
-                ? {
-                    ...e,
-                    status:
-                      "RELEASED"
-                  }
-
-                : e
-            );
-
-          renderEscrows();
+          await loadEscrows();
 
           status.innerHTML =
             "Funds released!";
@@ -585,21 +622,7 @@
 
           await tx.wait();
 
-          escrows =
-            escrows.map((e) =>
-
-              e.id == escrowId
-
-                ? {
-                    ...e,
-                    status:
-                      "REFUNDED"
-                  }
-
-                : e
-            );
-
-          renderEscrows();
+          await loadEscrows();
 
           status.innerHTML =
             "Buyer refunded!";
