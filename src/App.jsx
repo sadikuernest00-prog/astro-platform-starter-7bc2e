@@ -4,6 +4,9 @@ import { ethers } from "ethers";
 const ESCROW_ADDRESS =
   "0x46E3829422A899D61eb63F34A754ea67A06D3928";
 
+const USDC_ADDRESS =
+  "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
+
 const ESCROW_ABI = [
 
   "function createEscrow(address _seller,uint256 _amount,string memory _escrowReference) external",
@@ -16,6 +19,10 @@ const ESCROW_ABI = [
 
 ];
 
+const USDC_ABI = [
+  "function approve(address spender,uint256 amount) external returns (bool)"
+];
+
 export default function App() {
 
   const [wallet, setWallet] = useState("");
@@ -25,6 +32,8 @@ export default function App() {
   const [amount, setAmount] = useState("");
 
   const [escrowId, setEscrowId] = useState("");
+
+  const [escrows, setEscrows] = useState([]);
 
   async function connectWallet() {
 
@@ -47,15 +56,20 @@ export default function App() {
     }
   }
 
-  async function getContract() {
+  async function getSigner() {
 
     const provider =
       new ethers.BrowserProvider(
         window.ethereum
       );
 
+    return await provider.getSigner();
+  }
+
+  async function getEscrowContract() {
+
     const signer =
-      await provider.getSigner();
+      await getSigner();
 
     return new ethers.Contract(
       ESCROW_ADDRESS,
@@ -64,12 +78,45 @@ export default function App() {
     );
   }
 
+  async function approveUSDC() {
+
+    try {
+
+      const signer =
+        await getSigner();
+
+      const usdc =
+        new ethers.Contract(
+          USDC_ADDRESS,
+          USDC_ABI,
+          signer
+        );
+
+      const usdcAmount =
+        ethers.parseUnits(amount, 6);
+
+      const tx =
+        await usdc.approve(
+          ESCROW_ADDRESS,
+          usdcAmount
+        );
+
+      await tx.wait();
+
+      alert("USDC Approved");
+
+    } catch (err) {
+      console.error(err);
+      alert("Approval failed");
+    }
+  }
+
   async function createEscrow() {
 
     try {
 
       const contract =
-        await getContract();
+        await getEscrowContract();
 
       const usdcAmount =
         ethers.parseUnits(amount, 6);
@@ -82,6 +129,18 @@ export default function App() {
         );
 
       await tx.wait();
+
+      const newEscrow = {
+        id: escrowId,
+        seller,
+        amount,
+        status: "AWAITING PAYMENT"
+      };
+
+      setEscrows([
+        ...escrows,
+        newEscrow
+      ]);
 
       alert("Escrow created");
 
@@ -96,7 +155,7 @@ export default function App() {
     try {
 
       const contract =
-        await getContract();
+        await getEscrowContract();
 
       const tx =
         await contract.depositFunds(
@@ -104,6 +163,18 @@ export default function App() {
         );
 
       await tx.wait();
+
+      const updated =
+        escrows.map((e) =>
+          e.id == escrowId
+            ? {
+                ...e,
+                status: "FUNDED"
+              }
+            : e
+        );
+
+      setEscrows(updated);
 
       alert("Funds deposited");
 
@@ -118,7 +189,7 @@ export default function App() {
     try {
 
       const contract =
-        await getContract();
+        await getEscrowContract();
 
       const tx =
         await contract.releaseFunds(
@@ -126,6 +197,18 @@ export default function App() {
         );
 
       await tx.wait();
+
+      const updated =
+        escrows.map((e) =>
+          e.id == escrowId
+            ? {
+                ...e,
+                status: "RELEASED"
+              }
+            : e
+        );
+
+      setEscrows(updated);
 
       alert("Funds released");
 
@@ -140,7 +223,7 @@ export default function App() {
     try {
 
       const contract =
-        await getContract();
+        await getEscrowContract();
 
       const tx =
         await contract.refundBuyer(
@@ -148,6 +231,18 @@ export default function App() {
         );
 
       await tx.wait();
+
+      const updated =
+        escrows.map((e) =>
+          e.id == escrowId
+            ? {
+                ...e,
+                status: "REFUNDED"
+              }
+            : e
+        );
+
+      setEscrows(updated);
 
       alert("Buyer refunded");
 
@@ -159,7 +254,7 @@ export default function App() {
 
   return (
 
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-10">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center p-10">
 
       <h1 className="text-6xl font-bold text-center mb-6">
         Secure Escrow Infrastructure
@@ -213,6 +308,13 @@ export default function App() {
         </button>
 
         <button
+          onClick={approveUSDC}
+          className="bg-purple-600 hover:bg-purple-700 px-6 py-4 rounded-xl"
+        >
+          Approve USDC
+        </button>
+
+        <button
           onClick={createEscrow}
           className="bg-zinc-800 hover:bg-zinc-700 px-6 py-4 rounded-xl"
         >
@@ -242,7 +344,46 @@ export default function App() {
 
       </div>
 
-      <div className="mt-8 text-sm text-gray-500">
+      <div className="mt-16 w-full max-w-2xl">
+
+        <h2 className="text-3xl font-bold mb-6">
+          Active Escrows
+        </h2>
+
+        <div className="flex flex-col gap-4">
+
+          {escrows.map((escrow, index) => (
+
+            <div
+              key={index}
+              className="bg-zinc-900 border border-zinc-700 rounded-2xl p-6"
+            >
+
+              <div className="mb-2">
+                <strong>ID:</strong> {escrow.id}
+              </div>
+
+              <div className="mb-2">
+                <strong>Seller:</strong> {escrow.seller}
+              </div>
+
+              <div className="mb-2">
+                <strong>Amount:</strong> {escrow.amount} USDC
+              </div>
+
+              <div>
+                <strong>Status:</strong> {escrow.status}
+              </div>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </div>
+
+      <div className="mt-10 text-sm text-gray-500">
         Connected Wallet: {wallet}
       </div>
 
