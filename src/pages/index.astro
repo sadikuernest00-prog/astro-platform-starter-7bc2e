@@ -1,7 +1,3 @@
----
-
----
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -153,7 +149,7 @@
 
         <input
           id="escrowId"
-          placeholder="Escrow ID"
+          placeholder="Escrow NUMBER (1,2,3...)"
         />
 
       </div>
@@ -222,7 +218,7 @@
         ethers
       } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
 
-      // NEW LIVE CONTRACT
+      // LIVE CONTRACT
       const ESCROW_ADDRESS =
         "0xd497473d15ef814370F88818b92540d0D5Af4fE1";
 
@@ -449,7 +445,7 @@
               "amount"
             ).value;
 
-          const escrowId =
+          const escrowReference =
             document.getElementById(
               "escrowId"
             ).value;
@@ -470,7 +466,7 @@
 
               parsedAmount,
 
-              escrowId
+              escrowReference
 
             );
 
@@ -538,9 +534,11 @@
         try {
 
           const escrowId =
-            document.getElementById(
-              "escrowId"
-            ).value;
+            Number(
+              document.getElementById(
+                "escrowId"
+              ).value
+            );
 
           status.innerHTML =
             "Depositing USDC...";
@@ -572,9 +570,11 @@
         try {
 
           const escrowId =
-            document.getElementById(
-              "escrowId"
-            ).value;
+            Number(
+              document.getElementById(
+                "escrowId"
+              ).value
+            );
 
           status.innerHTML =
             "Releasing funds...";
@@ -606,9 +606,11 @@
         try {
 
           const escrowId =
-            document.getElementById(
-              "escrowId"
-            ).value;
+            Number(
+              document.getElementById(
+                "escrowId"
+              ).value
+            );
 
           status.innerHTML =
             "Refunding buyer...";
