@@ -10,6 +10,7 @@ const ESCROW_ADDRESS = "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
   <title>AmicBridge Escrow</title>
 
   <style>
+
     *{
       margin:0;
       padding:0;
@@ -148,6 +149,7 @@ const ESCROW_ADDRESS = "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
         width:100%;
       }
     }
+
   </style>
 </head>
 
@@ -271,8 +273,18 @@ async function connectWallet(){
 
   try{
 
+    if (!window.ethereum) {
+
+      alert("MetaMask is not installed");
+
+      document.getElementById("status").innerText =
+        "MetaMask not installed";
+
+      return;
+    }
+
     await window.ethereum.request({
-      method:"eth_requestAccounts"
+      method: "eth_requestAccounts",
     });
 
     provider = new ethers.BrowserProvider(window.ethereum);
