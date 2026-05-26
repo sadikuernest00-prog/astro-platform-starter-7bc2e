@@ -24,7 +24,8 @@
         "function deposit(uint256 escrowId) external",
         "function releaseFunds(uint256 escrowId) external",
         "function refundBuyer(uint256 escrowId) external",
-        "function escrowCount() view returns (uint256)"
+        "function escrowCount() view returns (uint256)",
+        "function getEscrow(uint256 escrowId) view returns ((uint256 id,address buyer,address seller,uint256 amount,bool deposited,bool released,bool refunded))"
       ];
 
       let provider;
@@ -100,6 +101,8 @@
 
           document.getElementById("status").innerText =
             "Escrow created successfully";
+
+          loadEscrowStatus();
 
         } catch (err) {
 
@@ -179,6 +182,8 @@
           document.getElementById("status").innerText =
             "USDC deposited successfully";
 
+          loadEscrowStatus();
+
         } catch (err) {
 
           console.error(err);
@@ -209,6 +214,8 @@
 
           document.getElementById("status").innerText =
             "Funds released successfully";
+
+          loadEscrowStatus();
 
         } catch (err) {
 
@@ -241,6 +248,8 @@
           document.getElementById("status").innerText =
             "Buyer refunded successfully";
 
+          loadEscrowStatus();
+
         } catch (err) {
 
           console.error(err);
@@ -252,12 +261,64 @@
         }
       }
 
+      // LOAD ESCROW STATUS
+      async function loadEscrowStatus() {
+        try {
+
+          const escrowId =
+            document.getElementById("escrowId").value;
+
+          if (!escrowId) return;
+
+          const escrow =
+            await escrowContract.getEscrow(
+              escrowId
+            );
+
+          let status = "CREATED";
+
+          if (escrow.deposited) {
+            status = "FUNDED";
+          }
+
+          if (escrow.released) {
+            status = "RELEASED";
+          }
+
+          if (escrow.refunded) {
+            status = "REFUNDED";
+          }
+
+          document.getElementById("escrowInfo").innerHTML = `
+            <div class="card">
+              <h2>Escrow Status</h2>
+
+              <p><strong>Escrow ID:</strong> ${escrow.id}</p>
+
+              <p><strong>Status:</strong> ${status}</p>
+
+              <p><strong>Buyer:</strong><br>${escrow.buyer}</p>
+
+              <p><strong>Seller:</strong><br>${escrow.seller}</p>
+
+              <p><strong>Amount:</strong>
+              ${ethers.formatUnits(escrow.amount, 6)} USDC</p>
+            </div>
+          `;
+
+        } catch (err) {
+
+          console.error(err);
+        }
+      }
+
       window.connectWallet = connectWallet;
       window.createEscrow = createEscrow;
       window.approveUSDC = approveUSDC;
       window.depositUSDC = depositUSDC;
       window.releaseFunds = releaseFunds;
       window.refundBuyer = refundBuyer;
+      window.loadEscrowStatus = loadEscrowStatus;
     </script>
 
     <style>
@@ -273,7 +334,7 @@
       }
 
       .container {
-        width: 700px;
+        width: 750px;
         text-align: center;
       }
 
@@ -286,7 +347,6 @@
       p {
         color: #999;
         font-size: 20px;
-        margin-bottom: 40px;
       }
 
       input {
@@ -297,7 +357,7 @@
         border: 1px solid #333;
         background: black;
         color: white;
-        font-size: 28px;
+        font-size: 24px;
         box-sizing: border-box;
       }
 
@@ -306,16 +366,16 @@
         flex-wrap: wrap;
         gap: 20px;
         justify-content: center;
+        margin-top: 20px;
       }
 
       button {
-        padding: 22px 36px;
+        padding: 22px 34px;
         border-radius: 20px;
         border: none;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: bold;
         cursor: pointer;
-        min-width: 240px;
       }
 
       .gold {
@@ -341,9 +401,28 @@
 
       #status {
         margin-top: 40px;
-        font-size: 30px;
+        font-size: 28px;
         font-weight: bold;
         color: #00ffae;
+      }
+
+      .card {
+        margin-top: 40px;
+        padding: 30px;
+        border-radius: 24px;
+        border: 1px solid #333;
+        background: #111;
+        text-align: left;
+      }
+
+      .card h2 {
+        color: #d4a84f;
+        margin-top: 0;
+      }
+
+      .card p {
+        margin-bottom: 20px;
+        word-break: break-all;
       }
     </style>
   </head>
@@ -420,9 +499,18 @@
           Refund Buyer
         </button>
 
+        <button
+          class="dark"
+          onclick="loadEscrowStatus()"
+        >
+          Load Escrow Status
+        </button>
+
       </div>
 
       <div id="status"></div>
+
+      <div id="escrowInfo"></div>
 
     </div>
   </body>
