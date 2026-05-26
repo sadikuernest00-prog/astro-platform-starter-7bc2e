@@ -5,191 +5,308 @@ const ESCROW_ADDRESS = "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AmicBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>AmicBridge Escrow</title>
 
   <style>
-    body {
-      background: black;
-      color: white;
-      font-family: Arial;
-      text-align: center;
-      margin: 0;
-      padding: 0;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
     }
 
-    h1 {
-      font-size: 90px;
-      margin-top: 60px;
-      line-height: 1;
-      font-weight: bold;
+    body{
+      background:black;
+      color:white;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow-x:hidden;
     }
 
-    .gold {
-      color: #d4a03a;
+    .container{
+      width:100%;
+      max-width:1400px;
+      text-align:center;
+      padding:40px;
     }
 
-    p {
-      color: gray;
-      font-size: 22px;
-      margin-top: 30px;
+    h1{
+      font-size:110px;
+      line-height:0.9;
+      font-weight:900;
+      margin-bottom:40px;
     }
 
-    input {
-      width: 600px;
-      padding: 24px;
-      margin-top: 20px;
-      border-radius: 20px;
-      border: 1px solid #333;
-      background: #0b0b0b;
-      color: white;
-      font-size: 22px;
+    .gold{
+      color:#d4a03a;
     }
 
-    button {
-      padding: 22px 40px;
-      margin: 12px;
-      border-radius: 20px;
-      border: none;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
+    .subtitle{
+      color:#8b8b8b;
+      font-size:22px;
+      max-width:900px;
+      margin:auto;
+      line-height:1.7;
+      margin-bottom:70px;
     }
 
-    .connect {
-      background: #d4a03a;
-      color: black;
+    .inputs{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:24px;
+      margin-bottom:50px;
     }
 
-    .dark {
-      background: #111;
-      color: white;
-      border: 1px solid #333;
+    input{
+      width:460px;
+      height:72px;
+      background:#090909;
+      border:1px solid #242424;
+      border-radius:20px;
+      padding:0 24px;
+      color:white;
+      font-size:28px;
+      outline:none;
     }
 
-    .green {
-      background: #12b76a;
-      color: white;
+    input::placeholder{
+      color:#777;
     }
 
-    .red {
-      background: #ef4444;
-      color: white;
+    .buttons{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:18px;
+      margin-top:30px;
     }
 
-    #status {
-      margin-top: 40px;
-      font-size: 28px;
-      color: #00ff99;
+    button{
+      height:72px;
+      padding:0 38px;
+      border-radius:22px;
+      border:none;
+      font-size:22px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    button:hover{
+      transform:scale(1.03);
+    }
+
+    .connect{
+      background:#d4a03a;
+      color:black;
+    }
+
+    .dark{
+      background:#0b0b0b;
+      color:white;
+      border:1px solid #262626;
+    }
+
+    .green{
+      background:#0bc56d;
+      color:white;
+    }
+
+    .red{
+      background:#e53935;
+      color:white;
+    }
+
+    #status{
+      margin-top:45px;
+      color:#00ff99;
+      font-size:24px;
+      font-weight:700;
+    }
+
+    @media(max-width:900px){
+
+      h1{
+        font-size:70px;
+      }
+
+      input{
+        width:100%;
+      }
+
+      .buttons{
+        flex-direction:column;
+      }
+
+      button{
+        width:100%;
+      }
     }
   </style>
 </head>
 
 <body>
 
+<div class="container">
+
   <h1>
-    Secure Escrow <br />
-    Infrastructure <span class="gold">For</span><br />
+    Secure Escrow <br>
+    Infrastructure <span class="gold">For</span><br>
     <span class="gold">International Trade</span>
   </h1>
 
-  <p>
+  <div class="subtitle">
     AmicBridge provides blockchain escrow infrastructure powered by USDC,
     smart contracts and decentralized settlement technology.
-  </p>
+  </div>
 
-  <div style="margin-top:60px;">
+  <div class="inputs">
+
     <input
       id="seller"
       placeholder="Seller wallet address"
     />
 
-    <br />
-
     <input
       id="amount"
       placeholder="Amount in USDC"
     />
+
+    <input
+      id="escrowId"
+      placeholder="Escrow Number (1,2,3...)"
+    />
+
   </div>
 
-  <div style="margin-top:40px;">
-    <button class="connect" onclick="connectWallet()">
+  <div class="buttons">
+
+    <button
+      class="connect"
+      onclick="connectWallet()"
+    >
       Connect MetaMask
     </button>
 
-    <button class="dark" onclick="createEscrow()">
+    <button
+      class="dark"
+      onclick="createEscrow()"
+    >
       Create Escrow
     </button>
 
-    <button class="dark" onclick="approveUSDC()">
+    <button
+      class="dark"
+      onclick="approveUSDC()"
+    >
       Approve USDC
     </button>
 
-    <button class="dark" onclick="depositUSDC()">
+    <button
+      class="dark"
+      onclick="depositUSDC()"
+    >
       Deposit USDC
     </button>
 
-    <br />
-
-    <button class="green" onclick="releaseFunds()">
+    <button
+      class="green"
+      onclick="releaseFunds()"
+    >
       Release Funds
     </button>
 
-    <button class="red" onclick="refundBuyer()">
+    <button
+      class="red"
+      onclick="refundBuyer()"
+    >
       Refund Buyer
     </button>
+
   </div>
 
-  <div id="status"></div>
+  <div id="status">
+    Waiting for wallet connection...
+  </div>
+
+</div>
 
 <script type="module">
-import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
+
+import { ethers }
+from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
 
 const ESCROW_ABI = [
+
   "function createEscrow(address seller, uint256 amount) external returns (uint256)",
+
   "function deposit(uint256 escrowId) external",
+
   "function releaseFunds(uint256 escrowId) external",
+
   "function refundBuyer(uint256 escrowId) external",
+
   "function escrowCount() view returns (uint256)"
 ];
-
-const USDC_ADDRESS =
-  "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
 
 const ERC20_ABI = [
   "function approve(address spender, uint256 amount) external returns (bool)"
 ];
+
+const USDC_ADDRESS =
+  "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
 
 let provider;
 let signer;
 let escrow;
 let usdc;
 
-async function connectWallet() {
-  await window.ethereum.request({
-    method: "eth_requestAccounts",
-  });
+async function connectWallet(){
 
-  provider = new ethers.BrowserProvider(window.ethereum);
-  signer = await provider.getSigner();
+  try{
 
-  escrow = new ethers.Contract(
-    ESCROW_ADDRESS,
-    ESCROW_ABI,
-    signer
-  );
+    await window.ethereum.request({
+      method:"eth_requestAccounts"
+    });
 
-  usdc = new ethers.Contract(
-    USDC_ADDRESS,
-    ERC20_ABI,
-    signer
-  );
+    provider = new ethers.BrowserProvider(window.ethereum);
 
-  document.getElementById("status").innerText =
-    "Wallet connected";
+    signer = await provider.getSigner();
+
+    escrow = new ethers.Contract(
+      ESCROW_ADDRESS,
+      ESCROW_ABI,
+      signer
+    );
+
+    usdc = new ethers.Contract(
+      USDC_ADDRESS,
+      ERC20_ABI,
+      signer
+    );
+
+    document.getElementById("status").innerText =
+      "Wallet connected successfully";
+
+  }catch(err){
+
+    console.error(err);
+
+    document.getElementById("status").innerText =
+      "Wallet connection failed";
+  }
 }
 
-async function createEscrow() {
-  try {
+async function createEscrow(){
+
+  try{
+
     const seller =
       document.getElementById("seller").value;
 
@@ -206,16 +323,17 @@ async function createEscrow() {
 
     await tx.wait();
 
-    const escrowId = await escrow.escrowCount();
+    const escrowId =
+      await escrow.escrowCount();
 
-    localStorage.setItem(
-      "lastEscrowId",
-      escrowId.toString()
-    );
+    document.getElementById("escrowId").value =
+      escrowId.toString();
 
     document.getElementById("status").innerText =
-      "Escrow created. ID: " + escrowId;
-  } catch (err) {
+      "Escrow created successfully";
+
+  }catch(err){
+
     console.error(err);
 
     document.getElementById("status").innerText =
@@ -223,8 +341,10 @@ async function createEscrow() {
   }
 }
 
-async function approveUSDC() {
-  try {
+async function approveUSDC(){
+
+  try{
+
     const amount =
       document.getElementById("amount").value;
 
@@ -239,19 +359,23 @@ async function approveUSDC() {
     await tx.wait();
 
     document.getElementById("status").innerText =
-      "USDC approved";
-  } catch (err) {
+      "USDC approved successfully";
+
+  }catch(err){
+
     console.error(err);
 
     document.getElementById("status").innerText =
-      "Approval failed";
+      "USDC approval failed";
   }
 }
 
-async function depositUSDC() {
-  try {
+async function depositUSDC(){
+
+  try{
+
     const escrowId =
-      localStorage.getItem("lastEscrowId");
+      document.getElementById("escrowId").value;
 
     const tx = await escrow.deposit(
       escrowId
@@ -264,7 +388,9 @@ async function depositUSDC() {
 
     document.getElementById("status").innerText =
       "Deposit successful";
-  } catch (err) {
+
+  }catch(err){
+
     console.error(err);
 
     document.getElementById("status").innerText =
@@ -272,20 +398,27 @@ async function depositUSDC() {
   }
 }
 
-async function releaseFunds() {
-  try {
+async function releaseFunds(){
+
+  try{
+
     const escrowId =
-      localStorage.getItem("lastEscrowId");
+      document.getElementById("escrowId").value;
 
     const tx = await escrow.releaseFunds(
       escrowId
     );
 
+    document.getElementById("status").innerText =
+      "Releasing funds...";
+
     await tx.wait();
 
     document.getElementById("status").innerText =
       "Funds released";
-  } catch (err) {
+
+  }catch(err){
+
     console.error(err);
 
     document.getElementById("status").innerText =
@@ -293,20 +426,27 @@ async function releaseFunds() {
   }
 }
 
-async function refundBuyer() {
-  try {
+async function refundBuyer(){
+
+  try{
+
     const escrowId =
-      localStorage.getItem("lastEscrowId");
+      document.getElementById("escrowId").value;
 
     const tx = await escrow.refundBuyer(
       escrowId
     );
 
+    document.getElementById("status").innerText =
+      "Refunding buyer...";
+
     await tx.wait();
 
     document.getElementById("status").innerText =
       "Buyer refunded";
-  } catch (err) {
+
+  }catch(err){
+
     console.error(err);
 
     document.getElementById("status").innerText =
@@ -320,6 +460,7 @@ window.approveUSDC = approveUSDC;
 window.depositUSDC = depositUSDC;
 window.releaseFunds = releaseFunds;
 window.refundBuyer = refundBuyer;
+
 </script>
 
 </body>
