@@ -10,23 +10,26 @@
     <script type="module">
       import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
 
-      // YOUR DEPLOYED ESCROW CONTRACT
-      const ESCROW_ADDRESS = "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
+      // YOUR ESCROW CONTRACT
+      const ESCROW_ADDRESS =
+        "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
 
       // BASE MAINNET USDC
-      const USDC_ADDRESS = "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
+      const USDC_ADDRESS =
+        "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
 
       // ESCROW ABI
       const escrowABI = [
-        "function createEscrow(address seller,uint256 amount,string memory item) public",
-        "function deposit(uint256 escrowId) public",
-        "function release(uint256 escrowId) public",
-        "function refund(uint256 escrowId) public"
+        "function createEscrow(address seller,uint256 amount) external returns (uint256)",
+        "function deposit(uint256 escrowId) external",
+        "function releaseFunds(uint256 escrowId) external",
+        "function refundBuyer(uint256 escrowId) external",
+        "function escrowCount() view returns (uint256)"
       ];
 
       // USDC ABI
       const usdcABI = [
-        "function approve(address spender,uint256 amount) public returns (bool)"
+        "function approve(address spender,uint256 amount) external returns (bool)"
       ];
 
       let provider;
@@ -53,12 +56,16 @@
             signer
           );
 
+          const address = await signer.getAddress();
+
           document.getElementById("status").innerText =
-            "Wallet connected";
+            "Connected: " + address;
+
         } catch (err) {
           console.error(err);
+
           document.getElementById("status").innerText =
-            "Connection failed";
+            "Wallet connection failed";
         }
       }
 
@@ -71,17 +78,13 @@
           const amount =
             document.getElementById("amount").value;
 
-          const item =
-            document.getElementById("item").value;
-
           const parsedAmount =
             ethers.parseUnits(amount, 6);
 
           const tx =
             await escrowContract.createEscrow(
               seller,
-              parsedAmount,
-              item
+              parsedAmount
             );
 
           document.getElementById("status").innerText =
@@ -89,8 +92,15 @@
 
           await tx.wait();
 
+          const escrowId =
+            await escrowContract.escrowCount();
+
+          document.getElementById("escrowId").value =
+            escrowId;
+
           document.getElementById("status").innerText =
             "Escrow created successfully";
+
         } catch (err) {
           console.error(err);
 
@@ -127,6 +137,7 @@
 
           document.getElementById("status").innerText =
             "USDC approved successfully";
+
         } catch (err) {
           console.error(err);
 
@@ -135,14 +146,16 @@
         }
       }
 
-      // DEPOSIT
+      // DEPOSIT USDC
       async function depositUSDC() {
         try {
           const escrowId =
             document.getElementById("escrowId").value;
 
           const tx =
-            await escrowContract.deposit(escrowId);
+            await escrowContract.deposit(
+              escrowId
+            );
 
           document.getElementById("status").innerText =
             "Depositing USDC...";
@@ -150,7 +163,8 @@
           await tx.wait();
 
           document.getElementById("status").innerText =
-            "Deposit successful";
+            "USDC deposited successfully";
+
         } catch (err) {
           console.error(err);
 
@@ -166,7 +180,9 @@
             document.getElementById("escrowId").value;
 
           const tx =
-            await escrowContract.release(escrowId);
+            await escrowContract.releaseFunds(
+              escrowId
+            );
 
           document.getElementById("status").innerText =
             "Releasing funds...";
@@ -174,7 +190,8 @@
           await tx.wait();
 
           document.getElementById("status").innerText =
-            "Funds released";
+            "Funds released successfully";
+
         } catch (err) {
           console.error(err);
 
@@ -183,14 +200,16 @@
         }
       }
 
-      // REFUND
+      // REFUND BUYER
       async function refundBuyer() {
         try {
           const escrowId =
             document.getElementById("escrowId").value;
 
           const tx =
-            await escrowContract.refund(escrowId);
+            await escrowContract.refundBuyer(
+              escrowId
+            );
 
           document.getElementById("status").innerText =
             "Refunding buyer...";
@@ -198,7 +217,8 @@
           await tx.wait();
 
           document.getElementById("status").innerText =
-            "Buyer refunded";
+            "Buyer refunded successfully";
+
         } catch (err) {
           console.error(err);
 
@@ -219,11 +239,12 @@
       body {
         background: black;
         color: white;
-        font-family: Arial;
+        font-family: Arial, sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        margin: 0;
       }
 
       .container {
@@ -232,24 +253,27 @@
       }
 
       h1 {
-        font-size: 60px;
+        font-size: 70px;
         color: #d4a84f;
+        margin-bottom: 10px;
       }
 
       p {
-        color: gray;
+        color: #888;
+        font-size: 20px;
         margin-bottom: 40px;
       }
 
       input {
         width: 100%;
-        padding: 25px;
+        padding: 24px;
         margin-bottom: 20px;
         border-radius: 20px;
         border: 1px solid #333;
         background: black;
         color: white;
         font-size: 28px;
+        box-sizing: border-box;
       }
 
       .buttons {
@@ -257,20 +281,28 @@
         flex-wrap: wrap;
         gap: 20px;
         justify-content: center;
+        margin-top: 20px;
       }
 
       button {
-        padding: 22px 40px;
+        padding: 22px 36px;
         border-radius: 20px;
         border: none;
         font-size: 22px;
         font-weight: bold;
         cursor: pointer;
+        min-width: 240px;
       }
 
       .gold {
         background: #d4a84f;
         color: black;
+      }
+
+      .dark {
+        background: #111;
+        color: white;
+        border: 1px solid #333;
       }
 
       .green {
@@ -283,17 +315,11 @@
         color: white;
       }
 
-      .dark {
-        background: #111;
-        color: white;
-        border: 1px solid #333;
-      }
-
       #status {
         margin-top: 40px;
-        font-size: 32px;
-        color: #00ffae;
+        font-size: 30px;
         font-weight: bold;
+        color: #00ffae;
       }
     </style>
   </head>
@@ -309,21 +335,19 @@
 
       <input
         id="seller"
+        type="text"
         placeholder="Seller Wallet Address"
       />
 
       <input
         id="amount"
+        type="text"
         placeholder="Amount in USDC"
       />
 
       <input
-        id="item"
-        placeholder="Item Name"
-      />
-
-      <input
         id="escrowId"
+        type="text"
         placeholder="Escrow ID"
       />
 
