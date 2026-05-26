@@ -10,7 +10,7 @@
     <script type="module">
       import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
 
-      // YOUR ESCROW CONTRACT
+      // YOUR DEPLOYED ESCROW CONTRACT
       const ESCROW_ADDRESS =
         "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
 
@@ -27,11 +27,6 @@
         "function escrowCount() view returns (uint256)"
       ];
 
-      // USDC ABI
-      const usdcABI = [
-        "function approve(address spender,uint256 amount) external returns (bool)"
-      ];
-
       let provider;
       let signer;
       let escrowContract;
@@ -39,6 +34,7 @@
       // CONNECT WALLET
       async function connectWallet() {
         try {
+
           if (!window.ethereum) {
             alert("Install MetaMask");
             return;
@@ -62,6 +58,7 @@
             "Connected: " + address;
 
         } catch (err) {
+
           console.error(err);
 
           document.getElementById("status").innerText =
@@ -72,6 +69,7 @@
       // CREATE ESCROW
       async function createEscrow() {
         try {
+
           const seller =
             document.getElementById("seller").value;
 
@@ -102,36 +100,46 @@
             "Escrow created successfully";
 
         } catch (err) {
+
           console.error(err);
 
           document.getElementById("status").innerText =
             "Escrow creation failed";
+
+          alert(err.reason || err.message);
         }
       }
 
       // APPROVE USDC
       async function approveUSDC() {
         try {
+
+          if (!signer) {
+            alert("Connect wallet first");
+            return;
+          }
+
           const amount =
             document.getElementById("amount").value;
-
-          const usdcContract = new ethers.Contract(
-            USDC_ADDRESS,
-            usdcABI,
-            signer
-          );
 
           const parsedAmount =
             ethers.parseUnits(amount, 6);
 
-          const tx =
-            await usdcContract.approve(
-              ESCROW_ADDRESS,
-              parsedAmount
-            );
+          const usdcContract = new ethers.Contract(
+            USDC_ADDRESS,
+            [
+              "function approve(address spender,uint256 amount) external returns (bool)"
+            ],
+            signer
+          );
 
           document.getElementById("status").innerText =
-            "Approving USDC...";
+            "Waiting for approval...";
+
+          const tx = await usdcContract.approve(
+            ESCROW_ADDRESS,
+            parsedAmount
+          );
 
           await tx.wait();
 
@@ -139,16 +147,20 @@
             "USDC approved successfully";
 
         } catch (err) {
+
           console.error(err);
 
           document.getElementById("status").innerText =
             "USDC approval failed";
+
+          alert(err.reason || err.message);
         }
       }
 
       // DEPOSIT USDC
       async function depositUSDC() {
         try {
+
           const escrowId =
             document.getElementById("escrowId").value;
 
@@ -166,16 +178,20 @@
             "USDC deposited successfully";
 
         } catch (err) {
+
           console.error(err);
 
           document.getElementById("status").innerText =
             "Deposit failed";
+
+          alert(err.reason || err.message);
         }
       }
 
       // RELEASE FUNDS
       async function releaseFunds() {
         try {
+
           const escrowId =
             document.getElementById("escrowId").value;
 
@@ -193,16 +209,20 @@
             "Funds released successfully";
 
         } catch (err) {
+
           console.error(err);
 
           document.getElementById("status").innerText =
             "Release failed";
+
+          alert(err.reason || err.message);
         }
       }
 
       // REFUND BUYER
       async function refundBuyer() {
         try {
+
           const escrowId =
             document.getElementById("escrowId").value;
 
@@ -220,10 +240,13 @@
             "Buyer refunded successfully";
 
         } catch (err) {
+
           console.error(err);
 
           document.getElementById("status").innerText =
             "Refund failed";
+
+          alert(err.reason || err.message);
         }
       }
 
@@ -253,13 +276,13 @@
       }
 
       h1 {
-        font-size: 70px;
+        font-size: 72px;
         color: #d4a84f;
         margin-bottom: 10px;
       }
 
       p {
-        color: #888;
+        color: #999;
         font-size: 20px;
         margin-bottom: 40px;
       }
@@ -281,7 +304,6 @@
         flex-wrap: wrap;
         gap: 20px;
         justify-content: center;
-        margin-top: 20px;
       }
 
       button {
@@ -326,6 +348,7 @@
 
   <body>
     <div class="container">
+
       <h1>International Trade</h1>
 
       <p>
@@ -352,6 +375,7 @@
       />
 
       <div class="buttons">
+
         <button
           class="gold"
           onclick="connectWallet()"
@@ -393,9 +417,11 @@
         >
           Refund Buyer
         </button>
+
       </div>
 
       <div id="status"></div>
+
     </div>
   </body>
 </html>
