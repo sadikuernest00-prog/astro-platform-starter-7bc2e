@@ -1,0 +1,410 @@
+---
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AmicBridge Payment</title>
+
+    <script type="module">
+      import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
+
+      // CONTRACT
+      const ESCROW_ADDRESS =
+        "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
+
+      // BASE USDC
+      const USDC_ADDRESS =
+        "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
+
+      // ABI
+      const escrowABI = [
+        "function deposit(uint256 escrowId) external",
+        "function getEscrow(uint256 escrowId) view returns ((uint256 id,address buyer,address seller,uint256 amount,bool deposited,bool released,bool refunded))"
+      ];
+
+      let provider;
+      let signer;
+      let escrowContract;
+
+      // READ URL PARAMS
+      const params =
+        new URLSearchParams(window.location.search);
+
+      const escrowId =
+        params.get("escrow");
+
+      const seller =
+        params.get("seller");
+
+      const amount =
+        params.get("amount");
+
+      // CONNECT WALLET
+      async function connectWallet() {
+
+        try {
+
+          if (!window.ethereum) {
+            alert("Install MetaMask");
+            return;
+          }
+
+          provider = new ethers.BrowserProvider(window.ethereum);
+
+          await provider.send("eth_requestAccounts", []);
+
+          signer = await provider.getSigner();
+
+          escrowContract = new ethers.Contract(
+            ESCROW_ADDRESS,
+            escrowABI,
+            signer
+          );
+
+          const address =
+            await signer.getAddress();
+
+          document.getElementById("wallet").innerText =
+            address;
+
+        } catch (err) {
+
+          console.error(err);
+
+          alert(err.reason || err.message);
+        }
+      }
+
+      // APPROVE USDC
+      async function approveUSDC() {
+
+        try {
+
+          const parsedAmount =
+            ethers.parseUnits(amount, 6);
+
+          const usdcContract = new ethers.Contract(
+            USDC_ADDRESS,
+            [
+              "function approve(address spender,uint256 amount) external returns (bool)"
+            ],
+            signer
+          );
+
+          document.getElementById("status").innerText =
+            "Approving USDC...";
+
+          const tx =
+            await usdcContract.approve(
+              ESCROW_ADDRESS,
+              parsedAmount
+            );
+
+          await tx.wait();
+
+          document.getElementById("status").innerText =
+            "USDC approved";
+
+        } catch (err) {
+
+          console.error(err);
+
+          alert(err.reason || err.message);
+        }
+      }
+
+      // DEPOSIT
+      async function depositUSDC() {
+
+        try {
+
+          document.getElementById("status").innerText =
+            "Depositing USDC...";
+
+          const tx =
+            await escrowContract.deposit(
+              escrowId
+            );
+
+          await tx.wait();
+
+          document.getElementById("status").innerText =
+            "Funds locked in escrow";
+
+          loadEscrow();
+
+        } catch (err) {
+
+          console.error(err);
+
+          alert(err.reason || err.message);
+        }
+      }
+
+      // LOAD ESCROW
+      async function loadEscrow() {
+
+        try {
+
+          provider =
+            new ethers.BrowserProvider(
+              window.ethereum
+            );
+
+          escrowContract = new ethers.Contract(
+            ESCROW_ADDRESS,
+            escrowABI,
+            provider
+          );
+
+          const escrow =
+            await escrowContract.getEscrow(
+              escrowId
+            );
+
+          let escrowStatus = "CREATED";
+
+          if (escrow.deposited) {
+            escrowStatus = "FUNDED";
+          }
+
+          if (
+            escrow.deposited &&
+            !escrow.released &&
+            !escrow.refunded
+          ) {
+            escrowStatus = "AWAITING DELIVERY";
+          }
+
+          if (escrow.released) {
+            escrowStatus = "RELEASED";
+          }
+
+          if (escrow.refunded) {
+            escrowStatus = "REFUNDED";
+          }
+
+          document.getElementById("escrow").innerHTML = `
+
+            <div class="card">
+
+              <h2>Escrow Payment</h2>
+
+              <div class="line">
+                <span>Escrow ID</span>
+                <span>#${escrow.id}</span>
+              </div>
+
+              <div class="line">
+                <span>Status</span>
+                <span class="status">
+                  ${escrowStatus}
+                </span>
+              </div>
+
+              <div class="line">
+                <span>Amount</span>
+                <span>
+                  ${ethers.formatUnits(
+                    escrow.amount,
+                    6
+                  )} USDC
+                </span>
+              </div>
+
+              <div class="wallet">
+                <label>Seller Wallet</label>
+                <p>${escrow.seller}</p>
+              </div>
+
+              <div class="proof">
+                Blockchain escrow payment secured by smart contract.
+              </div>
+
+            </div>
+
+          `;
+
+        } catch (err) {
+
+          console.error(err);
+        }
+      }
+
+      window.connectWallet = connectWallet;
+      window.approveUSDC = approveUSDC;
+      window.depositUSDC = depositUSDC;
+
+      window.onload = () => {
+        loadEscrow();
+      };
+    </script>
+
+    <style>
+
+      body {
+        background: #000;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 40px;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: #d4a84f;
+        font-size: 58px;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 50px;
+        font-size: 20px;
+      }
+
+      .card {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 24px;
+        padding: 35px;
+      }
+
+      .card h2 {
+        color: #d4a84f;
+        margin-top: 0;
+      }
+
+      .line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        font-size: 20px;
+      }
+
+      .wallet {
+        margin-top: 24px;
+      }
+
+      .wallet label {
+        color: #888;
+      }
+
+      .wallet p {
+        word-break: break-all;
+      }
+
+      .proof {
+        margin-top: 30px;
+        padding: 18px;
+        border-radius: 16px;
+        background: #0a0a0a;
+        border: 1px solid #222;
+        text-align: center;
+        color: #00ffae;
+        font-weight: bold;
+      }
+
+      .status {
+        color: #00ffae;
+        font-weight: bold;
+      }
+
+      .buttons {
+        display: grid;
+        gap: 18px;
+        margin-top: 35px;
+      }
+
+      button {
+        padding: 22px;
+        border-radius: 18px;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .gold {
+        background: #d4a84f;
+        color: black;
+      }
+
+      .dark {
+        background: #111;
+        color: white;
+        border: 1px solid #333;
+      }
+
+      #status {
+        margin-top: 35px;
+        text-align: center;
+        font-size: 24px;
+        color: #00ffae;
+        font-weight: bold;
+      }
+
+      #wallet {
+        text-align: center;
+        margin-top: 20px;
+        color: #888;
+        word-break: break-all;
+      }
+
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <h1>AmicBridge</h1>
+
+      <div class="subtitle">
+        Secure blockchain escrow payment.
+      </div>
+
+      <div id="escrow"></div>
+
+      <div id="wallet"></div>
+
+      <div class="buttons">
+
+        <button
+          class="gold"
+          onclick="connectWallet()"
+        >
+          Connect Wallet
+        </button>
+
+        <button
+          class="dark"
+          onclick="approveUSDC()"
+        >
+          Approve USDC
+        </button>
+
+        <button
+          class="dark"
+          onclick="depositUSDC()"
+        >
+          Deposit USDC
+        </button>
+
+      </div>
+
+      <div id="status"></div>
+
+    </div>
+
+  </body>
+</html>
