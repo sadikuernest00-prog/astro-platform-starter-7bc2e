@@ -1,3 +1,6 @@
+---
+---
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -218,13 +221,13 @@
         ethers
       } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
 
-      // NEW FIXED CONTRACT
+      // YOUR NEW DEPLOYED CONTRACT
       const ESCROW_ADDRESS =
-        "0x1aaF728FeB7DD76d62A641955efE1A08AE31967B";
+        "0x885e28B0fCCdB5BBFE54DBfB20aF31AbDb64E81";
 
-      // BASE USDC
+      // BASE SEPOLIA USDC
       const USDC_ADDRESS =
-        "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+        "0x036CbD53842c5426634e7929541eC2318f3dCF7";
 
       const ESCROW_ABI = [
 
@@ -390,6 +393,17 @@
 
           signer =
             provider.getSigner();
+
+          const network =
+            await provider.getNetwork();
+
+          if (network.chainId !== 84532) {
+
+            status.innerHTML =
+              "Switch MetaMask to Base Sepolia";
+
+            return;
+          }
 
           escrowContract =
             new ethers.Contract(
