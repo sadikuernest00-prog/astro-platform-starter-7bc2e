@@ -4,147 +4,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>AmicBridge Escrow</title>
 
   <style>
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial, sans-serif;
+    body {
+      margin: 0;
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
     }
 
-    body{
-      background:black;
-      color:white;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      padding:40px;
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+      padding-top: 40px;
     }
 
-    h1{
-      font-size:90px;
-      text-align:center;
-      line-height:1;
-      font-weight:900;
+    h1 {
+      font-size: 90px;
+      line-height: 1;
+      margin-bottom: 30px;
+      font-weight: 900;
     }
 
-    .gold{
-      color:#d6a548;
+    .gold {
+      color: #d6a84f;
     }
 
-    p{
-      margin-top:40px;
-      color:#8d8d8d;
-      text-align:center;
-      font-size:22px;
-      max-width:1000px;
-      line-height:1.5;
+    p {
+      color: gray;
+      font-size: 20px;
+      margin-bottom: 50px;
+      line-height: 1.5;
     }
 
-    .form{
-      margin-top:60px;
-      display:flex;
-      flex-direction:column;
-      gap:24px;
-      width:460px;
+    input {
+      width: 100%;
+      max-width: 500px;
+      height: 70px;
+      border-radius: 20px;
+      border: 2px solid #222;
+      background: #080808;
+      color: white;
+      font-size: 18px;
+      padding-left: 25px;
+      margin-bottom: 25px;
     }
 
-    input{
-      background:#0b0b0b;
-      border:2px solid #222;
-      border-radius:20px;
-      padding:24px;
-      color:white;
-      font-size:20px;
-      width:100%;
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
     }
 
-    .buttons{
-      margin-top:40px;
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      gap:20px;
+    button {
+      border: none;
+      border-radius: 22px;
+      padding: 24px 40px;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      background: #0d0d0d;
+      border: 2px solid #1d1d1d;
     }
 
-    button{
-      border:none;
-      border-radius:24px;
-      padding:24px 38px;
-      font-size:22px;
-      font-weight:700;
-      cursor:pointer;
-      color:white;
-      background:#0b0b0b;
-      border:2px solid #222;
-      transition:0.2s;
+    .connect {
+      background: #d6a84f;
+      color: black;
     }
 
-    button:hover{
-      transform:scale(1.03);
+    .release {
+      background: #19cc6f;
     }
 
-    .connect{
-      background:#d6a548;
-      color:black;
+    .refund {
+      background: #ef3737;
     }
 
-    .release{
-      background:#16c96b;
+    .status {
+      margin-top: 35px;
+      color: #00ffae;
+      font-size: 24px;
+      font-weight: bold;
     }
 
-    .refund{
-      background:#ef3737;
+    .escrow-box {
+      margin-top: 70px;
+      text-align: left;
     }
 
-    #status{
-      margin-top:40px;
-      color:#00ffb3;
-      font-size:22px;
-      font-weight:bold;
-      text-align:center;
+    .escrow-box h2 {
+      font-size: 72px;
+      margin-bottom: 20px;
     }
 
-    .card{
-      margin-top:80px;
-      width:700px;
-      background:black;
+    .escrow-card {
+      margin-top: 30px;
     }
 
-    .card h2{
-      font-size:60px;
-      margin-bottom:30px;
+    .escrow-card h3 {
+      font-size: 60px;
+      margin-bottom: 20px;
     }
 
-    .card h3{
-      font-size:44px;
-      margin-bottom:30px;
+    .escrow-card p {
+      color: white;
+      font-size: 30px;
+      margin: 20px 0;
     }
-
-    .card p{
-      text-align:left;
-      margin-top:25px;
-      color:white;
-      font-size:30px;
-    }
-
   </style>
-
 </head>
 
 <body>
 
+<div class="container">
+
   <h1>
-    Secure Escrow<br/>
-    Infrastructure
-    <span class="gold">For</span><br/>
+    Secure Escrow <br />
+    Infrastructure <span class="gold">For</span> <br />
     <span class="gold">International Trade</span>
   </h1>
 
@@ -153,24 +137,24 @@
     smart contracts and decentralized settlement technology.
   </p>
 
-  <div class="form">
+  <input
+    id="seller"
+    placeholder="Seller wallet address"
+  />
 
-    <input
-      id="seller"
-      placeholder="Seller wallet address"
-    />
+  <br />
 
-    <input
-      id="amount"
-      placeholder="Amount in USDC"
-    />
+  <input
+    id="amount"
+    placeholder="Amount in USDC"
+  />
 
-    <input
-      id="escrowId"
-      placeholder="Escrow Number (1,2,3...)"
-    />
+  <br />
 
-  </div>
+  <input
+    id="escrowId"
+    placeholder="Escrow Number (1,2,3...)"
+  />
 
   <div class="buttons">
 
@@ -181,21 +165,15 @@
       Connect MetaMask
     </button>
 
-    <button
-      onclick="createEscrow()"
-    >
+    <button onclick="createEscrow()">
       Create Escrow
     </button>
 
-    <button
-      onclick="approveUSDC()"
-    >
+    <button onclick="approveUSDC()">
       Approve USDC
     </button>
 
-    <button
-      onclick="depositUSDC()"
-    >
+    <button onclick="depositUSDC()">
       Deposit USDC
     </button>
 
@@ -215,34 +193,41 @@
 
   </div>
 
-  <div id="status">
+  <div id="status" class="status">
     Waiting for wallet connection...
   </div>
 
-  <div
-    id="escrowCard"
-    class="card"
-    style="display:none;"
-  >
+  <div class="escrow-box">
 
     <h2>Active Escrows</h2>
 
-    <h3 id="escrowTitle">
-      Escrow #1
-    </h3>
+    <div class="escrow-card">
 
-    <p id="escrowSeller"></p>
+      <h3 id="escrowTitle">
+        Escrow #0
+      </h3>
 
-    <p id="escrowAmount"></p>
+      <p id="sellerText">
+        Seller:
+      </p>
 
-    <p id="escrowStatus"></p>
+      <p id="amountText">
+        Amount:
+      </p>
+
+      <p id="statusText">
+        Status:
+      </p>
+
+    </div>
 
   </div>
 
+</div>
+
 <script type="module">
 
-import { ethers }
-from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
+import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
 
 const ESCROW_ADDRESS =
 "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
@@ -250,24 +235,16 @@ const ESCROW_ADDRESS =
 const USDC_ADDRESS =
 "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
 
-const ESCROW_ABI = [
-
-"function createEscrow(address seller, uint256 amount) external returns (uint256)",
-
-"function deposit(uint256 escrowId) external",
-
-"function releaseFunds(uint256 escrowId) external",
-
-"function refundBuyer(uint256 escrowId) external",
-
-"function escrowCount() view returns (uint256)"
-
+const ABI = [
+  "function createEscrow(address seller,uint256 amount) external returns(uint256)",
+  "function deposit(uint256 escrowId) external",
+  "function releaseFunds(uint256 escrowId) external",
+  "function refundBuyer(uint256 escrowId) external",
+  "function getEscrow(uint256 escrowId) external view returns(tuple(uint256 id,address buyer,address seller,uint256 amount,bool deposited,bool released,bool refunded))"
 ];
 
-const ERC20_ABI = [
-
-"function approve(address spender, uint256 amount) external returns (bool)"
-
+const ERC20ABI = [
+  "function approve(address spender,uint256 amount) external returns(bool)"
 ];
 
 let provider;
@@ -275,258 +252,206 @@ let signer;
 let escrow;
 let usdc;
 
-async function connectWallet() {
+window.connectWallet = async () => {
 
-try {
+  try {
 
-if (!window.ethereum) {
+    if (!window.ethereum) {
+      alert("Install MetaMask");
+      return;
+    }
 
-alert("MetaMask not installed");
-return;
-}
+    await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
 
-await window.ethereum.request({
-method:"eth_requestAccounts"
-});
+    provider = new ethers.BrowserProvider(window.ethereum);
 
-provider =
-new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
 
-signer =
-await provider.getSigner();
+    escrow = new ethers.Contract(
+      ESCROW_ADDRESS,
+      ABI,
+      signer
+    );
 
-escrow =
-new ethers.Contract(
-ESCROW_ADDRESS,
-ESCROW_ABI,
-signer
-);
+    usdc = new ethers.Contract(
+      USDC_ADDRESS,
+      ERC20ABI,
+      signer
+    );
 
-usdc =
-new ethers.Contract(
-USDC_ADDRESS,
-ERC20_ABI,
-signer
-);
+    const address = await signer.getAddress();
 
-const address =
-await signer.getAddress();
+    document.getElementById("status").innerHTML =
+      "Connected: " + address;
 
-document.getElementById("status").innerText =
-"Connected: " + address;
+  } catch (err) {
 
-} catch(err){
+    console.log(err);
 
-console.error(err);
+    document.getElementById("status").innerHTML =
+      "Wallet connection failed";
 
-document.getElementById("status").innerText =
-"Wallet connection failed";
+  }
+};
 
-}
+window.createEscrow = async () => {
 
-}
+  try {
 
-async function createEscrow(){
+    const seller =
+      document.getElementById("seller").value;
 
-try{
+    const amount =
+      document.getElementById("amount").value;
 
-const seller =
-document.getElementById("seller").value;
+    const tx =
+      await escrow.createEscrow(
+        seller,
+        ethers.parseUnits(amount, 6)
+      );
 
-const amount =
-document.getElementById("amount").value;
+    await tx.wait();
 
-const tx =
-await escrow.createEscrow(
-seller,
-ethers.parseUnits(amount,6)
-);
+    document.getElementById("status").innerHTML =
+      "Escrow created successfully";
 
-document.getElementById("status").innerText =
-"Creating escrow...";
+    const escrowId = 1;
 
-await tx.wait();
+    document.getElementById("escrowTitle").innerHTML =
+      "Escrow #" + escrowId;
 
-const escrowId =
-await escrow.escrowCount();
+    document.getElementById("sellerText").innerHTML =
+      "Seller: " + seller;
 
-document.getElementById("escrowId").value =
-escrowId.toString();
+    document.getElementById("amountText").innerHTML =
+      "Amount: " + amount + " USDC";
 
-document.getElementById("escrowCard").style.display =
-"block";
+    document.getElementById("statusText").innerHTML =
+      "Status: AWAITING PAYMENT";
 
-document.getElementById("escrowTitle").innerText =
-`Escrow #${escrowId}`;
+  } catch (err) {
 
-document.getElementById("escrowSeller").innerText =
-`Seller: ${seller}`;
+    console.log(err);
 
-document.getElementById("escrowAmount").innerText =
-`Amount: ${amount} USDC`;
+    document.getElementById("status").innerHTML =
+      "Escrow creation failed";
 
-document.getElementById("escrowStatus").innerText =
-"Status: AWAITING PAYMENT";
+  }
+};
 
-document.getElementById("status").innerText =
-"Escrow created successfully";
+window.approveUSDC = async () => {
 
-}catch(err){
+  try {
 
-console.error(err);
+    const amount =
+      document.getElementById("amount").value;
 
-document.getElementById("status").innerText =
-"Escrow creation failed";
+    const tx =
+      await usdc.approve(
+        ESCROW_ADDRESS,
+        ethers.parseUnits(amount, 6)
+      );
 
-}
+    await tx.wait();
 
-}
+    document.getElementById("status").innerHTML =
+      "USDC approved successfully";
 
-async function approveUSDC(){
+  } catch (err) {
 
-try{
+    console.log(err);
 
-const amount =
-document.getElementById("amount").value;
+    document.getElementById("status").innerHTML =
+      "USDC approval failed";
 
-const tx =
-await usdc.approve(
-ESCROW_ADDRESS,
-ethers.parseUnits(amount,6)
-);
+  }
+};
 
-document.getElementById("status").innerText =
-"Approving USDC...";
+window.depositUSDC = async () => {
 
-await tx.wait();
+  try {
 
-document.getElementById("status").innerText =
-"USDC approved";
+    const escrowId =
+      document.getElementById("escrowId").value;
 
-}catch(err){
+    const tx =
+      await escrow.deposit(escrowId);
 
-console.error(err);
+    await tx.wait();
 
-document.getElementById("status").innerText =
-"USDC approval failed";
+    document.getElementById("status").innerHTML =
+      "USDC deposited successfully";
 
-}
+    document.getElementById("statusText").innerHTML =
+      "Status: FUNDED";
 
-}
+  } catch (err) {
 
-async function depositUSDC(){
+    console.log(err);
 
-try{
+    document.getElementById("status").innerHTML =
+      "Deposit failed";
 
-const escrowId =
-document.getElementById("escrowId").value;
+  }
+};
 
-const tx =
-await escrow.deposit(escrowId);
+window.releaseFunds = async () => {
 
-document.getElementById("status").innerText =
-"Depositing USDC...";
+  try {
 
-await tx.wait();
+    const escrowId =
+      document.getElementById("escrowId").value;
 
-document.getElementById("escrowStatus").innerText =
-"Status: PAYMENT SECURED";
+    const tx =
+      await escrow.releaseFunds(escrowId);
 
-document.getElementById("status").innerText =
-"Deposit successful";
+    await tx.wait();
 
-}catch(err){
+    document.getElementById("status").innerHTML =
+      "Funds released successfully";
 
-console.error(err);
+    document.getElementById("statusText").innerHTML =
+      "Status: RELEASED";
 
-document.getElementById("status").innerText =
-"Deposit failed";
+  } catch (err) {
 
-}
+    console.log(err);
 
-}
+    document.getElementById("status").innerHTML =
+      "Release failed";
 
-async function releaseFunds(){
+  }
+};
 
-try{
+window.refundBuyer = async () => {
 
-const escrowId =
-document.getElementById("escrowId").value;
+  try {
 
-const tx =
-await escrow.releaseFunds(escrowId);
+    const escrowId =
+      document.getElementById("escrowId").value;
 
-document.getElementById("status").innerText =
-"Releasing funds...";
+    const tx =
+      await escrow.refundBuyer(escrowId);
 
-await tx.wait();
+    await tx.wait();
 
-document.getElementById("escrowStatus").innerText =
-"Status: FUNDS RELEASED";
+    document.getElementById("status").innerHTML =
+      "Buyer refunded successfully";
 
-document.getElementById("status").innerText =
-"Funds released";
+    document.getElementById("statusText").innerHTML =
+      "Status: REFUNDED";
 
-}catch(err){
+  } catch (err) {
 
-console.error(err);
+    console.log(err);
 
-document.getElementById("status").innerText =
-"Release failed";
+    document.getElementById("status").innerHTML =
+      "Refund failed";
 
-}
-
-}
-
-async function refundBuyer(){
-
-try{
-
-const escrowId =
-document.getElementById("escrowId").value;
-
-const tx =
-await escrow.refundBuyer(escrowId);
-
-document.getElementById("status").innerText =
-"Refunding buyer...";
-
-await tx.wait();
-
-document.getElementById("escrowStatus").innerText =
-"Status: BUYER REFUNDED";
-
-document.getElementById("status").innerText =
-"Buyer refunded";
-
-}catch(err){
-
-console.error(err);
-
-document.getElementById("status").innerText =
-"Refund failed";
-
-}
-
-}
-
-window.connectWallet =
-connectWallet;
-
-window.createEscrow =
-createEscrow;
-
-window.approveUSDC =
-approveUSDC;
-
-window.depositUSDC =
-depositUSDC;
-
-window.releaseFunds =
-releaseFunds;
-
-window.refundBuyer =
-refundBuyer;
+  }
+};
 
 </script>
 
