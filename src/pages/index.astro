@@ -10,15 +10,15 @@
     <script type="module">
       import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
 
-      // YOUR DEPLOYED ESCROW CONTRACT
+      // ESCROW CONTRACT
       const ESCROW_ADDRESS =
         "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
 
-      // BASE MAINNET USDC
+      // BASE USDC
       const USDC_ADDRESS =
         "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
 
-      // ESCROW ABI
+      // ABI
       const escrowABI = [
         "function createEscrow(address seller,uint256 amount) external returns (uint256)",
         "function deposit(uint256 escrowId) external",
@@ -34,6 +34,7 @@
 
       // CONNECT WALLET
       async function connectWallet() {
+
         try {
 
           if (!window.ethereum) {
@@ -62,15 +63,13 @@
 
           console.error(err);
 
-          document.getElementById("status").innerText =
-            "Wallet connection failed";
-
           alert(err.reason || err.message);
         }
       }
 
       // CREATE ESCROW
       async function createEscrow() {
+
         try {
 
           const seller =
@@ -108,21 +107,14 @@
 
           console.error(err);
 
-          document.getElementById("status").innerText =
-            "Escrow creation failed";
-
           alert(err.reason || err.message);
         }
       }
 
       // APPROVE USDC
       async function approveUSDC() {
-        try {
 
-          if (!signer) {
-            alert("Connect wallet first");
-            return;
-          }
+        try {
 
           const amount =
             document.getElementById("amount").value;
@@ -139,12 +131,13 @@
           );
 
           document.getElementById("status").innerText =
-            "Waiting for approval...";
+            "Approving USDC...";
 
-          const tx = await usdcContract.approve(
-            ESCROW_ADDRESS,
-            parsedAmount
-          );
+          const tx =
+            await usdcContract.approve(
+              ESCROW_ADDRESS,
+              parsedAmount
+            );
 
           await tx.wait();
 
@@ -155,15 +148,13 @@
 
           console.error(err);
 
-          document.getElementById("status").innerText =
-            "USDC approval failed";
-
           alert(err.reason || err.message);
         }
       }
 
-      // DEPOSIT USDC
+      // DEPOSIT
       async function depositUSDC() {
+
         try {
 
           const escrowId =
@@ -180,7 +171,7 @@
           await tx.wait();
 
           document.getElementById("status").innerText =
-            "USDC deposited successfully";
+            "Funds locked in escrow";
 
           loadEscrowStatus();
 
@@ -188,15 +179,13 @@
 
           console.error(err);
 
-          document.getElementById("status").innerText =
-            "Deposit failed";
-
           alert(err.reason || err.message);
         }
       }
 
-      // RELEASE FUNDS
+      // RELEASE
       async function releaseFunds() {
+
         try {
 
           const escrowId =
@@ -213,7 +202,7 @@
           await tx.wait();
 
           document.getElementById("status").innerText =
-            "Funds released successfully";
+            "Funds released to seller";
 
           loadEscrowStatus();
 
@@ -221,15 +210,13 @@
 
           console.error(err);
 
-          document.getElementById("status").innerText =
-            "Release failed";
-
           alert(err.reason || err.message);
         }
       }
 
-      // REFUND BUYER
+      // REFUND
       async function refundBuyer() {
+
         try {
 
           const escrowId =
@@ -246,7 +233,7 @@
           await tx.wait();
 
           document.getElementById("status").innerText =
-            "Buyer refunded successfully";
+            "Buyer refunded";
 
           loadEscrowStatus();
 
@@ -254,21 +241,21 @@
 
           console.error(err);
 
-          document.getElementById("status").innerText =
-            "Refund failed";
-
           alert(err.reason || err.message);
         }
       }
 
-      // LOAD ESCROW STATUS
+      // LOAD ESCROW
       async function loadEscrowStatus() {
+
         try {
 
           const escrowId =
             document.getElementById("escrowId").value;
 
-          if (!escrowId) return;
+          if (!escrowId) {
+            return;
+          }
 
           const escrow =
             await escrowContract.getEscrow(
@@ -281,6 +268,13 @@
             status = "FUNDED";
           }
 
+          if (escrow.deposited &&
+              !escrow.released &&
+              !escrow.refunded) {
+
+            status = "AWAITING DELIVERY";
+          }
+
           if (escrow.released) {
             status = "RELEASED";
           }
@@ -289,21 +283,49 @@
             status = "REFUNDED";
           }
 
-          document.getElementById("escrowInfo").innerHTML = `
+          const amount =
+            ethers.formatUnits(
+              escrow.amount,
+              6
+            );
+
+          document.getElementById("escrowCard").innerHTML = `
+
             <div class="card">
-              <h2>Escrow Status</h2>
 
-              <p><strong>Escrow ID:</strong> ${escrow.id}</p>
+              <h2>Live Escrow Transaction</h2>
 
-              <p><strong>Status:</strong> ${status}</p>
+              <div class="line">
+                <span>Escrow ID</span>
+                <span>#${escrow.id}</span>
+              </div>
 
-              <p><strong>Buyer:</strong><br>${escrow.buyer}</p>
+              <div class="line">
+                <span>Status</span>
+                <span class="status">${status}</span>
+              </div>
 
-              <p><strong>Seller:</strong><br>${escrow.seller}</p>
+              <div class="line">
+                <span>Amount</span>
+                <span>${amount} USDC</span>
+              </div>
 
-              <p><strong>Amount:</strong>
-              ${ethers.formatUnits(escrow.amount, 6)} USDC</p>
+              <div class="wallet">
+                <label>Buyer Wallet</label>
+                <p>${escrow.buyer}</p>
+              </div>
+
+              <div class="wallet">
+                <label>Seller Wallet</label>
+                <p>${escrow.seller}</p>
+              </div>
+
+              <div class="proof">
+                Funds secured by blockchain smart contract escrow.
+              </div>
+
             </div>
+
           `;
 
         } catch (err) {
@@ -322,30 +344,31 @@
     </script>
 
     <style>
+
       body {
-        background: black;
+        background: #000;
         color: white;
         font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
         margin: 0;
+        padding: 40px;
       }
 
       .container {
-        width: 750px;
-        text-align: center;
+        max-width: 850px;
+        margin: auto;
       }
 
       h1 {
-        font-size: 72px;
+        font-size: 64px;
         color: #d4a84f;
+        text-align: center;
         margin-bottom: 10px;
       }
 
-      p {
-        color: #999;
+      .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 50px;
         font-size: 20px;
       }
 
@@ -353,27 +376,26 @@
         width: 100%;
         padding: 24px;
         margin-bottom: 20px;
-        border-radius: 20px;
+        border-radius: 18px;
         border: 1px solid #333;
-        background: black;
+        background: #0d0d0d;
         color: white;
-        font-size: 24px;
+        font-size: 20px;
         box-sizing: border-box;
       }
 
       .buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
         margin-top: 20px;
       }
 
       button {
-        padding: 22px 34px;
-        border-radius: 20px;
+        padding: 22px;
         border: none;
-        font-size: 20px;
+        border-radius: 18px;
+        font-size: 18px;
         font-weight: bold;
         cursor: pointer;
       }
@@ -384,74 +406,106 @@
       }
 
       .dark {
-        background: #111;
+        background: #121212;
         color: white;
         border: 1px solid #333;
       }
 
       .green {
-        background: #22c55e;
+        background: #16a34a;
         color: white;
       }
 
       .red {
-        background: #ef4444;
+        background: #dc2626;
         color: white;
       }
 
       #status {
-        margin-top: 40px;
-        font-size: 28px;
-        font-weight: bold;
+        text-align: center;
+        margin-top: 35px;
+        font-size: 24px;
         color: #00ffae;
+        font-weight: bold;
       }
 
       .card {
-        margin-top: 40px;
-        padding: 30px;
-        border-radius: 24px;
-        border: 1px solid #333;
+        margin-top: 50px;
         background: #111;
-        text-align: left;
+        border: 1px solid #333;
+        border-radius: 24px;
+        padding: 35px;
       }
 
       .card h2 {
-        color: #d4a84f;
         margin-top: 0;
+        color: #d4a84f;
+        font-size: 32px;
       }
 
-      .card p {
+      .line {
+        display: flex;
+        justify-content: space-between;
         margin-bottom: 20px;
-        word-break: break-all;
+        font-size: 20px;
       }
+
+      .wallet {
+        margin-top: 25px;
+      }
+
+      .wallet label {
+        color: #888;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .wallet p {
+        word-break: break-all;
+        font-size: 18px;
+      }
+
+      .status {
+        color: #00ffae;
+        font-weight: bold;
+      }
+
+      .proof {
+        margin-top: 35px;
+        padding: 20px;
+        background: #0a0a0a;
+        border-radius: 16px;
+        border: 1px solid #222;
+        color: #00ffae;
+        text-align: center;
+        font-weight: bold;
+      }
+
     </style>
   </head>
 
   <body>
+
     <div class="container">
 
-      <h1>International Trade</h1>
+      <h1>AmicBridge</h1>
 
-      <p>
-        AmicBridge provides blockchain escrow infrastructure powered by USDC,
-        smart contracts and decentralized settlement technology.
-      </p>
+      <div class="subtitle">
+        Blockchain escrow infrastructure for global trade settlement.
+      </div>
 
       <input
         id="seller"
-        type="text"
         placeholder="Seller Wallet Address"
       />
 
       <input
         id="amount"
-        type="text"
         placeholder="Amount in USDC"
       />
 
       <input
         id="escrowId"
-        type="text"
         placeholder="Escrow ID"
       />
 
@@ -461,7 +515,7 @@
           class="gold"
           onclick="connectWallet()"
         >
-          Connect MetaMask
+          Connect Wallet
         </button>
 
         <button
@@ -502,16 +556,18 @@
         <button
           class="dark"
           onclick="loadEscrowStatus()"
+          style="grid-column: span 2;"
         >
-          Load Escrow Status
+          Load Live Escrow
         </button>
 
       </div>
 
       <div id="status"></div>
 
-      <div id="escrowInfo"></div>
+      <div id="escrowCard"></div>
 
     </div>
+
   </body>
 </html>
