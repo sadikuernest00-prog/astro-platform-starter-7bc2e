@@ -21,13 +21,13 @@ import {
 // =====================================
 
 const ESCROW_ADDRESS =
-  "0xCbcB21aC53a80279A42D6c210a1f60Fa745F6826";
+  "PASTE_YOUR_NEW_CONTRACT_ADDRESS_HERE";
 
 const USDC_ADDRESS =
   "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
 
 // =====================================
-// ABI
+// FIXED ABI
 // =====================================
 
 const escrowABI = [
@@ -42,7 +42,8 @@ const escrowABI = [
 
   "function escrowCount() view returns (uint256)",
 
-  "function escrows(uint256) view returns (uint256 id,address buyer,address seller,uint256 amount,bool deposited,bool released,bool refunded,uint256 createdAt,uint256 depositedAt,uint256 releasedAt,uint256 refundedAt)"
+  // IMPORTANT FIX
+  "function escrows(uint256) view returns (uint256,address,address,uint256,bool,bool,bool,uint256,uint256,uint256,uint256)"
 ];
 
 let provider;
@@ -142,10 +143,7 @@ async function createEscrow() {
 
     await tx.wait();
 
-    // =====================================
     // FIXED ESCROW ID
-    // =====================================
-
     const totalEscrows =
       await escrowContract.escrowCount();
 
@@ -167,11 +165,6 @@ async function createEscrow() {
   } catch (err) {
 
     console.error(err);
-
-    document.getElementById(
-      "status"
-    ).innerText =
-      "Escrow creation failed";
 
     alert(
       err.reason || err.message
@@ -278,7 +271,7 @@ async function depositUSDC() {
 }
 
 // =====================================
-// RELEASE FUNDS
+// RELEASE
 // =====================================
 
 async function releaseFunds() {
@@ -384,50 +377,77 @@ async function loadEscrow() {
         escrowId
       );
 
+    // FIXED POSITIONAL VALUES
+    const id = escrow[0];
+    const buyer = escrow[1];
+    const seller = escrow[2];
+    const amount = escrow[3];
+
+    const depositedBool =
+      escrow[4];
+
+    const releasedBool =
+      escrow[5];
+
+    const refundedBool =
+      escrow[6];
+
+    const createdAt =
+      escrow[7];
+
+    const depositedAt =
+      escrow[8];
+
+    const releasedAt =
+      escrow[9];
+
+    const refundedAt =
+      escrow[10];
+
     let status =
       "CREATED";
 
-    if (escrow.deposited)
+    if (depositedBool)
       status = "FUNDED";
 
-    if (escrow.released)
+    if (releasedBool)
       status = "RELEASED";
 
-    if (escrow.refunded)
+    if (refundedBool)
       status = "REFUNDED";
 
     const created =
-      Number(escrow.createdAt) > 0
+      Number(createdAt) > 0
         ? new Date(
             Number(
-              escrow.createdAt
+              createdAt
             ) * 1000
           ).toLocaleString()
         : "-";
 
     const deposited =
-      Number(escrow.depositedAt) > 0
+      Number(depositedAt) > 0
         ? new Date(
             Number(
-              escrow.depositedAt
+              depositedAt
             ) * 1000
           ).toLocaleString()
         : "-";
 
     const released =
-      Number(escrow.releasedAt) > 0
+      Number(releasedAt) > 0
         ? new Date(
             Number(
-              escrow.releasedAt
+              releasedAt
             ) * 1000
           ).toLocaleString()
         : "-";
 
     const refunded =
-      Number(escrow.refundedAt) > 0
+      Number(refundedAt) > 0
         ? new Date(
             Number(
-              escrow.refundedAt
+              refundedAt
             ) * 1000
           ).toLocaleString()
         : "-";
@@ -435,11 +455,11 @@ async function loadEscrow() {
     let shipmentStatus =
       "Waiting Shipment";
 
-    if (escrow.deposited)
+    if (depositedBool)
       shipmentStatus =
         "In Transit";
 
-    if (escrow.released)
+    if (releasedBool)
       shipmentStatus =
         "Delivered";
 
@@ -461,14 +481,14 @@ async function loadEscrow() {
       "<div class='line'>" +
       "<span>Buyer</span>" +
       "<span>" +
-      escrow.buyer +
+      buyer +
       "</span>" +
       "</div>" +
 
       "<div class='line'>" +
       "<span>Seller</span>" +
       "<span>" +
-      escrow.seller +
+      seller +
       "</span>" +
       "</div>" +
 
@@ -476,7 +496,7 @@ async function loadEscrow() {
       "<span>Amount</span>" +
       "<span>" +
       ethers.formatUnits(
-        escrow.amount,
+        amount,
         6
       ) +
       " USDC</span>" +
@@ -526,7 +546,7 @@ async function loadEscrow() {
       "<div class='line'>" +
       "<span>Tracking Number</span>" +
       "<span>AMIC-" +
-      escrow.id +
+      id +
       "</span>" +
       "</div>" +
 
@@ -548,7 +568,12 @@ async function loadEscrow() {
 
   } catch (err) {
 
-    console.error(err);
+    console.error(
+      "LOAD ESCROW ERROR:",
+      err
+    );
+
+    alert(err.message);
   }
 }
 
@@ -562,7 +587,7 @@ setInterval(async () => {
     await loadEscrow();
   }
 
-}, 5000);
+}, 3000);
 
 // =====================================
 // GLOBALS
