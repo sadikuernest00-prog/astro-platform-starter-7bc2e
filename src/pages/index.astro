@@ -26,8 +26,9 @@
       const ESCROW_ADDRESS =
         "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
 
+      // BASE USDC
       const USDC_ADDRESS =
-        "0x833589fCD6EDB6E08f4c7C32D4f71b54bdA02913";
+        "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
 
       // =====================================
       // ABI
@@ -126,7 +127,7 @@
           const seller =
             document.getElementById(
               "seller"
-            ).value;
+            ).value.trim();
 
           if (!ethers.isAddress(seller)) {
 
@@ -262,7 +263,7 @@
       }
 
       // =====================================
-      // DEPOSIT
+      // DEPOSIT USDC
       // =====================================
 
       async function depositUSDC() {
@@ -309,7 +310,7 @@
       }
 
       // =====================================
-      // RELEASE
+      // RELEASE FUNDS
       // =====================================
 
       async function releaseFunds() {
@@ -356,7 +357,7 @@
       }
 
       // =====================================
-      // REFUND
+      // REFUND BUYER
       // =====================================
 
       async function refundBuyer() {
@@ -504,7 +505,6 @@
     <style>
 
       body {
-
         background: black;
         color: white;
         font-family: Arial;
@@ -512,13 +512,11 @@
       }
 
       .container {
-
         max-width: 900px;
         margin: auto;
       }
 
       h1 {
-
         text-align: center;
         color: #d4a84f;
         font-size: 72px;
@@ -526,7 +524,6 @@
       }
 
       input {
-
         width: 100%;
         padding: 22px;
         margin-bottom: 18px;
@@ -538,14 +535,12 @@
       }
 
       .buttons {
-
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 18px;
       }
 
       button {
-
         padding: 22px;
         border-radius: 18px;
         border: none;
@@ -555,32 +550,27 @@
       }
 
       .gold {
-
         background: #d4a84f;
         color: black;
       }
 
       .dark {
-
         background: #111;
         color: white;
         border: 1px solid #333;
       }
 
       .green {
-
         background: #16a34a;
         color: white;
       }
 
       .red {
-
         background: #dc2626;
         color: white;
       }
 
       #status {
-
         margin-top: 30px;
         text-align: center;
         color: #00ffae;
@@ -589,7 +579,6 @@
       }
 
       .card {
-
         background: #111;
         border: 1px solid #333;
         border-radius: 24px;
@@ -598,7 +587,6 @@
       }
 
       .line {
-
         display: flex;
         justify-content: space-between;
         margin-bottom: 14px;
@@ -607,7 +595,6 @@
       }
 
       .status {
-
         color: #00ffae;
       }
 
