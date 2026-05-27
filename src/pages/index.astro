@@ -3,7 +3,9 @@
 
 <html lang="en">
   <head>
+
     <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0"
@@ -13,8 +15,9 @@
 
     <script type="module">
 
-      import { ethers }
-      from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
+      import {
+        ethers
+      } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
 
       // =====================================
       // CONTRACTS
@@ -42,7 +45,7 @@
 
         "function escrowCount() view returns (uint256)",
 
-        "function getEscrow(uint256 escrowId) view returns ((uint256 id,address buyer,address seller,uint256 amount,uint256 releaseTime,uint8 status,bool deposited,bool disputed))"
+        "function escrows(uint256) view returns (uint256 id,address buyer,address seller,uint256 amount,uint256 releaseTime,uint8 status,bool deposited,bool disputed)"
 
       ];
 
@@ -51,7 +54,7 @@
       let escrowContract;
 
       // =====================================
-      // CONNECT
+      // CONNECT WALLET
       // =====================================
 
       async function connectWallet() {
@@ -59,7 +62,9 @@
         try {
 
           if (!window.ethereum) {
+
             alert("Install MetaMask");
+
             return;
           }
 
@@ -109,6 +114,15 @@
 
         try {
 
+          if (!signer) {
+
+            alert(
+              "Connect wallet first"
+            );
+
+            return;
+          }
+
           const seller =
             document.getElementById(
               "seller"
@@ -152,14 +166,15 @@
 
           document.getElementById(
             "escrowId"
-          ).value = escrowId;
+          ).value =
+            escrowId.toString();
 
           document.getElementById(
             "status"
           ).innerText =
             "Escrow created successfully";
 
-          loadEscrow();
+          await loadEscrow();
 
         } catch (err) {
 
@@ -183,6 +198,15 @@
       async function approveUSDC() {
 
         try {
+
+          if (!signer) {
+
+            alert(
+              "Connect wallet first"
+            );
+
+            return;
+          }
 
           const amount =
             document.getElementById(
@@ -226,6 +250,11 @@
 
           console.error(err);
 
+          document.getElementById(
+            "status"
+          ).innerText =
+            "Approval failed";
+
           alert(
             err.reason || err.message
           );
@@ -262,11 +291,16 @@
           ).innerText =
             "Funds locked in escrow";
 
-          loadEscrow();
+          await loadEscrow();
 
         } catch (err) {
 
           console.error(err);
+
+          document.getElementById(
+            "status"
+          ).innerText =
+            "Deposit failed";
 
           alert(
             err.reason || err.message
@@ -275,7 +309,7 @@
       }
 
       // =====================================
-      // RELEASE
+      // RELEASE FUNDS
       // =====================================
 
       async function releaseFunds() {
@@ -286,6 +320,11 @@
             document.getElementById(
               "escrowId"
             ).value;
+
+          document.getElementById(
+            "status"
+          ).innerText =
+            "Releasing funds...";
 
           const tx =
             await escrowContract.releaseFunds(
@@ -299,11 +338,16 @@
           ).innerText =
             "Funds released successfully";
 
-          loadEscrow();
+          await loadEscrow();
 
         } catch (err) {
 
           console.error(err);
+
+          document.getElementById(
+            "status"
+          ).innerText =
+            "Release failed";
 
           alert(
             err.reason || err.message
@@ -312,7 +356,7 @@
       }
 
       // =====================================
-      // DISPUTE
+      // OPEN DISPUTE
       // =====================================
 
       async function openDispute() {
@@ -323,6 +367,11 @@
             document.getElementById(
               "escrowId"
             ).value;
+
+          document.getElementById(
+            "status"
+          ).innerText =
+            "Opening dispute...";
 
           const tx =
             await escrowContract.openDispute(
@@ -336,11 +385,16 @@
           ).innerText =
             "Dispute opened";
 
-          loadEscrow();
+          await loadEscrow();
 
         } catch (err) {
 
           console.error(err);
+
+          document.getElementById(
+            "status"
+          ).innerText =
+            "Dispute failed";
 
           alert(
             err.reason || err.message
@@ -364,47 +418,77 @@
           if (!escrowId) return;
 
           const escrow =
-            await escrowContract.getEscrow(
+            await escrowContract.escrows(
               escrowId
             );
 
-          let status = "CREATED";
+          let status =
+            "CREATED";
 
-          if (Number(escrow.status) === 1)
+          if (
+            Number(escrow.status) === 1
+          ) {
             status = "FUNDED";
+          }
 
-          if (Number(escrow.status) === 2)
+          if (
+            Number(escrow.status) === 2
+          ) {
             status = "DISPUTED";
+          }
 
-          if (Number(escrow.status) === 3)
+          if (
+            Number(escrow.status) === 3
+          ) {
             status = "RELEASED";
+          }
 
-          if (Number(escrow.status) === 4)
+          if (
+            Number(escrow.status) === 4
+          ) {
             status = "REFUNDED";
+          }
 
           document.getElementById(
             "escrowCard"
           ).innerHTML =
+
             "<div class='card'>" +
 
             "<h2>Live Escrow Status</h2>" +
 
             "<div class='line'>" +
             "<span>Escrow ID</span>" +
-            "<span>#" + escrow.id + "</span>" +
+            "<span>#"
+            + escrow.id +
+            "</span>" +
             "</div>" +
 
             "<div class='line'>" +
             "<span>Status</span>" +
-            "<span class='status'>" +
-            status +
+            "<span class='status'>"
+            + status +
+            "</span>" +
+            "</div>" +
+
+            "<div class='line'>" +
+            "<span>Buyer</span>" +
+            "<span>"
+            + escrow.buyer +
+            "</span>" +
+            "</div>" +
+
+            "<div class='line'>" +
+            "<span>Seller</span>" +
+            "<span>"
+            + escrow.seller +
             "</span>" +
             "</div>" +
 
             "<div class='line'>" +
             "<span>Amount</span>" +
-            "<span>" +
-            ethers.formatUnits(
+            "<span>"
+            + ethers.formatUnits(
               escrow.amount,
               6
             ) +
@@ -442,6 +526,7 @@
     <style>
 
       body {
+
         background: black;
         color: white;
         font-family: Arial;
@@ -449,17 +534,21 @@
       }
 
       .container {
+
         max-width: 900px;
         margin: auto;
       }
 
       h1 {
+
         text-align: center;
         color: #d4a84f;
-        font-size: 70px;
+        font-size: 72px;
+        margin-bottom: 40px;
       }
 
       input {
+
         width: 100%;
         padding: 22px;
         margin-bottom: 18px;
@@ -471,12 +560,14 @@
       }
 
       .buttons {
+
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 18px;
       }
 
       button {
+
         padding: 22px;
         border-radius: 18px;
         border: none;
@@ -486,27 +577,32 @@
       }
 
       .gold {
+
         background: #d4a84f;
         color: black;
       }
 
       .dark {
+
         background: #111;
         color: white;
         border: 1px solid #333;
       }
 
       .green {
+
         background: #16a34a;
         color: white;
       }
 
       .red {
+
         background: #dc2626;
         color: white;
       }
 
       #status {
+
         margin-top: 30px;
         text-align: center;
         color: #00ffae;
@@ -515,6 +611,7 @@
       }
 
       .card {
+
         background: #111;
         border: 1px solid #333;
         border-radius: 24px;
@@ -523,12 +620,16 @@
       }
 
       .line {
+
         display: flex;
         justify-content: space-between;
-        margin-bottom: 15px;
+        margin-bottom: 14px;
+        gap: 10px;
+        word-break: break-all;
       }
 
       .status {
+
         color: #00ffae;
       }
 
