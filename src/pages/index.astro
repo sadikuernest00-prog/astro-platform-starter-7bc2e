@@ -20,11 +20,11 @@
       } from "https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm";
 
       // =====================================
-      // CONTRACTS
+      // CONTRACT ADDRESS
       // =====================================
 
       const ESCROW_ADDRESS =
-        "0x7B6eB10420CdA9Dfcc04AE4964709E19857e7573";
+        "0x9F1AD7F9B34787B0dE37dD3e8d0966de0EA6CE75";
 
       // BASE USDC
       const USDC_ADDRESS =
@@ -46,7 +46,7 @@
 
         "function escrowCount() view returns (uint256)",
 
-        "function escrows(uint256) view returns (uint256 id,address buyer,address seller,uint256 amount,bool deposited,bool released,bool refunded)"
+        "function escrows(uint256) view returns (uint256 id,address buyer,address seller,uint256 amount,bool deposited,bool released,bool refunded,uint256 createdAt,uint256 depositedAt,uint256 releasedAt,uint256 refundedAt)"
 
       ];
 
@@ -63,9 +63,7 @@
         try {
 
           if (!window.ethereum) {
-
             alert("Install MetaMask");
-
             return;
           }
 
@@ -116,11 +114,7 @@
         try {
 
           if (!signer) {
-
-            alert(
-              "Connect wallet first"
-            );
-
+            alert("Connect wallet first");
             return;
           }
 
@@ -130,11 +124,7 @@
             ).value.trim();
 
           if (!ethers.isAddress(seller)) {
-
-            alert(
-              "Invalid seller address"
-            );
-
+            alert("Invalid seller address");
             return;
           }
 
@@ -201,11 +191,7 @@
         try {
 
           if (!signer) {
-
-            alert(
-              "Connect wallet first"
-            );
-
+            alert("Connect wallet first");
             return;
           }
 
@@ -263,7 +249,7 @@
       }
 
       // =====================================
-      // DEPOSIT USDC
+      // DEPOSIT
       // =====================================
 
       async function depositUSDC() {
@@ -310,7 +296,7 @@
       }
 
       // =====================================
-      // RELEASE FUNDS
+      // RELEASE
       // =====================================
 
       async function releaseFunds() {
@@ -357,7 +343,7 @@
       }
 
       // =====================================
-      // REFUND BUYER
+      // REFUND
       // =====================================
 
       async function refundBuyer() {
@@ -435,6 +421,46 @@
           if (escrow.refunded)
             status = "REFUNDED";
 
+          const created =
+            new Date(
+              Number(
+                escrow.createdAt
+              ) * 1000
+            ).toLocaleString();
+
+          const deposited =
+            Number(
+              escrow.depositedAt
+            ) > 0
+              ? new Date(
+                  Number(
+                    escrow.depositedAt
+                  ) * 1000
+                ).toLocaleString()
+              : "-";
+
+          const released =
+            Number(
+              escrow.releasedAt
+            ) > 0
+              ? new Date(
+                  Number(
+                    escrow.releasedAt
+                  ) * 1000
+                ).toLocaleString()
+              : "-";
+
+          const refunded =
+            Number(
+              escrow.refundedAt
+            ) > 0
+              ? new Date(
+                  Number(
+                    escrow.refundedAt
+                  ) * 1000
+                ).toLocaleString()
+              : "-";
+
           document.getElementById(
             "escrowCard"
           ).innerHTML =
@@ -445,33 +471,61 @@
 
             "<div class='line'>" +
             "<span>Status</span>" +
-            "<span class='status'>"
-            + status +
+            "<span class='status'>" +
+            status +
             "</span>" +
             "</div>" +
 
             "<div class='line'>" +
             "<span>Buyer</span>" +
-            "<span>"
-            + escrow.buyer +
+            "<span>" +
+            escrow.buyer +
             "</span>" +
             "</div>" +
 
             "<div class='line'>" +
             "<span>Seller</span>" +
-            "<span>"
-            + escrow.seller +
+            "<span>" +
+            escrow.seller +
             "</span>" +
             "</div>" +
 
             "<div class='line'>" +
             "<span>Amount</span>" +
-            "<span>"
-            + ethers.formatUnits(
+            "<span>" +
+            ethers.formatUnits(
               escrow.amount,
               6
             ) +
             " USDC</span>" +
+            "</div>" +
+
+            "<div class='line'>" +
+            "<span>Created</span>" +
+            "<span>" +
+            created +
+            "</span>" +
+            "</div>" +
+
+            "<div class='line'>" +
+            "<span>Deposited</span>" +
+            "<span>" +
+            deposited +
+            "</span>" +
+            "</div>" +
+
+            "<div class='line'>" +
+            "<span>Released</span>" +
+            "<span>" +
+            released +
+            "</span>" +
+            "</div>" +
+
+            "<div class='line'>" +
+            "<span>Refunded</span>" +
+            "<span>" +
+            refunded +
+            "</span>" +
             "</div>" +
 
             "</div>";
