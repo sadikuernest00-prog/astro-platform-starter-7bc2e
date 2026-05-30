@@ -267,42 +267,48 @@
       // RELEASE FUNDS
       // =====================================
 
-      async function releaseFunds() {
+async function loadEscrow() {
+  try {
+    const escrowId =
+      document.getElementById("escrowId").value;
 
-        try {
+    if (!escrowId) return;
 
-          const escrowId =
-            document.getElementById(
-              "escrowId"
-            ).value;
+    const escrow =
+      await escrowContract.escrows(
+        Number(escrowId)
+      );
 
-          document.getElementById(
-            "status"
-          ).innerText =
-            "Releasing funds...";
+    document.getElementById(
+      "escrowCard"
+    ).innerHTML = `
+      <div class="card">
+        <h2>Escrow #${escrow.id}</h2>
 
-          const tx =
-            await escrowContract.releaseFunds(
-              escrowId
-            );
+        <div class="line">
+          <span>Buyer</span>
+          <span>${escrow.buyer}</span>
+        </div>
 
-          await tx.wait();
+        <div class="line">
+          <span>Seller</span>
+          <span>${escrow.seller}</span>
+        </div>
 
-          document.getElementById(
-            "status"
-          ).innerText =
-            "Funds released";
+        <div class="line">
+          <span>Amount</span>
+          <span>${ethers.formatUnits(
+            escrow.amount,
+            6
+          )} USDC</span>
+        </div>
+      </div>
+    `;
 
-          await loadEscrow();
-
-        } catch (err) {
-
-          console.error(err);
-
-          alert(err.message);
-        }
-      }
-
+  } catch (err) {
+    console.log(err);
+  }
+}
       // =====================================
       // REFUND BUYER
       // =====================================
